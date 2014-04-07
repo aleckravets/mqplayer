@@ -1,0 +1,13 @@
+body {
+	padding: 20px;
+}
+
+table.table-tweets {
+	margin-top: 20px;
+	border-radius: 3px;
+	border: 1px solid #ccc;
+}
+
+.form-inline input.input-search {
+	width: 300px;
+}
