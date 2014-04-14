@@ -4,20 +4,19 @@
     <script src="lib/angular/angular.js"></script>
     <script src="lib/angular/angular-resource.js"></script>
 
-    <script type="text/javascript" src="lib/tree/angular-tree-control.js"></script>
-    <!-- link for CSS when using the tree as a Dom element -->
-    <link rel="stylesheet" type="text/css" href="lib/tree/css/tree-control.css">
+    <!--<script type="text/javascript" src="lib/tree/angular-tree-control.js"></script>-->
+    <!--&lt;!&ndash; link for CSS when using the tree as a Dom element &ndash;&gt;-->
+    <!--<link rel="stylesheet" type="text/css" href="lib/tree/css/tree-control.css">-->
 
     <script src="js/disk.js"></script>
-	<script src="js/directives.js"></script>
+	<script src="js/tree.js"></script>
 	<script src="js/services.js"></script>
 
     <link rel="stylesheet" href="lib/bootstrap.min.css">
     <link rel="stylesheet" href="css/app.css"/>
 </head>
 <body ng-app="Disk" ng-controller="DiskCtrl" class="container-fluid">
-    <treecontrol class="tree-classic" tree-model="data" options="treeOptions" on-selection="showSelected(node)">
-        {{node.displayName}}
-    </treecontrol>
+    <audio id='audio' controls></audio>
+    <tree model="items"/>
 </body>
 </html>
