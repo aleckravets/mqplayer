@@ -4,19 +4,39 @@
     <script src="lib/angular/angular.js"></script>
     <script src="lib/angular/angular-resource.js"></script>
 
-    <!--<script type="text/javascript" src="lib/tree/angular-tree-control.js"></script>-->
-    <!--&lt;!&ndash; link for CSS when using the tree as a Dom element &ndash;&gt;-->
-    <!--<link rel="stylesheet" type="text/css" href="lib/tree/css/tree-control.css">-->
-
     <script src="js/disk.js"></script>
-	<script src="js/tree.js"></script>
-	<script src="js/services.js"></script>
+    <script src="js/tree.js"></script>
+    <script src="js/playlist.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/directives.js"></script>
+    <script src="js/services.js"></script>
 
     <link rel="stylesheet" href="lib/bootstrap.min.css">
     <link rel="stylesheet" href="css/app.css"/>
 </head>
-<body ng-app="Disk" ng-controller="DiskCtrl" class="container-fluid">
-    <audio id='audio' controls></audio>
-    <tree model="items"/>
+<body ng-app="Disk" ng-controller="DiskController" class="container-fluid">
+<div id="left" class="col-md-2" ng-controller="TreeCtrl">
+    <script type="text/ng-template"  id="item.html">
+        <div ng-if="item.resourceType == 'dir'" ng-class="{collapsed: item.collapsed}">
+            <a href ng-click="toggle(item)"><i class="glyphicon glyphicon-folder-close"></i></a>
+            <a href>{{item.displayName}}</a>
+            <ul>
+                <li ng-repeat="item in item.items" ng-include="'item.html'"></li>
+            </ul>
+        </div>
+        <div ng-if="item.resourceType != 'dir'">
+            <i class="glyphicon glyphicon-file"></i>
+            <a href ng-click="enqueue(item)">{{item.displayName}}</a>
+        </div>
+    </script>
+    <ul>
+        <li ng-repeat="item in items" ng-include="'item.html'"></li>
+    </ul>
+</div>
+<div id="main" class="col-md-10">
+    <div id="player">
+        <player />
+    </div>
+</div>
 </body>
 </html>

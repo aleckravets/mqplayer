@@ -1,7 +1,65 @@
 body {
-	padding: 20px;
+    padding: 20px 0;
 }
 
-.collapsed .tree {
+div[class*='col-md-'],
+#left, #main, #player, #playlist {
+    border: 1px dotted #000;
+    border-collapse: collapse;
+}
+
+.collapsed ul {
     display: none;
+}
+
+body {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border: 1px solid red;
+}
+
+#left {
+    white-space: nowrap;
+    overflow: auto;
+    height: 100%;
+    padding: 10px 0 0 0;
+}
+
+#main {
+    overflow: auto;
+    height: 100%;
+    padding: 0;
+}
+
+#player {
+    padding: 10px;
+}
+
+#playlist {
+    padding: 10px;
+}
+
+ul.tree {
+    padding-left: 20px;
+    list-style-type: none;
+}
+
+player .paused .play-text,
+player .pause-text {
+    display:inline-block;
+}
+player .play-text,
+player .paused .pause-text {
+    display:none;
+}
+player * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

@@ -2,11 +2,18 @@
 
  /* Services */
 
-angular.module('Disk.services', ['ngResource'])
-  .factory('DiskData', ['$resource', '$http',
+angular.module('Services', ['ngResource'])
+  .factory('Data', ['$resource', '$http',
     function($resource, $http){
 		return $resource('proxy.php?path=:path');
 	}])
+    .factory('Playlist', function() {
+        var items = [];
+
+        return {
+            items: items
+        };
+    })
     .factory('RecursionHelper', ['$compile', function($compile){
         return {
             /**
