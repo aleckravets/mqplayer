@@ -2,7 +2,13 @@
 
 angular.module('Tree', ['Services'])
     .controller('TreeCtrl', ['$scope', 'Data', 'PlayerService', function($scope, Data, PlayerService) {
-        $scope.toggle = function(item) {
+        Data.query({path: '/'}, function (data){
+            $scope.items = data;
+        });
+
+        var selectedItems = [];
+
+        $scope.toggleDir = function(item) {
             if (item.items == undefined) {
                 Data.query({path: item.href }, function (data){
                     item.items = data;
@@ -12,6 +18,17 @@ angular.module('Tree', ['Services'])
             else {
                 item.collapsed = !item.collapsed;
             }
+        };
+
+        $scope.select = function($event, item) {
+            for (var i = 0; i < selectedItems.length; i++) {
+                selectedItems[i].selected = false;
+            }
+
+            item.selected = !item.selected;
+
+            if (item.selected)
+                selectedItems.push(item);
         };
 
         $scope.enqueue = function(item) {
@@ -24,7 +41,14 @@ angular.module('Tree', ['Services'])
             //angular.element('audio').attr('src', 'proxy.php?get=' + href);
         }
 
-        Data.query({path: '/'}, function (data){
-            $scope.items = data;
-        });
+        $scope.play = function($event, item) {
+            if (item.resourceType == 'dir') {
+
+            }
+            else {
+                PlayerService.play(item);
+            }
+        }
+
+
     }]);

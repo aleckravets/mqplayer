@@ -18,19 +18,19 @@
 <div id="left" class="col-md-2" ng-controller="TreeCtrl">
     <script type="text/ng-template"  id="item.html">
         <div ng-if="item.resourceType == 'dir'" ng-class="{collapsed: item.collapsed}">
-            <a href ng-click="toggle(item)"><i class="glyphicon glyphicon-folder-close"></i></a>
-            <a href>{{item.displayName}}</a>
+            <a ng-click="toggleDir(item)"><i class="glyphicon glyphicon-folder-close"></i></a>
+            <span class="tree-label" ng-class="{selected: item.selected}" ng-mousedown="select($event, item)" ng-dblclick="play($event, item)">{{item.displayName}}</span>
             <ul>
                 <li ng-repeat="item in item.items" ng-include="'item.html'"></li>
             </ul>
         </div>
         <div ng-if="item.resourceType != 'dir'">
             <i class="glyphicon glyphicon-file"></i>
-            <a href ng-click="enqueue(item)">{{item.displayName}}</a>
+            <span class="tree-label" ng-class="{selected: item.selected}" ng-mousedown="select($event, item)" ng-dblclick="play($event, item)">{{item.displayName}}</span>
         </div>
     </script>
-    <ul>
-        <li ng-repeat="item in items" ng-include="'item.html'"></li>
+    <ul class="tree">
+        <li ng-repeat="item in items" ng-include="'item.html'" class="tree-item"></li>
     </ul>
 </div>
 <div id="main" class="col-md-10">

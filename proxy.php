@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once 'phar://yandex-sdk_0.2.0.phar/vendor/autoload.php';
 
 use Yandex\Disk\DiskClient;
@@ -31,9 +33,12 @@ if (isset($_GET['get'])) {
 }
 else {
     header('Content-Type: application/json');
-    $files = $disk->directoryContents($_GET['path']);
-    array_shift($files);
-    echo json_encode($files);
+    if (!$_SESSION[$_GET['path']]) {
+        $files = $disk->directoryContents($_GET['path']);
+        array_shift($files);
+        $_SESSION[$_GET['path']] = $files;
+    }
+    echo json_encode($_SESSION[$_GET['path']]);
 }
 
 function pr($obj) {

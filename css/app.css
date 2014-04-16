@@ -47,6 +47,19 @@ ul.tree {
     list-style-type: none;
 }
 
+ul.tree li {
+    cursor: default;
+}
+
+.tree-label {
+    padding: 2px 4px;
+    border: 1px solid transparent;
+}
+.selected {
+    background: #eee;
+    border: 1px solid #ccc;
+}
+
 player .paused .play-text,
 player .pause-text {
     display:inline-block;
