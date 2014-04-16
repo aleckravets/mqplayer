@@ -15,23 +15,7 @@
     <link rel="stylesheet" href="css/app.css"/>
 </head>
 <body ng-app="Disk" ng-controller="DiskController" class="container-fluid">
-<div id="left" class="col-md-2" ng-controller="TreeCtrl">
-    <script type="text/ng-template"  id="item.html">
-        <div ng-if="item.resourceType == 'dir'" ng-class="{collapsed: item.collapsed}">
-            <a ng-click="toggleDir(item)"><i class="glyphicon glyphicon-folder-close"></i></a>
-            <span class="tree-label" ng-class="{selected: item.selected}" ng-mousedown="select($event, item)" ng-dblclick="play($event, item)">{{item.displayName}}</span>
-            <ul>
-                <li ng-repeat="item in item.items" ng-include="'item.html'"></li>
-            </ul>
-        </div>
-        <div ng-if="item.resourceType != 'dir'">
-            <i class="glyphicon glyphicon-file"></i>
-            <span class="tree-label" ng-class="{selected: item.selected}" ng-mousedown="select($event, item)" ng-dblclick="play($event, item)">{{item.displayName}}</span>
-        </div>
-    </script>
-    <ul class="tree">
-        <li ng-repeat="item in items" ng-include="'item.html'" class="tree-item"></li>
-    </ul>
+<div id="left" class="col-md-2" ng-controller="TreeCtrl" ng-include="'tree.html'">
 </div>
 <div id="main" class="col-md-10">
     <div id="player">

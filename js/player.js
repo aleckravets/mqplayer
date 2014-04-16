@@ -55,9 +55,12 @@ angular.module('Player', ['Directives'])
                     currentItem = items[i + 1];
                 }
             },
-            play: function() {
-                if (items.length > 0)
-                    audio.src = items[0];
+            play: function(item) {
+                clear();
+                items.push(item);
+                currentItem = item;
+                audio.src = 'proxy.php?get=' + currentItem.href;
+                audio.play();
             },
             playItem: function(item) {
                 clear();

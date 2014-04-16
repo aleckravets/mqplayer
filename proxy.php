@@ -1,6 +1,4 @@
 <?php
-session_start();
-
 require_once 'phar://yandex-sdk_0.2.0.phar/vendor/autoload.php';
 
 use Yandex\Disk\DiskClient;

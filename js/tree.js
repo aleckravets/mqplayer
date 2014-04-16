@@ -49,6 +49,4 @@ angular.module('Tree', ['Services'])
                 PlayerService.play(item);
             }
         }
-
-
     }]);
