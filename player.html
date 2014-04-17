@@ -22,6 +22,6 @@
 
 <div id="playlist">
     <ul>
-        <li ng-repeat="item in items">{{item.href}}</li>
+        <li ng-repeat="item in playlist" ng-class="{playing: item == player.currentItem}">{{item.displayName}}</li>
     </ul>
 </div>

@@ -76,3 +76,7 @@ player * {
     -ms-user-select: none;
     user-select: none;
 }
+
+.playing {
+    font-weight: bold;
+}

@@ -1,19 +1,37 @@
 'use strict';
 
- /* Services */
+/* Services */
 
 angular.module('Services', ['ngResource'])
-  .factory('Data', ['$resource', '$http',
-    function($resource, $http){
-		return $resource('proxy.php?path=:path');
-	}])
-    .factory('Playlist', function() {
-        var items = [];
+    .factory('DiskAPI', ['$resource', '$http',
+        function($resource, $http){
+            var url = 'proxy.php';
 
-        return {
-            items: items
-        };
-    })
+            return {
+                getItems: function(path, done) {
+                    var res = $resource(url + path);
+
+                    if (done) {
+                        return res.query(done);
+                    }
+                    else
+                    {
+                        var items = [];
+
+                        res.query(function(data) {
+                            for (var i = 0; i < data.length; i++) {
+                                items.push(data[i]);
+                            }
+                        });
+
+                        return items;
+                    }
+                },
+                getFileUrl: function(path) {
+                    return url + '?get=' + encodeURIComponent(path);
+                }
+            };
+        }])
     .factory('RecursionHelper', ['$compile', function($compile){
         return {
             /**
