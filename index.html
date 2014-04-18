@@ -5,16 +5,17 @@
     <script src="lib/angular/angular-resource.js"></script>
 
     <script src="js/disk.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/api.js"></script>
+
     <script src="js/tree.js"></script>
     <script src="js/playlist.js"></script>
-    <script src="js/player.js"></script>
-    <script src="js/directives.js"></script>
-    <script src="js/services.js"></script>
+
 
     <link rel="stylesheet" href="lib/bootstrap.min.css">
     <link rel="stylesheet" href="css/app.css"/>
 </head>
-<body ng-app="Disk" ng-controller="DiskController" class="container-fluid">
+<body ng-app="Disk" class="container-fluid">
 <div id="left" class="col-md-3" ng-controller="TreeCtrl" ng-include="'tree.html'">
 </div>
 <div id="main" class="col-md-9">

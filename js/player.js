@@ -1,15 +1,12 @@
 'use strict';
 
-angular.module('Player', ['Directives'])
+angular.module('Player', [])
     .directive('player', ['$rootScope', 'Player', function($rootScope, Player) {
         return {
             restrict: 'E',
             scope: {},
             controller: function($scope, $element) {
                 $scope.player = Player;
-                $scope.audio = Player.audio;
-                $scope.playlist = Player.playlist;
-                $scope.currentItem = null;
 
                 $scope.playpause = function() {
                     if ($scope.audio.paused) {
@@ -37,42 +34,22 @@ angular.module('Player', ['Directives'])
             templateUrl: 'player.html'
         };
     }])
-    .factory('Player', ['DiskAPI', function(DiskAPI) {
+    .factory('Player', ['DiskAPI', '$q', function(DiskAPI, $q) {
         var audio = new Audio();
         var playlist = [];
-        audio.currentItem = null;
 
-        var next = function() {
-            var i = playlist.indexOf(audio.currentItem);
-            if (i + 2 <= playlist.length) {
-                var item = playlist[i + 1]
-                audio.src = DiskAPI.getFileUrl(item.href);
-                audio.play();
-                audio.currentItem = item;
-            }
+        var playFile = function(item) {
+            audio.src = item.getUrl();
+            audio.play();
+            audio.currentItem = item;
         };
 
-        var playItem = function(item) {
-            audio.src = '';
+        var clearPlaylist = function() {
             playlist.splice(0, playlist.length);
+        }
 
-            if (item.resourceType == 'dir') {
-                for (var i = 0; i < item.children.length; i++) {
-                    if (/\.mp3/.test(item.children[i].href)) {
-                        playlist.push(item.children[i]);
-                    }
-                }
-            }
-            else {
-                playlist.push(item);
-            }
-
-            if (playlist.length == 0)
-                return;
-
-            currentItem = playlist[0];
-            audio.src = DiskAPI.getFileUrl(currentItem.href);
-            audio.play();
+        var isSupportedType = function(item) {
+            return /\.mp3/.test(item.href);
         };
 
         audio.addEventListener('ended', function() {
@@ -82,18 +59,42 @@ angular.module('Player', ['Directives'])
         return {
             audio: audio,
             playlist: playlist,
-            currentItem: currentItem,
-            next: next,
-            play: function(item) {
-                if (item.resourceType == 'dir' && item.children == undefined) {
-                    DiskAPI.getItems(item.href, function(data) {
-                        item.children = data;
-                        playItem(item);
+            next: function() {
+                var i = playlist.indexOf(audio.currentItem);
+                if (i + 2 <= playlist.length) {
+                    var item = playlist[i + 1]
+                    audio.src = item.getUrl();
+                    audio.play();
+                    audio.currentItem = item;
+                }
+            },
+            stop: function() {
+                audio.pause();
+                audio.src = '';
+            },
+            playItem: function(item) {
+                this.stop();
+                clearPlaylist();
+
+                if (item.isDir()) {
+                    item.getChildren().then(function(items) {
+                        for (var i = 0; i < items.length; i++) {
+                            if (isSupportedType(items[i])) {
+                                playlist.push(items[i]);
+                            }
+                        }
                     });
+
                 }
                 else {
-                    playItem(item);
+                    if (isSupportedType(item))
+                        playlist.push(item);
                 }
+
+                if (playlist.length == 0)
+                    return;
+
+                playFile(playlist[0]);
             }
         };
     }]);

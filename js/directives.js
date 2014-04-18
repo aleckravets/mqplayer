@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('Directives', ['Services'])
+angular.module('Directives')
     .directive('delayedModel', function() {
         return {
             scope: {
