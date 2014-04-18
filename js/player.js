@@ -38,16 +38,17 @@ angular.module('Player', ['Directives'])
         };
     }])
     .factory('Player', ['DiskAPI', function(DiskAPI) {
-        var playlist = [];
         var audio = new Audio();
-        var currentItem = {};
+        var playlist = [];
+        audio.currentItem = null;
 
         var next = function() {
-            var i = playlist.indexOf(currentItem);
+            var i = playlist.indexOf(audio.currentItem);
             if (i + 2 <= playlist.length) {
-                currentItem = playlist[i + 1];
-                audio.src = DiskAPI.getFileUrl(currentItem.href);
+                var item = playlist[i + 1]
+                audio.src = DiskAPI.getFileUrl(item.href);
                 audio.play();
+                audio.currentItem = item;
             }
         };
 
