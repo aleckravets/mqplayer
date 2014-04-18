@@ -1,100 +1,104 @@
 'use strict';
 
 angular.module('Player', [])
-    .directive('player', ['$rootScope', 'Player', function($rootScope, Player) {
+    .directive('player', ['Player', function(Player) {
         return {
             restrict: 'E',
-            scope: {},
+            scope: { },
             controller: function($scope, $element) {
                 $scope.player = Player;
 
-                $scope.playpause = function() {
-                    if ($scope.audio.paused) {
-                        if (!$scope.items)
-                            return;
+                $scope.select = function($event, item) {
+                    if ($scope.selectedItem)
+                        $scope.selectedItem.selected = false;
 
-                        if (!$scope.currentItem) {
-                            $scope.currentItem = $scope.items[0];
-                            $scope.audio.src = 'proxy.php?get=' + $scope.currentItem.href;
-                        }
+                    $scope.selectedItem = item;
 
-                        $scope.audio.play();
-                    }
-                    else {
-                        $scope.audio.pause();
-                    }
+                    item.selected = true;
                 };
 
-                $scope.stop = function() {
-                    $scope.audio.pause();
-                    $scope.src = '';
-                }
+                Player.audio.addEventListener('ended', function() {
+                    $scope.$apply();
+                });
             },
-
             templateUrl: 'player.html'
         };
     }])
-    .factory('Player', ['DiskAPI', '$q', function(DiskAPI, $q) {
+    .factory('Player', function() {
         var audio = new Audio();
         var playlist = [];
 
-        var playFile = function(item) {
-            audio.src = item.getUrl();
-            audio.play();
-            audio.currentItem = item;
-        };
-
-        var clearPlaylist = function() {
-            playlist.splice(0, playlist.length);
-        }
-
-        var isSupportedType = function(item) {
-            return /\.mp3/.test(item.href);
-        };
-
-        audio.addEventListener('ended', function() {
-            next();
-        });
-
-        return {
+        var player = {
             audio: audio,
             playlist: playlist,
+            play: function(item) {
+                audio.src = item.getUrl();
+                audio.play();
+                audio.currentItem = item;
+            },
+            clearPlaylist: function() {
+                playlist.splice(0, playlist.length);
+            },
+            isSupportedType: function(item) {
+                return /\.mp3/.test(item.href);
+            },
+            prev: function() {
+                var i = playlist.indexOf(audio.currentItem);
+                if (i - 1 >= 0)
+                    this.play(playlist[i - 1]);
+            },
             next: function() {
                 var i = playlist.indexOf(audio.currentItem);
-                if (i + 2 <= playlist.length) {
-                    var item = playlist[i + 1]
-                    audio.src = item.getUrl();
-                    audio.play();
-                    audio.currentItem = item;
-                }
+                if (i + 2 <= playlist.length)
+                    this.play(playlist[i + 1]);
             },
             stop: function() {
                 audio.pause();
                 audio.src = '';
+                audio.currentItem = null;
             },
-            playItem: function(item) {
+            setAndPlay: function(item) {
                 this.stop();
-                clearPlaylist();
+                this.clearPlaylist();
 
                 if (item.isDir()) {
+                    var th = this;
                     item.getChildren().then(function(items) {
                         for (var i = 0; i < items.length; i++) {
-                            if (isSupportedType(items[i])) {
+                            if (th.isSupportedType(items[i])) {
                                 playlist.push(items[i]);
                             }
                         }
-                    });
 
+                        if (playlist.length > 0)
+                            th.play(playlist[0]);
+                    });
                 }
                 else {
-                    if (isSupportedType(item))
+                    if (this.isSupportedType(item))
                         playlist.push(item);
+
+                    this.play(item);
                 }
-
-                if (playlist.length == 0)
-                    return;
-
-                playFile(playlist[0]);
+            },
+            playPause: function() {
+                if (audio.paused) {
+                    if (audio.currentItem) {
+                        audio.play()
+                    }
+                    else if (playlist) {
+                        this.play(playlist[0]);
+                    }
+                }
+                else {
+                    audio.pause();
+                }
             }
         };
-    }]);
+
+        audio.addEventListener('ended', function() {
+            player.next();
+        });
+
+        return player;
+    });

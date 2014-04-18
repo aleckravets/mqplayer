@@ -55,6 +55,7 @@ ul.tree li {
     padding: 1px 4px;
     border: 1px solid transparent;
 }
+
 .selected {
     background: #eee;
     border: 1px solid #ccc;
@@ -79,4 +80,8 @@ player * {
 
 .playing {
     font-weight: bold;
+}
+
+#playlist {
+    cursor: default;
 }

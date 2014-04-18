@@ -5,7 +5,7 @@
 <div class="form-group">
     <button ng-disabled="currentNum == 0" class="btn btn-default prev" ng-click="player.prev()"><i class="glyphicon glyphicon-step-backward"></i> prev</button>
     <button class="btn btn-default" ng-click="player.stop()"><i class="glyphicon glyphicon-stop"></i> stop</button>
-    <button class="btn btn-default playpause" ng-click="player.playpause()" ng-class="{paused:player.audio.paused}">
+    <button class="btn btn-default playpause" ng-click="player.playPause()" ng-class="{paused:player.audio.paused}">
         <span class="play-text"><i class="glyphicon glyphicon-play"></i> play</span>
         <span class="pause-text"><i class="glyphicon glyphicon-pause"></i> pause</span>
     </button>
@@ -22,6 +22,6 @@
 
 <div id="playlist">
     <ul>
-        <li ng-repeat="item in player.playlist" ng-class="{playing: item == player.audio.currentItem}">{{item.displayName}}</li>
+        <li ng-repeat="item in player.playlist" ng-class="{playing: item == player.audio.currentItem, selected: item.selected}" ng-click="select($event, item)" ng-dblclick="player.play(item)">{{item.displayName}}</li>
     </ul>
 </div>

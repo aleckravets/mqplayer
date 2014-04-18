@@ -2,7 +2,7 @@
     <div ng-class="{collapsed: item.collapsed}">
         <a ng-if="item.resourceType == 'dir'" ng-click="toggleDir(item)"><i class="glyphicon glyphicon-folder-close"></i></a>
         <i ng-if="item.resourceType != 'dir'" class="glyphicon glyphicon-file"></i>
-        <span class="tree-label" ng-class="{selected: item.selected}" ng-mousedown="select($event, item)" ng-dblclick="play(item)">{{item.displayName}}</span>
+        <span class="tree-label" ng-class="{selected: item.selected}" ng-mousedown="select($event, item)" ng-dblclick="player.setAndPlay(item)">{{item.displayName}}</span>
         <ul ng-if="item.resourceType == 'dir'">
             <li ng-repeat="item in item.children" ng-include="'item.html'"></li>
         </ul>

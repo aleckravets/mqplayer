@@ -22,7 +22,5 @@ angular.module('Tree', [])
             item.selected = !item.selected;
         };
 
-        $scope.play = function(item) {
-            Player.playItem(item);
-        }
+        $scope.player = Player;
     }]);

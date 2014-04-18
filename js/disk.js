@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('Disk', ['Tree', 'Player', 'API'])
-    .factory('Item', ['$http', '$q', 'DiskAPI', function($http, $q, DiskAPI) {
+angular.module('Disk', ['Tree', 'Player', 'Services'])
+    .factory('Item', ['$q', 'DiskAPI', function($q, DiskAPI) {
         function Item(itemData) {
             angular.extend(this, itemData || { href: '/' });
         }

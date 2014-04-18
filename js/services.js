@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('API', [])
+angular.module('Services', [])
     .factory('DiskAPI', ['$http', function($http){
             var url = 'proxy.php';
 
