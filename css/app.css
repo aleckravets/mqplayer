@@ -61,6 +61,10 @@ ul.tree li {
     border: 1px solid #ccc;
 }
 
+.dragover{
+    border-top: 1px solid #000;
+}
+
 player .paused .play-text,
 player .pause-text {
     display:inline-block;

@@ -22,6 +22,10 @@
 
 <div id="playlist">
     <ul>
-        <li ng-repeat="item in player.playlist" ng-class="{playing: item == player.audio.currentItem, selected: item.selected}" ng-click="select($event, item)" ng-dblclick="player.play(item)">{{item.displayName}}</li>
+        <li droppable
+            ng-repeat="item in player.playlist track by $index"
+            ng-click="select($event, item)"
+            ng-dblclick="player.playItem(item)"
+            ng-class="{playing: item == player.audio.currentItem, selected: item.selected2, dragover: item.dragover == true}">{{item.displayName}}</li>
     </ul>
 </div>
