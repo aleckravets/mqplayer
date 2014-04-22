@@ -21,6 +21,10 @@ angular.module('Player', [])
                     $scope.$apply();
                 });
 
+                Player.audio.addEventListener('timeupdate', function() {
+                    $scope.$apply();
+                });
+
                 Player.audio.volume = 0.5;
             },
             templateUrl: 'player.html'
