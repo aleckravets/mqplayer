@@ -23,7 +23,6 @@ body {
 
 #left {
     white-space: nowrap;
-    overflow: auto;
     height: 100%;
     padding: 10px 0 0 0;
 }
@@ -36,10 +35,72 @@ body {
 
 #player {
     padding: 10px;
+    height: 100%;
+}
+
+#player-controls {
+    height: 50px;
 }
 
 #playlist {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: 60px;
+    bottom: 10px;
     padding: 10px;
+    background: #fefefe;
+    overflow: auto;
+}
+
+#playlist ul {
+    list-style-type: none;
+    padding-left: 0;
+    cursor: default;
+    pointer-events: none;
+}
+
+#playlist ul.dragover {
+    border-bottom: 2px dotted #000;
+}
+
+#playlist li {
+    margin: 0 0 0 20px;
+    border-top: 2px solid transparent;
+    pointer-events: all;
+}
+
+#playlist li i {
+    display: none;
+    margin-left: -14px;
+}
+
+.playing #playlist li.current i.glyphicon-play {
+     display: inline;
+ }
+
+.paused #playlist li.current i.glyphicon-pause {
+    display: inline;
+}
+
+#playlist li:nth-child(2n+1) {
+    background-color: #F9F9F9;
+}
+
+#playlist li.selected {
+    background: #eee;
+}
+
+#playlist li.current {
+    font-weight: bold;
+}
+
+#playlist li span {
+    pointer-events: none; /* do not fire dragenter/dragleave events on li's contents */
+}
+
+#playlist li.dragover{
+    border-top: 2px dotted #000;
 }
 
 ul.tree {
@@ -56,14 +117,12 @@ ul.tree li {
     border: 1px solid transparent;
 }
 
-.selected {
+.tree-label.selected {
     background: #eee;
     border: 1px solid #ccc;
 }
 
-.dragover{
-    border-top: 1px solid #000;
-}
+
 
 player .paused .play-text,
 player .pause-text {
@@ -82,10 +141,3 @@ player * {
     user-select: none;
 }
 
-.playing {
-    font-weight: bold;
-}
-
-#playlist {
-    cursor: default;
-}

@@ -9,10 +9,10 @@ angular.module('Player', [])
                 $scope.player = Player;
 
                 $scope.select = function($event, item) {
-                    if ($scope.selectedItem)
-                        $scope.selectedItem.selected2 = false;
+                    if (Player.state.selectedItem)
+                        Player.state.selectedItem.selected2 = false;
 
-                    $scope.selectedItem = item;
+                    Player.state.selectedItem = item;
 
                     item.selected2 = true;
                 };
@@ -20,11 +20,13 @@ angular.module('Player', [])
                 Player.audio.addEventListener('ended', function() {
                     $scope.$apply();
                 });
+
+                Player.audio.volume = 0.5;
             },
             templateUrl: 'player.html'
         };
     }])
-    .directive('droppable', ['Player', 'TreeState', function(Player, TreeState) {
+    .directive('droppablePlaylist', ['Player', function(Player) {
         return {
             link: function(scope, element, attrs) {
                 element.on('dragover', function(e) {
@@ -32,18 +34,66 @@ angular.module('Player', [])
                 });
 
                 element.on('dragenter', function(e) {
-                    scope.$apply(function(){
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    scope.$apply(function() {
+                        scope.dragover = true;
+                    });
+                });
+
+                element.on('dragleave', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    scope.$apply(function() {
+                        scope.dragover = false;
+                    });
+                });
+
+                element.on('drop', function(e) {
+                    scope.$apply(function() {
+                        scope.dragover = false;
+                    });
+
+                    Player.enqueue(Player.dragging);
+                });
+            }
+        }
+    }])
+    .directive('droppableItem', ['Player', function(Player) {
+        return {
+            link: function(scope, element, attrs) {
+                element.on('dragover', function(e) {
+                    e.preventDefault(); // allow drop
+                });
+
+                element.on('dragenter', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    scope.$apply(function() {
                         scope.item.dragover = true;
                     });
                 });
 
                 element.on('dragleave', function(e) {
-                    scope.item.dragover = false;
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    scope.$apply(function() {
+                        scope.item.dragover = false;
+                    });
                 });
 
                 element.on('drop', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    Player.enqueue(Player.dragging, scope.item);
+
                     scope.item.dragover = false;
-                    Player.enqueue(TreeState.dragging, scope.item);
+                    scope.$apply();
                 });
             }
         }
@@ -51,14 +101,16 @@ angular.module('Player', [])
     .factory('Player', ['$q', function($q) {
         var audio = new Audio();
         var playlist = [];
+        var state = {};
 
         var player = {
             audio: audio,
             playlist: playlist,
+            state: state,
             playItem: function(item) {
                 audio.src = item.getUrl();
                 audio.play();
-                audio.currentItem = item;
+                state.currentItem = item;
             },
             clearPlaylist: function() {
                 playlist.splice(0, playlist.length);
@@ -69,6 +121,7 @@ angular.module('Player', [])
             play: function(item) {
                 this.stop();
                 this.clearPlaylist();
+                delete this.state.currentItem;
 
                 var th = this;
 
@@ -109,24 +162,27 @@ angular.module('Player', [])
                 });
             },
             prev: function() {
-                var i = playlist.indexOf(audio.currentItem);
+                var i = playlist.indexOf(state.currentItem);
                 if (i - 1 >= 0)
                     this.playItem(playlist[i - 1]);
             },
             next: function() {
-                var i = playlist.indexOf(audio.currentItem);
+                var i = playlist.indexOf(state.currentItem);
                 if (i + 2 <= playlist.length)
                     this.playItem(playlist[i + 1]);
             },
             stop: function() {
                 audio.pause();
                 audio.src = '';
-                audio.currentItem = null;
+                state.currentItem = null;
             },
             playPause: function() {
                 if (audio.paused) {
-                    if (audio.currentItem) {
-                        audio.playItem()
+                    if (state.currentItem) {
+                        audio.play()
+                    }
+                    else if (state.selectedItem) {
+                        this.playItem(state.selectedItem);
                     }
                     else if (playlist) {
                         this.playItem(playlist[0]);

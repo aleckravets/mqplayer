@@ -10,11 +10,21 @@ angular.module('Tree', [])
 
                 root.getChildren().then(function(items) {
                     $scope.items = items;
+                    return items;
+                }).then(function(items) {
+                    return $scope.toggleDir(items[0]);
+                }).then(function(items) {
+                    return $scope.toggleDir(items[0]);
+                }).then(function(items) {
+                    return $scope.toggleDir(items[1]);
                 });
 
+
                 $scope.toggleDir = function(item) {
-                    item.getChildren();
-                    item.collapsed = !item.collapsed;
+                    return item.getChildren().then(function(items) {
+                        item.collapsed = !item.collapsed;
+                        return items;
+                    });
                 };
 
                 $scope.select = function($event, item) {
@@ -34,7 +44,7 @@ angular.module('Tree', [])
             templateUrl: 'tree.html'
         };
     }])
-    .directive('draggable', ['TreeState', function(TreeState) {
+    .directive('draggable', ['Player', function(Player) {
         return {
             link: function(scope, element, attrs) {
                 var item = scope.item;
@@ -43,16 +53,13 @@ angular.module('Tree', [])
 
                 element.on('dragstart', function(e) {
                     e.dataTransfer.setData('text/html', ''); // needed for FF.
-                    TreeState.dragging = item;
+                    Player.dragging = item;
                 });
 
                 element.on('dragend', function() {
-                    delete TreeState.dragging;
+                    delete Player.dragging;
                 });
             }
         };
     }])
-    .factory('TreeState', function(){
-        return { };
-    })
 ;
