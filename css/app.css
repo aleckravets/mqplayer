@@ -40,6 +40,19 @@ body {
 
 #player-controls {
     height: 50px;
+    cursor: default;
+}
+
+#player-controls a {
+    /*cursor: default;*/
+}
+
+#player.playing #player-controls a.play {
+    display: none;
+}
+
+#player.paused #player-controls a.pause {
+    display: none;
 }
 
 #playlist {
