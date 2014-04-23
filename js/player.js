@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('Player', [])
+angular.module('Player', ['ui.slider'])
     .directive('player', ['Player', function(Player) {
         return {
             restrict: 'E',
@@ -33,11 +33,11 @@ angular.module('Player', [])
     .directive('droppablePlaylist', ['Player', function(Player) {
         return {
             link: function(scope, element, attrs) {
-                element.on('dragover', function(e) {
+                element[0].addEventListener('dragover', function(e) {
                     e.preventDefault(); // allow drop
                 });
 
-                element.on('dragenter', function(e) {
+                element[0].addEventListener('dragenter', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
 
@@ -46,7 +46,7 @@ angular.module('Player', [])
                     });
                 });
 
-                element.on('dragleave', function(e) {
+                element[0].addEventListener('dragleave', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
 
@@ -55,7 +55,7 @@ angular.module('Player', [])
                     });
                 });
 
-                element.on('drop', function(e) {
+                element[0].addEventListener('drop', function(e) {
                     scope.$apply(function() {
                         scope.dragover = false;
                     });
@@ -68,11 +68,11 @@ angular.module('Player', [])
     .directive('droppableItem', ['Player', function(Player) {
         return {
             link: function(scope, element, attrs) {
-                element.on('dragover', function(e) {
+                element[0].addEventListener('dragover', function(e) {
                     e.preventDefault(); // allow drop
                 });
 
-                element.on('dragenter', function(e) {
+                element[0].addEventListener('dragenter', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
 
@@ -81,7 +81,7 @@ angular.module('Player', [])
                     });
                 });
 
-                element.on('dragleave', function(e) {
+                element[0].addEventListener('dragleave', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
 
@@ -90,7 +90,7 @@ angular.module('Player', [])
                     });
                 });
 
-                element.on('drop', function(e) {
+                element[0].addEventListener('drop', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
 

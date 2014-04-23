@@ -51,12 +51,12 @@ angular.module('Tree', [])
 
                 element.attr('draggable', true);
 
-                element.on('dragstart', function(e) {
+                element[0].addEventListener('dragstart', function(e) {
                     e.dataTransfer.setData('text/html', ''); // needed for FF.
                     Player.dragging = item;
                 });
 
-                element.on('dragend', function() {
+                element[0].addEventListener('dragend', function() {
                     delete Player.dragging;
                 });
             }

@@ -1,6 +1,7 @@
 <script type="text/ng-template"  id="item.html">
     <div ng-class="{collapsed: item.collapsed}">
-        <a ng-if="item.resourceType == 'dir'" ng-click="toggleDir(item)"><i class="glyphicon glyphicon-folder-close"></i></a>
+        <i ng-if="item.resourceType == 'dir'" ng-click="toggleDir(item)" class="expand-collapse glyphicon glyphicon-plus" ng-class="{'glyphicon-minus': !item.collapsed}"></i>
+        <i ng-if="item.resourceType == 'dir'" ng-click="toggleDir(item)" class="glyphicon glyphicon-folder-close" ng-class="{'glyphicon-folder-open': !item.collapsed}"></i>
         <i ng-if="item.resourceType != 'dir'" class="glyphicon glyphicon-file"></i>
         <span draggable class="tree-label" ng-class="{selected: item.selected}" ng-mousedown="select($event, item)" ng-dblclick="player.play(item)">{{item.displayName}}</span>
         <ul ng-if="item.resourceType == 'dir'">
