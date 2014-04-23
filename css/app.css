@@ -60,6 +60,11 @@ ul.tree li {
     padding-right: 5px;
     margin-top: -3px;
     vertical-align: middle;
+    line-height: 18px;
+}
+
+.tree .glyphicon-folder-closed {
+    line-height: 18px;
 }
 
 .tree .glyphicon-file {
@@ -121,7 +126,7 @@ a.play, a.pause {
 }
 
 #current-time {
-    margin-top: 12px;
+    /*margin-top: 12px;*/
 }
 #current-time .ui-slider {
     /*margin-top: 18px;*/
