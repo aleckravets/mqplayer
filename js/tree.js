@@ -21,8 +21,8 @@ angular.module('Tree', [])
 
 
                 $scope.toggleDir = function(item) {
+                    item.collapsed = !item.collapsed;
                     return item.getChildren().then(function(items) {
-                        item.collapsed = !item.collapsed;
                         return items;
                     });
                 };

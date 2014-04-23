@@ -13,7 +13,10 @@ angular.module('Disk', ['Tree', 'Player', 'Services'])
             },
             getChildren: function() {
                 var item = this;
+                if (!this.children)
+                    this.loading = true;
                 return $q.when(this.children || DiskAPI.loadItemsData(this.href).then(function(response) {
+                    item.loading = false;
                     item.children = response.data.map(function(itemData){
                         return new Item(itemData);
                     });

@@ -1,15 +1,14 @@
 <script type="text/ng-template"  id="item.html">
     <div ng-class="{collapsed: item.collapsed}">
-        <i ng-if="item.resourceType == 'dir'" ng-click="toggleDir(item)" class="expand-collapse glyphicon glyphicon-plus" ng-class="{'glyphicon-minus': !item.collapsed}"></i>
-        <i ng-if="item.resourceType == 'dir'" ng-click="toggleDir(item)" class="glyphicon glyphicon-folder-close" ng-class="{'glyphicon-folder-open': !item.collapsed}"></i>
+        <a ng-if="item.resourceType == 'dir'" ng-click="toggleDir(item)"><i class="glyphicon glyphicon-plus" ng-class="{'glyphicon-minus': !item.collapsed}"></i><i class="glyphicon glyphicon-folder-close" ng-class="{'glyphicon-folder-open': !item.collapsed}"></i></a>
         <i ng-if="item.resourceType != 'dir'" class="glyphicon glyphicon-file"></i>
         <span draggable class="tree-label" ng-class="{selected: item.selected}" ng-mousedown="select($event, item)" ng-dblclick="player.play(item)">{{item.displayName}}</span>
+        <div ng-if="item.resourceType == 'dir' && !item.collapsed && item.loading" class="loading">Loading...</div>
         <ul ng-if="item.resourceType == 'dir'">
             <li ng-repeat="item in item.children" ng-include="'item.html'"></li>
         </ul>
     </div>
 </script>
-
 
 <ul class="tree">
     <li ng-repeat="item in items" ng-include="'item.html'" class="tree-item"></li>

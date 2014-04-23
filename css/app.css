@@ -47,12 +47,31 @@ ul.tree li {
     border: 1px solid #ccc;
 }
 
-.expand-collapse {
-    font-size: 8px;
-    margin-left: -15px;
+.tree a {
+    cursor: pointer;
 }
+.tree .glyphicon {
+    font-size: 12px;
+}
+
+.tree .glyphicon-plus {
+    font-size: 9px;
+    margin-left: -15px;
+    padding-right: 5px;
+    margin-top: -3px;
+    vertical-align: middle;
+}
+
+.tree .glyphicon-file {
+    color: #777;
+}
+
 .collapsed ul {
     display: none;
+}
+
+.loading {
+    font-size: 85%;
 }
 
 /************************************** PLAYER ******************************/
