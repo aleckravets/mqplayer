@@ -140,7 +140,7 @@ angular.module('Player', ['ui.slider'])
             },
             getPlayableItems: function(item) {
                 var th = this;
-                return $q.when(item.isDir() ? item.getChildren() : [item]).then(function(items) {
+                return $q.when(item.isDir() ? th.getDirChildren(item): [item]).then(function(items) {
                     var playable = [];
                     items.forEach(function(item) {
                         if (!item.isDir() && th.isSupportedType(item))
@@ -148,6 +148,31 @@ angular.module('Player', ['ui.slider'])
                     });
 
                     return playable;
+                });
+            },
+            getDirChildren: function(item) {
+                var th = this;
+                return item.getChildren().then(function(items) {
+                    var children = [];
+                    var dirs = [];
+
+                    items.forEach(function(item, index) {
+                        if (th.isSupportedType(item)) {
+                            children.push(item);
+                        }
+                        else if (item.isDir()) {
+                            var promise = th.getDirChildren(item).then(function(items) {
+                                items.forEach(function(item) {
+                                    children.splice(i, 1, item);
+                                });
+                            });
+                            dirs.push(promise);
+                        }
+                    });
+
+                    return dirs.reduce($q.when, $q.when()).then(function(){
+                        return children;
+                    })
                 });
             },
             enqueue: function(item, insertBeforeItem) {
