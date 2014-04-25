@@ -140,7 +140,7 @@ angular.module('Player', ['ui.slider'])
             },
             getPlayableItems: function(item) {
                 var th = this;
-                return $q.when(item.isDir() ? this.getDirChildren(item): [item]).then(function(items) {
+                return $q.when(item.isDir() ? this.getAllChildren(item): [item]).then(function(items) {
                     var playable = [];
                     items.forEach(function(item) {
                         if (!item.isDir() && th.isSupportedType(item))
@@ -150,7 +150,7 @@ angular.module('Player', ['ui.slider'])
                     return playable;
                 });
             },
-            getDirChildren: function(item) {
+            getAllChildren: function(item) {
                 var th = this;
                 return item.getChildren().then(function(items) {
                     var children = [];
@@ -165,15 +165,18 @@ angular.module('Player', ['ui.slider'])
                             dirs.push(item);
                     });
 
-                    var addDirChildren = function(item) {
-                        return th.getDirChildren(item).then(function(items) {
-                            Array.prototype.splice.apply(children, [children.indexOf(item), 1].concat(items));
-                        });
-                    };
+                    var result = $q.when(children);
 
-                    return dirs.reduce($q.when, $q.when(1)).then(function(){
-                        return children;
+                    dirs.forEach(function(dir) {
+                        result = result.then(function() {
+                            return th.getAllChildren(dir).then(function(items) {
+                                Array.prototype.splice.apply(children, [children.indexOf(dir), 1].concat(items));
+                                return children;
+                            });
+                        });
                     });
+
+                    return result;
                 });
             },
             enqueue: function(item, insertBeforeItem) {
