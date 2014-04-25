@@ -150,6 +150,7 @@ angular.module('Player', ['ui.slider'])
                     return playable;
                 });
             },
+            // get directory children recursively
             getAllChildren: function(item) {
                 var th = this;
                 return item.getChildren().then(function(items) {
