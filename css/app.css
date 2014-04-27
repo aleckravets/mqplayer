@@ -86,15 +86,15 @@ ul.tree li {
     cursor: default;
 }
 
-#player-controls {
+#player .btn {
+    padding: 0 5px 0 5px;
 }
 
-#player-controls a {
-    padding: 5px;
-}
-
-#player-controls i {
+#player .glyphicon {
     font-size: 20px;
+}
+#player .mute .glyphicon {
+
 }
 
 a.play, a.pause {
@@ -111,33 +111,65 @@ a.play, a.pause {
 }
 
 #volume {
-    margin-top: 12px;
-}
-#volume .ui-slider {
-    /*margin-top: 15px;*/
-    /*border-radius: 2px;*/
+    float: right;
+    width: 100px;
+    margin-top: 5px;
+    margin-left: 5px;
+
+    box-shadow: inset 0 1px 5px 0px #999;
+    background-color: #8e8d8d;
+    border-color: #333 #333 #777 #333;
+    border-radius: 25px;
+    height: 13px;
 }
 
-#volume .ui-slider .ui-slider-handle {
-    /*margin-top: -4px;*/
-    /*width: 10px;*/
-    /*height: 30px;*/
-    /*border-radius: 1px;*/
+#volume .ui-slider-handle {
+    background: url('../images/handle.png') no-repeat 50% 50%;
+    border: none;
+    outline: none;
+    width: 25px;
+    height: 25px;
+    margin-top: -2px;
 }
 
-#current-time {
-    /*margin-top: 12px;*/
-}
-#current-time .ui-slider {
-    /*margin-top: 18px;*/
-    /*border-radius: 2px;*/
-    /*height: 5px;*/
+#volume .ui-slider-range {
+    background: linear-gradient(top, #ffffff 0%, #eaeaea 100%);
+    position: absolute;
+    border: 0;
+    top: 0;
+    height: 100%;
+    border-radius: 25px;
 }
 
-#current-time .ui-slider .ui-slider-handle {
-    /*width: 8px;*/
-    /*border-radius: 1px;*/
-    /*display: none;*/
+.track-row {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#track {
+    box-shadow: inset 0 5px 5px 0px #eee, 0 1px 0 0px rgba(250, 250, 250, .5);
+    background: none;
+    border-color: #999;
+    border-radius: 2px;
+    height: 10px;
+}
+
+#track .ui-slider-handle {
+    display: none;
+    border: none;
+    outline: none;
+    width: 25px;
+    height: 25px;
+    margin-top: -5px;
+}
+
+#track .ui-slider-range {
+    /*background: linear-gradient(top, #ffffff 0%, #eaeaea 100%);*/
+    position: absolute;
+    border: 0;
+    top: 0;
+    height: 100%;
+    border-radius: 25px;
 }
 
 .playing #current-time .ui-slider .ui-slider-handle,
@@ -155,8 +187,8 @@ a.play, a.pause {
     position: absolute;
     left: 10px;
     right: 10px;
-    top: 60px;
     bottom: 10px;
+    top: 80px;
     padding: 10px;
     background: #fefefe;
     overflow: auto;

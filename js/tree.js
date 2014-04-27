@@ -13,8 +13,6 @@ angular.module('Tree', [])
                     return items;
                 }).then(function(items) {
                     return $scope.toggleDir(items[0]);
-                }).then(function(items) {
-                    return $scope.toggleDir(items[0]);
                 });
 
 
