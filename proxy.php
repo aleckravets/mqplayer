@@ -2,7 +2,7 @@
 
 DEFINE('TOKEN', '9aed859d536244ab891e11caeb7947e0');
 
-//session_start();
+session_start();
 
 require_once 'phar://yandex-sdk_0.2.0.phar/vendor/autoload.php';
 
