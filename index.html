@@ -17,12 +17,45 @@
     <link rel="stylesheet" href="css/app.css"/>
 </head>
 <body ng-app="Disk">
-<div id="left">
-    <tree />
-    <div id="handle">test</div>
+<div id="wrapper">
+    <div id="left">
+        <tree />
+    </div>
+    <div id="handle"></div>
+    <div id="content">
+        <player />
+    </div>
 </div>
-<div id="main">
-    <player />
-</div>
+<script>
+    var startWidth, handleWidth, startX, min;
+
+    $('#handle').on('mousedown', function(event) {
+        event.preventDefault();
+
+        startWidth = $("#left").outerWidth();
+        handleWidth = $("#handle").outerWidth();
+        min = parseInt($("#left").css('min-width'));
+
+        startX = event.pageX;
+
+        $(document).on('mousemove', mousemove);
+        $(document).on('mouseup', mouseup);
+    });
+
+    function mousemove(event) {
+        var x = event.pageX - startX;
+
+        if (startWidth + x < min)
+            return;
+
+        $("#left").css('width', startWidth + x + 'px');
+        $("#content").css('margin-left', startWidth + handleWidth + x + 'px');
+    }
+
+    function mouseup() {
+        $(document).off('mousemove', mousemove);
+        $(document).off('mouseup', mouseup);
+    }
+</script>
 </body>
 </html>

@@ -1,46 +1,47 @@
-body {
+#wrapper {
     position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
     border: 1px solid red;
     padding: 20px;
+    width: 100%;
+    height: 100%;
 }
 
 #left {
-    white-space: nowrap;
-    height: 100%;
-    padding: 10px 5px 0 0;
-    overflow: auto;
     float: left;
-    width: 30%;
+    width: 400px;
+    min-width: 5px;
+    height: 100%;
+    padding: 5px;
+    overflow: auto;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 #handle {
-    position: absolute;
-    right: 0;
+    float: left;
+    width: 10px;
     height: 100%;
-    width: 5px;
-    background: #ccc;
+    cursor: ew-resize;
 }
 
-#main {
+#content {
     height: 100%;
-    padding: 0;
-    float: right;
-    width: 70%;
+    margin-left: 410px;
+    /*border-radius: 5px;*/
+    /*border: 1px solid #ccc;*/
+    /*background: #eee;*/
 }
 
-div[class*='col-md-'],
-#left, #main, #player-wrapper, #playlist {
-    border: 1px dotted #000;
-    border-collapse: collapse;
-}
+/*div[class*='col-md-'],*/
+/*#left, #content, #player-wrapper, #playlist {*/
+     /*border: 1px dotted #000;*/
+     /*border-collapse: collapse;*/
+ /*}*/
 
 /*********************************** TREE ***********************************/
 ul.tree,
 ul.tree ul{
+    white-space: nowrap;
     padding-left: 20px;
     list-style-type: none;
 }
@@ -62,6 +63,7 @@ ul.tree li {
 .tree a {
     cursor: pointer;
 }
+
 .tree .glyphicon {
     font-size: 12px;
 }
@@ -93,24 +95,46 @@ ul.tree li {
 
 /************************************** PLAYER ******************************/
 #player-wrapper {
+    min-width: 500px;
     height: 100%;
     cursor: default;
     position: relative;
+
 }
 
 #player-controls {
-    width: 600px;
-    height: 35px;
-    padding: 5px 10px;
-    margin: 0 20px;
+    height: 34px;
     box-shadow: 0 0 3px 1px rgba(0,0,0,0.5);
     border-radius: 4px;
-    line-height: 100%;
+    background: #efefef;
 }
 
-#player-controls a {
+#buttons-col {
+    height: 100%;
+    width: 200px;
+    float: left;
+    padding: 5px 10px;
+    border-right: 2px solid #ddd;
+}
+
+#volume-col {
+    float: left;
+    height: 100%;
+    width: 120px;
+    border-left: 1px solid #bbb;
+    border-right: 2px solid #efefef;
+    padding: 11px;
+}
+
+#track-col {
+    height: 100%;
+    margin-left: 320px;
+    border-left: 1px solid #bbb;
+    padding: 12px;
+}
+
+#buttons-col a {
     margin-right: 10px;
-    margin-top: 10px;
     font-size: 20px;
 }
 
@@ -136,11 +160,6 @@ a.play, a.pause {
 }
 
 #volume {
-    float: right;
-    width: 100px;
-    margin-top: 7px;
-    margin-left: 10px;
-
     box-shadow: inset 0 1px 5px 0px #999;
     background-color: #8e8d8d;
     border-color: #333 #333 #777 #333;
@@ -172,14 +191,11 @@ a.play, a.pause {
 /*}*/
 
 #track {
-    float: right;
-    width: 330px;
     box-shadow: inset 0 5px 5px 0px #eee, 0 1px 0 0px rgba(250, 250, 250, .5);
     background: none;
     border-color: #999;
     border-radius: 2px;
     height: 10px;
-    margin: 8px 0 0 0px;
 }
 
 #track .ui-slider-handle {
@@ -218,6 +234,10 @@ a.play, a.pause {
     bottom: 0px;
     top: 50px;
     overflow: auto;
+
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 10px 0;
 }
 
 #playlist ul {
@@ -227,7 +247,7 @@ a.play, a.pause {
     pointer-events: none;
 }
 
-#playlist ul.dragover {
+#playlist ul.dragover li:last-child {
     border-bottom: 2px dotted #000;
 }
 
