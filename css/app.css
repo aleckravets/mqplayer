@@ -1,9 +1,13 @@
+body {
+    /*background: url(../images/bg.jpg) -200px -50px;*/
+}
 #wrapper {
     position: fixed;
-    border: 1px solid red;
-    padding: 20px;
+    /*border: 1px solid red;*/
+    padding: 50px ;
     width: 100%;
     height: 100%;
+    background: linear-gradient(#fff, #ccc);
 }
 
 #left {
@@ -15,6 +19,7 @@
     overflow: auto;
     border-radius: 5px;
     border: 1px solid #ccc;
+    background: white;
 }
 
 #handle {
@@ -104,38 +109,42 @@ ul.tree li {
 
 #player-controls {
     height: 34px;
-    box-shadow: 0 0 3px 1px rgba(0,0,0,0.5);
+    border: 1px solid #ccc;
     border-radius: 4px;
-    background: #efefef;
+    background: linear-gradient(#fff, #ddd);
 }
 
 #buttons-col {
     height: 100%;
-    width: 200px;
     float: left;
-    padding: 5px 10px;
-    border-right: 2px solid #ddd;
 }
 
 #volume-col {
     float: left;
     height: 100%;
-    width: 120px;
-    border-left: 1px solid #bbb;
-    border-right: 2px solid #efefef;
+    border-right: 1px solid #ccc;
     padding: 11px;
 }
 
 #track-col {
     height: 100%;
-    margin-left: 320px;
-    border-left: 1px solid #bbb;
+    margin-left: 260px;
     padding: 12px;
 }
 
 #buttons-col a {
-    margin-right: 10px;
-    font-size: 20px;
+    /*margin-right: 10px;*/
+    font-size: 18px;
+    display: block;
+    float: left;
+    height: 100%;
+    width: 34px;
+    text-align: center;
+    border-right: 1px solid #ccc;
+}
+
+#buttons-col a i {
+    vertical-align: middle;
 }
 
 #player .mute {
@@ -146,20 +155,21 @@ ul.tree li {
     /*font-size: 24px;*/
 }
 
-a.play, a.pause {
+#buttons-col a.play, #buttons-col a.pause {
     display: none;
 }
 
-.playing a.pause {
-    display: inline;
+.playing #buttons-col a.pause {
+    display: block;
 }
 
-.paused a.play,
-.stopped a.play {
-    display: inline;
+.paused #buttons-col a.play,
+.stopped #buttons-col a.play {
+    display: block;
 }
 
 #volume {
+    width: 100px;
     box-shadow: inset 0 1px 5px 0px #999;
     background-color: #8e8d8d;
     border-color: #333 #333 #777 #333;
@@ -238,6 +248,7 @@ a.play, a.pause {
     border-radius: 5px;
     border: 1px solid #ccc;
     padding: 10px 0;
+    background: white;
 }
 
 #playlist ul {
