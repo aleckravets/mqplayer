@@ -11,8 +11,6 @@ angular.module('Tree', [])
                 root.getChildren().then(function(items) {
                     $scope.items = items;
                     return items;
-                }).then(function(items) {
-                    return $scope.toggleDir(items[0]);
                 });
 
 

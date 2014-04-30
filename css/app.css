@@ -22,7 +22,7 @@ body {
     background: white;
 }
 
-#handle {
+#resize-handle {
     float: left;
     width: 10px;
     height: 100%;
@@ -242,7 +242,7 @@ ul.tree li {
     left: 0px;
     right: 0px;
     bottom: 0px;
-    top: 50px;
+    top: 45px;
     overflow: auto;
 
     border-radius: 2px;

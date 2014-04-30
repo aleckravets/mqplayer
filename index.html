@@ -4,9 +4,10 @@
     <script src="lib/jquery-1.11.0.min.js"></script>
     <script src="lib/jquery-ui-1.10.4.min.js"></script>
     <script src="lib/angular/angular.js"></script>
+
     <script src="lib/slider.js"></script>
 
-    <script src="js/disk.js"></script>
+    <script src="js/app.js"></script>
     <script src="js/item.js"></script>
     <script src="js/tree.js"></script>
     <script src="js/player.js"></script>
@@ -16,12 +17,13 @@
     <link rel="stylesheet" href="lib/jquery-ui-1.10.4.min.css"/>
     <link rel="stylesheet" href="css/app.css"/>
 </head>
-<body ng-app="Disk">
-<div id="wrapper">
+<body ng-app="App">
+<div id="wrapper" ng-controller="Controller">
+    <div><a href="auth.php">Authorize</a></div>
     <div id="left">
         <tree />
     </div>
-    <div id="handle"></div>
+    <div id="resize-handle"></div>
     <div id="content">
         <player />
     </div>
@@ -29,11 +31,11 @@
 <script>
     var startWidth, handleWidth, startX, min;
 
-    $('#handle').on('mousedown', function(event) {
+    $('#resize-handle').on('mousedown', function(event) {
         event.preventDefault();
 
         startWidth = $("#left").outerWidth();
-        handleWidth = $("#handle").outerWidth();
+        handleWidth = $("#resize-handle").outerWidth();
         min = parseInt($("#left").css('min-width'));
 
         startX = event.pageX;

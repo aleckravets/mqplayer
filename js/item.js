@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('Disk')
+angular.module('App')
     .factory('Item', ['$q', 'DiskAPI', function($q, DiskAPI) {
         function Item(itemData) {
             angular.extend(this, itemData || { href: '/' });

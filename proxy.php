@@ -1,8 +1,10 @@
 <?php
 
-DEFINE('TOKEN', '9aed859d536244ab891e11caeb7947e0');
+$cache = false;
 
 session_start();
+
+DEFINE('TOKEN', isset($_SESSION['token']) ? $_SESSION['token'] : '');
 
 require_once 'phar://yandex-sdk_0.2.0.phar/vendor/autoload.php';
 
@@ -19,7 +21,7 @@ if (isset($_GET['get'])) {
     getFile($_GET['get']);
 }
 else {
-    getDirectoryContents($_SERVER['PATH_INFO']);
+    getDirectoryContents($_SERVER['PATH_INFO'], $cache);
 }
 
 function pr($obj) {
@@ -54,7 +56,7 @@ function getFile($path) {
     curl_close($ch);
 }
 
-function getDirectoryContents($path) {
+function getDirectoryContents($path, $cache) {
 //    $ch = curl_init();
 //
 //    curl_setopt($ch, CURLOPT_URL, "https://webdav.yandex.ru" . $path);
@@ -73,19 +75,26 @@ function getDirectoryContents($path) {
 //
 //    curl_close($ch);
 
-//    return $response;
-
     header('Content-Type: application/json');
+
+    if (!TOKEN) {
+        die('[]');
+    }
 
     $disk = new DiskClient();
 
     $disk->setAccessToken(TOKEN);
 
-    if (!$_SESSION[$path]) {
+    if ($cache && isset($_SESSION[$path])) {
+        $files = $_SESSION[$path];
+    }
+    else {
         $files = $disk->directoryContents($path);
         array_shift($files);
-        $_SESSION[$path] = $files;
+
+        if ($cache)
+            $_SESSION[$path] = $files;
     }
 
-    echo json_encode($_SESSION[$path]);
+    die(json_encode($files));
 }
