@@ -4,7 +4,7 @@ body {
 #wrapper {
     position: fixed;
     /*border: 1px solid red;*/
-    padding: 50px ;
+    padding: 30px 50px 50px 50px;
     width: 100%;
     height: 100%;
     background: linear-gradient(#fff, #ccc);
@@ -20,6 +20,7 @@ body {
     border-radius: 2px;
     border: 1px solid #ccc;
     background: white;
+    position: relative;
 }
 
 #resize-handle {
@@ -63,6 +64,10 @@ ul.tree li {
 .tree-label.selected {
     background: #eee;
     border: 1px solid #ccc;
+}
+
+#tree-buttons {
+    padding: 5px 0;
 }
 
 .tree a {
@@ -237,13 +242,18 @@ ul.tree li {
 /*}*/
 
 /******************************** PLAYLIST *************************/
-#playlist {
+#playlist-wrapper {
     position: absolute;
+
     left: 0px;
     right: 0px;
     bottom: 0px;
     top: 45px;
+}
+#playlist {
     overflow: auto;
+    height: 100%;
+    width: 100%;
 
     border-radius: 2px;
     border: 1px solid #ccc;
@@ -299,4 +309,29 @@ ul.tree li {
 
 #playlist li.dragover{
     border-top: 2px dotted #000;
+}
+
+#playlist-buttons {
+        position: absolute;
+        right: -30px;
+        padding: 0 5px;
+    font-size: 18px;
+
+}
+
+#playlist-buttons a {
+    cursor: pointer;
+}
+
+#loading-label {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    font-size: 30px;
+    color: #ccc;
+    z-index: 1;
+}
+#loading-label div {
+    position: relative;
+    left: -50%;
 }

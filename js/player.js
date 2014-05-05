@@ -127,6 +127,8 @@ angular.module('Player', ['ui.slider'])
                 this.clearPlaylist();
                 delete this.state.currentItem;
 
+                this.state.loading = true;
+
                 var th = this;
 
                 this.getPlayableItems(item).then(function(items) {
@@ -136,6 +138,8 @@ angular.module('Player', ['ui.slider'])
 
                     if (playlist.length > 0)
                         th.playItem(playlist[0]);
+
+                    th.state.loading = false;
                 });
             },
             getPlayableItems: function(item) {
@@ -181,6 +185,10 @@ angular.module('Player', ['ui.slider'])
                 });
             },
             enqueue: function(item, insertBeforeItem) {
+                this.state.loading = true;
+
+                var th = this;
+
                 this.getPlayableItems(item).then(function(items) {
                     if (insertBeforeItem) {
                         var index = playlist.indexOf(insertBeforeItem);
@@ -193,6 +201,8 @@ angular.module('Player', ['ui.slider'])
                             playlist.push(item);
                         });
                     }
+
+                    th.state.loading = false;
                 });
             },
             prev: function() {

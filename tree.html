@@ -10,6 +10,7 @@
     </div>
 </script>
 
+<div ng-if="loading" id="loading-label"><div>Loading...</div></div>
 <ul class="tree">
     <li ng-repeat="item in items" ng-include="'item.html'" class="tree-item"></li>
 </ul>

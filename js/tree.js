@@ -8,11 +8,13 @@ angular.module('Tree', [])
             controller: function($scope, $element) {
                 var root = new Item();
 
+                $scope.loading = true;
+
                 root.getChildren().then(function(items) {
                     $scope.items = items;
+                    $scope.loading = false;
                     return items;
                 });
-
 
                 $scope.toggleDir = function(item) {
                     item.collapsed = !item.collapsed;
