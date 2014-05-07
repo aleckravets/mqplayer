@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .factory('Item', ['$q', 'DiskAPI', function($q, DiskAPI) {
+    .factory('Item', ['$q', 'DataService', function($q, DataService) {
         function Item(itemData) {
             angular.extend(this, itemData || { href: '/' });
         }
@@ -15,7 +15,7 @@ angular.module('App')
                 var item = this;
                 if (!this.children)
                     this.loading = true;
-                return $q.when(this.children || DiskAPI.loadItemsData(this.href).then(function(response) {
+                return $q.when(this.children || DataService.loadItemsData(this.href).then(function(response) {
                     item.loading = false;
                     item.children = response.data.map(function(itemData){
                         return new Item(itemData);
@@ -24,7 +24,7 @@ angular.module('App')
                 }));
             },
             getUrl: function() {
-                return DiskAPI.getFileUrl(this.href)
+                return DataService.getFileUrl(this.href);
             }
         };
 

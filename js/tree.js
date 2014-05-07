@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('Tree', [])
-    .directive('tree', ['Player', 'Item', function(Player, Item) {
+    .directive('tree', ['Player', 'Item', 'DataService', function(Player, Item, DataService) {
         return {
             restrict: 'E',
             scope: { },
             controller: function($scope, $element) {
+
                 var root = new Item();
 
                 $scope.loading = true;
