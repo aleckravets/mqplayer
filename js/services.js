@@ -4,17 +4,6 @@ angular.module('Services', [])
     .factory('DataService', ['$http', '$q', function($http, $q){
         var client = new Dropbox.Client({ key: "qfd1sjynxut1kkw" });
 
-        // get cached credentials
-        client.authenticate({interactive: false}, function(error, client) {
-            if (error) {
-                console.log(error);
-            }
-            if (client.isAuthenticated()) {
-                // Cached credentials are available, make Dropbox API calls.
-
-            }
-        });
-
         return {
             client: client,
 
@@ -50,6 +39,13 @@ angular.module('Services', [])
                         });
                     });
 
+                    items = items.sort(function(a, b) {
+                        if (a.resourceType != b.resourceType)
+                            return a.resourceType == 'dir' ? -1 : 1;
+                        else
+                            return a.displayName < b.displayName ? -1 : 1;
+                    });
+
                     var response = {
                         data: items
                     };
@@ -60,7 +56,6 @@ angular.module('Services', [])
                 return deferred.promise;
             },
             getFileUrl: function(path) {
-//                return url + '?getfile=' + encodeURIComponent(path);
                 var deferred = $q.defer();
 
                 client.makeUrl(path, {download: true}, function(error, shareUrl) {
