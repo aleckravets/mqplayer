@@ -2,18 +2,8 @@
 
 angular.module('App', ['ngRoute', 'Tree', 'Player', 'Services'])
     .controller('Controller', ['$scope', 'DataService', function($scope, DataService) {
-        $scope.authorize = function() {
-            DataService.authorize();
-        }
+        // try to auto login
+        DataService.authorize(true);
 
-        DataService.tryAuthorize().then(function (authorized) {
-            $scope.authorized = authorized;
-        });
-    }])
-//    .config(function($routeProvider){
-//        $routeProvider
-//            .when('/', {controller:'Controller', resolve:{ 'DataService': function() {
-//
-//            } }});
-//    })
-;
+        $scope.svc = DataService;
+    }]);

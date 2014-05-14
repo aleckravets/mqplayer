@@ -112,17 +112,15 @@ angular.module('Player', ['ui.slider'])
             playlist: playlist,
             state: state,
             playItem: function(item) {
-                item.getUrl().then(function(url) {
-                    audio.src = url;
-                    audio.play();
-                    state.currentItem = item;
-                });
+                audio.src = item.url;
+                audio.play();
+                state.currentItem = item;
             },
             clearPlaylist: function() {
                 playlist.splice(0, playlist.length);
             },
             isSupportedType: function(item) {
-                return /\.mp3/.test(item.href);
+                return /\.mp3/.test(item.displayName);
             },
             play: function(item) {
                 this.stop();

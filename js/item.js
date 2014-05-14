@@ -3,7 +3,7 @@
 angular.module('App')
     .factory('Item', ['$q', 'DataService', function($q, DataService) {
         function Item(itemData) {
-            angular.extend(this, itemData || { href: '/' });
+            angular.extend(this, itemData || { href: 'root' });
         }
 
         Item.prototype = {
@@ -12,7 +12,7 @@ angular.module('App')
                 return this.resourceType == 'dir';
             },
             getChildren: function() {
-                var item = this;
+                 var item = this;
                 if (!this.children)
                     this.loading = true;
                 return $q.when(this.children || DataService.loadItemsData(this.href).then(function(response) {
@@ -24,7 +24,8 @@ angular.module('App')
                 }));
             },
             getUrl: function() {
-                return DataService.getFileUrl(this.href);
+                return this.url;
+                //return DataService.getFileUrl(this.href);
             }
         };
 

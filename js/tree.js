@@ -6,7 +6,6 @@ angular.module('Tree', [])
             restrict: 'E',
             scope: { },
             controller: function($scope, $element) {
-
                 var root = new Item();
 
                 $scope.loading = true;
