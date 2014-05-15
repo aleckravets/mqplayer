@@ -1,41 +1,42 @@
 'use strict';
 
 angular.module('Tree', [])
-    .directive('tree', ['Player', 'Item', 'DataService', function(Player, Item, DataService) {
+    .directive('tree', ['Player', 'DataService', 'TreeNode', function(Player, DataService, TreeNode) {
         return {
             restrict: 'E',
             scope: { },
             controller: function($scope, $element) {
-                var root = new Item();
+                $scope.player = Player;
+                $scope.toggleDir = function(node) {
+                    node.collapsed = !node.collapsed;
+                    return node.getChildren().then(function(nodes) {
+                        return nodes;
+                    });
+                };
 
+                $scope.mousedown = function($event, node) {
+                    if ($scope.selectedRecord)
+                        $scope.selectedRecord.selected = false;
+
+                    $scope.selectedRecord = node;
+
+                    node.selected = !node.selected;
+                };
+
+                $scope.dblclick = function ($event, node) {
+                    $scope.player.playNode(node)
+                };
+
+                $scope.root = new TreeNode({ id: 'root' });
                 $scope.loading = true;
 
-                root.getChildren().then(function(items) {
-                    $scope.items = items;
+                $scope.root.getChildren().then(function(nodes) {
                     $scope.loading = false;
-                    return items;
+                    return nodes;
                 })
-                    .then(function(items) {
-                        $scope.toggleDir(items[0]);
+                    .then(function(nodes) {
+                        $scope.toggleDir(nodes[0]);
                     });
-
-                $scope.toggleDir = function(item) {
-                    item.collapsed = !item.collapsed;
-                    return item.getChildren().then(function(items) {
-                        return items;
-                    });
-                };
-
-                $scope.select = function($event, item) {
-                    if ($scope.selectedItem)
-                        $scope.selectedItem.selected = false;
-
-                    $scope.selectedItem = item;
-
-                    item.selected = !item.selected;
-                };
-
-                $scope.player = Player;
             },
             link: function(scope, element, attrs) {
 
@@ -46,19 +47,74 @@ angular.module('Tree', [])
     .directive('draggable', ['Player', function(Player) {
         return {
             link: function(scope, element, attrs) {
-                var item = scope.item;
+                var node = scope.node;
 
                 element.attr('draggable', true);
 
                 element[0].addEventListener('dragstart', function(e) {
                     e.dataTransfer.setData('text/html', ''); // needed for FF.
-                    Player.dragging = item;
+                    Player.draggedNode = node;
                 });
 
                 element[0].addEventListener('dragend', function() {
-                    delete Player.dragging;
+                    delete Player.draggedNode;
                 });
             }
         };
     }])
-;
+    .factory('TreeNode', ['$q', 'DataService', function($q, DataService) {
+        function Ctor(item) {
+            this.item = item;
+        }
+
+        Ctor.prototype = {
+            collapsed: true,
+            selected: false,
+            loading: false,
+            children: undefined,
+            getChildren: function() {
+                var self = this;
+                if (!this.children)
+                    this.loading = true;
+                return $q.when(this.children || DataService.loadItems(this.item.id).then(function(items) {
+                    self.children = items.map(function(item){
+                        return new Ctor(item);
+                    });
+                    self.loading = false;
+                    return self.children;
+                }));
+            },
+            // get directory children recursively
+            getAllChildren: function() {
+                var self = this;
+                return this.getChildren().then(function(nodes) {
+                    var children = [];
+                    var dirs = [];
+
+                    nodes.forEach(function(node, index) {
+//                        if (!node.isDir() && !self.isSupportedItem(node)) return;
+
+                        children.push(node);
+
+                        if (node.item.isDir)
+                            dirs.push(node);
+                    });
+
+                    var result = $q.when(children);
+
+                    dirs.forEach(function(node) {
+                        result = result.then(function() {
+                            return node.getAllChildren().then(function(nodes) {
+                                Array.prototype.splice.apply(children, [children.indexOf(node), 1].concat(nodes));
+                                return children;
+                            });
+                        });
+                    });
+
+                    return result;
+                });
+            }
+        };
+
+        return Ctor;
+    }]);

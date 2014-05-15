@@ -1,4 +1,4 @@
-<div id="player-wrapper" ng-class="{playing: !player.audio.paused, paused: player.audio.paused && player.state.currentItem, stopped: !player.state.currentItem}">
+<div id="player-wrapper" ng-class="{playing: !player.audio.paused, paused: player.audio.paused && player.state.currentRecord, stopped: !player.state.currentRecord}">
     <div id="player">
         <div id="player-controls">
             <div id="buttons-col">
@@ -27,11 +27,11 @@
             <div ng-if="player.state.loading" id="loading-label"><div>Loading...</div></div>
             <ul ng-class="{dragover: dragover}">
                 <li droppable-item
-                    ng-repeat="item in player.playlist track by $index"
-                    ng-mousedown="mousedown($event, item)"
-                    ng-dblclick="player.playItem(item)"
-                    ng-class="{current: item == player.state.currentItem, selected: item.selected2, dragover: item.dragover}">
-                    <span><i class="glyphicon glyphicon-play"></i><i class="glyphicon glyphicon-pause"></i>&nbsp;{{item.displayName}}</span>
+                    ng-repeat="record in player.playlist"
+                    ng-mousedown="mousedown($event, record)"
+                    ng-dblclick="player.playRecord(record)"
+                    ng-class="{current: record == player.state.currentRecord, selected: record.selected, dragover: record.dragover}">
+                    <span><i class="glyphicon glyphicon-play"></i><i class="glyphicon glyphicon-pause"></i>&nbsp;{{record.node.item.name}}</span>
                 </li>
             </ul>
         </div>

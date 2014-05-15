@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('Services', [])
-    .factory('DataService', ['$http', '$q', '$timeout', function($http, $q, $timeout){
+    .factory('DataService', ['$http', '$q', '$timeout', 'Item', function($http, $q, $timeout, Item){
         var clientid = '97071318931-0pqadkdeov03b36bhthnri1n3h64eg7d.apps.googleusercontent.com';
 
         var scopes = [
@@ -39,10 +39,7 @@ angular.module('Services', [])
                     $timeout(function() {}); // digest!
                 });
             },
-            signOut: function() {
-                gapi.auth.signOut();
-            },
-            loadItemsData: function(parentid) {
+            loadItems: function(parentid) {
                 var deferred = $q.defer();
 
                 var q = "'" + parentid + "' in parents and trashed = false";
@@ -58,25 +55,27 @@ angular.module('Services', [])
                             deferred.resolve(result);
                         }
                     });
-                }
+                };
+
                 var initialRequest = gapi.client.drive.files.list({ q: q });
                 retrievePageOfFiles(initialRequest, []);
 
-                return deferred.promise.then(function(items) {
-                    var res = [];
-
-                    items.forEach(function(item) {
-                        res.push({
-                            resourceType: item.mimeType == 'application/vnd.google-apps.folder' ? 'dir' : 'file',
-                            displayName: item.title,
-                            href: item.id,
-                            url: item.webContentLink
-                        });
+                return deferred.promise.then(function(rawItems) {
+                    return rawItems.map(function(rawItem) {
+                        return new Item(rawItem);
                     });
-
-                    return { data: res };
                 });
             }
         };
+    }])
+    .factory('Item', [function() {
+        function Ctor(data) {
+            this.id = data.id;
+            this.name = data.title;
+            this.isDir = data.mimeType == 'application/vnd.google-apps.folder';
+            this.url = data.webContentLink;
+        }
+
+        return Ctor;
     }]);
  

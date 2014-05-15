@@ -1,17 +1,17 @@
-<script type="text/ng-template"  id="item.html">
-    <div ng-class="{collapsed: item.collapsed}">
-        <a ng-if="item.resourceType == 'dir'" ng-click="toggleDir(item)"><i class="glyphicon glyphicon-plus" ng-class="{'glyphicon-minus': !item.collapsed}"></i><i class="glyphicon glyphicon-folder-close" ng-class="{'glyphicon-folder-open': !item.collapsed}"></i></a>
-        <i ng-if="item.resourceType != 'dir'" class="glyphicon glyphicon-file"></i>
-        <span draggable class="tree-label" ng-class="{selected: item.selected}" ng-mousedown="select($event, item)" ng-dblclick="player.play(item)">{{item.displayName}}</span>
-        <div ng-if="item.resourceType == 'dir' && !item.collapsed && item.loading" class="loading">Loading...</div>
-        <ul ng-if="item.resourceType == 'dir'">
-            <li ng-repeat="item in item.children" ng-include="'item.html'"></li>
+<script type="text/ng-template" id="node.html">
+    <div ng-class="{collapsed: node.collapsed}">
+        <a ng-if="node.item.isDir" ng-click="toggleDir(node)"><i class="glyphicon glyphicon-plus" ng-class="{'glyphicon-minus': !node.collapsed}"></i><i class="glyphicon glyphicon-folder-close" ng-class="{'glyphicon-folder-open': !node.collapsed}"></i></a>
+        <i ng-if="!node.item.isDir" class="glyphicon glyphicon-file"></i>
+        <span draggable class="tree-label" ng-class="{selected: node.selected}" ng-mousedown="mousedown($event, node)" ng-dblclick="dblclick($event, node)">{{node.item.name}}</span>
+        <div ng-if="node.item.isDir && !node.collapsed && node.loading" class="loading">Loading...</div>
+        <ul ng-if="node.item.isDir">
+            <li ng-repeat="node in node.children" ng-include="'node.html'"></li>
         </ul>
     </div>
 </script>
 
 <div ng-if="loading" id="loading-label"><div>Loading...</div></div>
 <ul class="tree">
-    <li ng-repeat="item in items" ng-include="'item.html'" class="tree-item"></li>
+    <li ng-repeat="node in root.children" ng-include="'node.html'" class="tree-item"></li>
 </ul>
 

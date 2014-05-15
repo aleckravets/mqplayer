@@ -7,23 +7,23 @@ angular.module('Player', ['ui.slider'])
             scope: {},
             controller: function($scope, $element) {
                 $scope.player = Player;
-                $scope.selectedItems = [];
+                $scope.selectedRecords = [];
 
-                $scope.mousedown = function($event, item) {
+                $scope.mousedown = function($event, record) {
                     if ($event.shiftKey) {
 
                     } else {
-                        if ($scope.selectedItems.length > 0 && !$event.ctrlKey) {
-                            $scope.selectedItems.forEach(function(item) {
-                                item.selected2 = false;
+                        if ($scope.selectedRecords.length > 0 && !$event.ctrlKey) {
+                            $scope.selectedRecords.forEach(function(record) {
+                                record.selected = false;
                             });
                         }
 
-                        Player.state.selectedItem = item;
+                        Player.state.selectedRecord = record;
 
-                        item.selected2 = !item.selected2;
+                        record.selected = !record.selected;
 
-                        $scope.selectedItems.push(item);
+                        $scope.selectedRecords.push(record);
                     }
                     $event.preventDefault(); // no selection on double click
                 };
@@ -71,7 +71,7 @@ angular.module('Player', ['ui.slider'])
                         scope.dragover = false;
                     });
 
-                    Player.enqueue(Player.dragging);
+                    Player.enqueue(Player.draggedNode);
                 });
             }
         }
@@ -88,7 +88,7 @@ angular.module('Player', ['ui.slider'])
                     e.stopPropagation();
 
                     scope.$apply(function() {
-                        scope.item.dragover = true;
+                        scope.record.dragover = true;
                     });
                 });
 
@@ -97,7 +97,7 @@ angular.module('Player', ['ui.slider'])
                     e.stopPropagation();
 
                     scope.$apply(function() {
-                        scope.item.dragover = false;
+                        scope.record.dragover = false;
                     });
                 });
 
@@ -105,19 +105,19 @@ angular.module('Player', ['ui.slider'])
                     e.preventDefault();
                     e.stopPropagation();
 
-                    Player.enqueue(Player.dragging, scope.item);
+                    Player.enqueue(Player.draggedNode, scope.record);
 
-                    scope.item.dragover = false;
+                    scope.record.dragover = false;
                     scope.$apply();
                 });
             }
         }
     }])
-    .factory('Player', ['$q', function($q) {
+    .factory('Player', ['$q', 'Record', function($q, Record) {
         var audio = new Audio();
         var playlist = [];
         var state = {
-            currentItem: undefined,
+            currentRecord: undefined,
             repeat: false,
             random: false
         };
@@ -126,121 +126,91 @@ angular.module('Player', ['ui.slider'])
             audio: audio,
             playlist: playlist,
             state: state,
-            playItem: function(item) {
-                audio.src = item.url;
+            playRecord: function(record) {
+                audio.src = record.node.item.url;
                 audio.play();
-                state.currentItem = item;
+                state.currentRecord = record;
             },
             clearPlaylist: function() {
                 playlist.splice(0, playlist.length);
             },
-            isSupportedType: function(item) {
-                return /\.mp3/.test(item.displayName);
+            isSupportedItem: function(item) {
+                return /\.mp3/.test(item.name);
             },
-            play: function(item) {
+            playNode: function(node) {
                 this.stop();
                 this.clearPlaylist();
-                delete this.state.currentItem;
+                delete this.state.currentRecord;
 
                 this.state.loading = true;
 
-                var th = this;
+                var self = this;
 
-                this.getPlayableItems(item).then(function(items) {
-                    items.forEach(function(item) {
-                        playlist.push(item);
+                this.getPlayableNodes(node).then(function(nodes) {
+                    nodes.forEach(function(node) {
+                        playlist.push(new Record(node));
                     });
 
                     if (playlist.length > 0)
-                        th.playItem(playlist[0]);
+                        self.playRecord(playlist[0]);
 
-                    th.state.loading = false;
+                    self.state.loading = false;
                 });
             },
-            getPlayableItems: function(item) {
-                var th = this;
-                return $q.when(item.isDir() ? this.getAllChildren(item): [item]).then(function(items) {
+            getPlayableNodes: function(node) {
+                var self = this;
+                return $q.when(node.item.isDir ? node.getAllChildren(): [node]).then(function(nodes) {
                     var playable = [];
-                    items.forEach(function(item) {
-                        if (!item.isDir() && th.isSupportedType(item))
-                            playable.push(item);
+                    nodes.forEach(function(node) {
+                        if (!node.item.isDir && self.isSupportedItem(node.item))
+                            playable.push(node);
                     });
 
                     return playable;
                 });
             },
-            // get directory children recursively
-            getAllChildren: function(item) {
-                var th = this;
-                return item.getChildren().then(function(items) {
-                    var children = [];
-                    var dirs = [];
-
-                    items.forEach(function(item, index) {
-                        if (!item.isDir() && !th.isSupportedType(item)) return;
-
-                        children.push(item);
-
-                        if (item.isDir())
-                            dirs.push(item);
-                    });
-
-                    var result = $q.when(children);
-
-                    dirs.forEach(function(dir) {
-                        result = result.then(function() {
-                            return th.getAllChildren(dir).then(function(items) {
-                                Array.prototype.splice.apply(children, [children.indexOf(dir), 1].concat(items));
-                                return children;
-                            });
-                        });
-                    });
-
-                    return result;
-                });
-            },
-            enqueue: function(item, insertBeforeItem) {
+            enqueue: function(node, insertBeforeRecord) {
                 this.state.loading = true;
 
-                var th = this;
+                var self = this;
 
-                this.getPlayableItems(item).then(function(items) {
-                    if (insertBeforeItem) {
-                        var index = playlist.indexOf(insertBeforeItem);
-                        items.forEach(function(item){
-                            playlist.splice(index++, 0, item);
+                this.getPlayableNodes(node).then(function(nodes) {
+                    if (insertBeforeRecord) {
+                        var index = playlist.indexOf(insertBeforeRecord);
+                        nodes.forEach(function(node){
+                            playlist.splice(index++, 0, new Record(node));
                         });
                     }
                     else {
-                        items.forEach(function(item){
-                            playlist.push(item);
+                        nodes.forEach(function(node){
+                            playlist.push(new Record(node));
                         });
                     }
 
-                    th.state.loading = false;
+                    self.state.loading = false;
                 });
             },
             prev: function() {
-                var i = playlist.indexOf(state.currentItem);
+                var i = playlist.indexOf(state.currentRecord);
                 if (i - 1 >= 0)
-                    this.playItem(playlist[i - 1]);
+                    this.playRecord(playlist[i - 1]);
             },
             next: function() {
                 if (state.random) {
                     var next = Math.floor(Math.random() * playlist.length);
-                    this.playItem(playlist[next]);
+                    this.playRecord(playlist[next]);
                 } else {
-                    var i = playlist.indexOf(state.currentItem);
+                    var i = playlist.indexOf(state.currentRecord);
                     if (i <= playlist.length - 2)
-                        this.playItem(playlist[i + 1]);
+                        this.playRecord(playlist[i + 1]);
                     else if (i == playlist.length - 1 && state.repeat)
-                        this.playItem(playlist[0]);
+                        this.playRecord(playlist[0]);
                 }
             },
             stop: function() {
                 audio.pause();
                 audio.src = '';
-                state.currentItem = null;
+                state.currentRecord = null;
             },
             mute: function() {
                 audio.muted = !audio.muted;
@@ -253,14 +223,14 @@ angular.module('Player', ['ui.slider'])
             },
             playPause: function() {
                 if (audio.paused) {
-                    if (state.currentItem) {
+                    if (state.currentRecord) {
                         audio.play()
                     }
-                    else if (state.selectedItem) {
-                        this.playItem(state.selectedItem);
+                    else if (state.selectedRecord) {
+                        this.playRecord(state.selectedRecord);
                     }
                     else if (playlist) {
-                        this.playItem(playlist[0]);
+                        this.playRecord(playlist[0]);
                     }
                 }
                 else {
@@ -274,4 +244,15 @@ angular.module('Player', ['ui.slider'])
         });
 
         return player;
+    }])
+    .factory('Record', [function() {
+        function Ctor(node) {
+            this.node = node;
+        }
+
+        Ctor.prototype = {
+            selected: false
+        };
+
+        return Ctor;
     }]);
