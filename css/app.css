@@ -1,6 +1,11 @@
 body {
     /*background: url(../images/bg.jpg) -200px -50px;*/
 }
+
+a {
+    cursor: pointer;
+}
+
 #wrapper {
     position: fixed;
     /*border: 1px solid red;*/
@@ -38,6 +43,29 @@ body {
     /*background: #eee;*/
 }
 
+#header {
+    margin-bottom: 10px;
+}
+
+#logo {
+    float: left;
+}
+
+#userinfo {
+    float: right;
+}
+
+
+.btn-singin {
+    font-weight: bold;
+}
+
+a.btn-pressed {
+    background: linear-gradient(#fff, #bbb);
+    /*border: 1px solid #aaa;*/
+    color: #000;
+}
+
 /*div[class*='col-md-'],*/
 /*#left, #content, #player-wrapper, #playlist {*/
      /*border: 1px dotted #000;*/
@@ -67,6 +95,7 @@ ul.tree li {
 }
 
 #tree-buttons {
+    text-align: right;
     padding: 5px 0;
 }
 
@@ -133,7 +162,7 @@ ul.tree li {
 
 #track-col {
     height: 100%;
-    margin-left: 260px;
+    margin-left: 360px;
     padding: 12px;
 }
 
@@ -250,6 +279,7 @@ ul.tree li {
     bottom: 0px;
     top: 45px;
 }
+
 #playlist {
     overflow: auto;
     height: 100%;

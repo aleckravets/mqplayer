@@ -7,14 +7,25 @@ angular.module('Player', ['ui.slider'])
             scope: {},
             controller: function($scope, $element) {
                 $scope.player = Player;
+                $scope.selectedItems = [];
 
-                $scope.select = function($event, item) {
-                    if (Player.state.selectedItem)
-                        Player.state.selectedItem.selected2 = false;
+                $scope.mousedown = function($event, item) {
+                    if ($event.shiftKey) {
 
-                    Player.state.selectedItem = item;
+                    } else {
+                        if ($scope.selectedItems.length > 0 && !$event.ctrlKey) {
+                            $scope.selectedItems.forEach(function(item) {
+                                item.selected2 = false;
+                            });
+                        }
 
-                    item.selected2 = true;
+                        Player.state.selectedItem = item;
+
+                        item.selected2 = !item.selected2;
+
+                        $scope.selectedItems.push(item);
+                    }
+                    $event.preventDefault(); // no selection on double click
                 };
 
                 Player.audio.addEventListener('ended', function() {
@@ -105,7 +116,11 @@ angular.module('Player', ['ui.slider'])
     .factory('Player', ['$q', function($q) {
         var audio = new Audio();
         var playlist = [];
-        var state = {};
+        var state = {
+            currentItem: undefined,
+            repeat: false,
+            random: false
+        };
 
         var player = {
             audio: audio,
@@ -211,14 +226,30 @@ angular.module('Player', ['ui.slider'])
                     this.playItem(playlist[i - 1]);
             },
             next: function() {
-                var i = playlist.indexOf(state.currentItem);
-                if (i + 2 <= playlist.length)
-                    this.playItem(playlist[i + 1]);
+                if (state.random) {
+                    var next = Math.floor(Math.random() * playlist.length);
+                    this.playItem(playlist[next]);
+                } else {
+                    var i = playlist.indexOf(state.currentItem);
+                    if (i <= playlist.length - 2)
+                        this.playItem(playlist[i + 1]);
+                    else if (i == playlist.length - 1 && state.repeat)
+                        this.playItem(playlist[0]);
+                }
             },
             stop: function() {
                 audio.pause();
                 audio.src = '';
                 state.currentItem = null;
+            },
+            mute: function() {
+                audio.muted = !audio.muted;
+            },
+            random: function() {
+                state.random = !state.random;
+            },
+            repeat: function() {
+                state.repeat = !state.repeat;
             },
             playPause: function() {
                 if (audio.paused) {

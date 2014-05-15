@@ -25,7 +25,6 @@ angular.module('App')
             },
             getUrl: function() {
                 return this.url;
-                //return DataService.getFileUrl(this.href);
             }
         };
 

@@ -26,12 +26,14 @@
 </head>
 <body ng-controller="Controller">
 <div id="wrapper">
-    <div id="tree-buttons">
-        <a ng-click="svc.authorize()" ng-if="!svc.authorized"><i class="glyphicon glyphicon-log-in"></i> Log in</a>
-        <span ng-if="svc.authorized"><i class="glyphicon glyphicon-user">{{svc.userInfo.name}}</i></span>
-        {{svc.userInfo.rootFolderId}}
-
+    <div id="header">
+        <div id="logo"><a href="https://googledrivemusic.com">Google Drive Music</a></div>
+        <div id="userinfo">
+            <button type="button" class="btn btn-danger btn-singin" ng-if="svc.authorized == false" ng-click="svc.authorize()"><i class="glyphicon glyphicon-log-in"></i> Sing in with Google</button>
+            <span ng-if="svc.authorized"><i class="glyphicon glyphicon-user"></i> {{svc.userInfo.name}} <a href="https://accounts.google.com/logout">Sign out</a></span>
+        </div>
     </div>
+    <br class="clearfix" />
     <div id="left">
         <tree ng-if="svc.authorized"/>
     </div>

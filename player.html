@@ -2,14 +2,14 @@
     <div id="player">
         <div id="player-controls">
             <div id="buttons-col">
-                <a class="prev" ng-click="player.prev()"><i class="glyphicon glyphicon-step-backward"></i></a>
-                <a class="stop" ng-click="player.stop()"><i class="glyphicon glyphicon-stop"></i></a>
-                <a class="pause" ng-click="player.playPause()"><i class="glyphicon glyphicon-pause"></i></a>
-                <a class="play" ng-click="player.playPause()"><i class="glyphicon glyphicon-play"></i></a>
-                <a class="next" ng-click="player.next()"><i class="glyphicon glyphicon-step-forward"></i></a>
-
-                <!--<a class="rand" ng-click="player.rand()"><i class="glyphicon glyphicon-random"></i></a>-->
-                <!--<a class="mute" ng-click="player.audio.muted = !player.audio.muted"><i class="glyphicon" ng-class="{'glyphicon-volume-up': !player.audio.muted, 'glyphicon-volume-off': player.audio.muted}"></i></a>-->
+                <a class="prev" title="Previous" ng-click="player.prev()"><i class="glyphicon glyphicon-step-backward"></i></a>
+                <a class="stop" title="Stop" ng-click="player.stop()"><i class="glyphicon glyphicon-stop"></i></a>
+                <a class="pause" title="Pause" ng-click="player.playPause()"><i class="glyphicon glyphicon-pause"></i></a>
+                <a class="play" title="Play" ng-click="player.playPause()"><i class="glyphicon glyphicon-play"></i></a>
+                <a class="next" title="Next" ng-click="player.next()"><i class="glyphicon glyphicon-step-forward"></i></a>
+                <a class="repeat" title="Repeat" ng-click="player.repeat()" ng-class="{'btn-pressed': player.state.repeat}"><i class="glyphicon glyphicon-repeat"></i></a>
+                <a class="random" title="Shuffle" ng-click="player.random()" ng-class="{'btn-pressed': player.state.random}"><i class="glyphicon glyphicon-random"></i></a>
+                <a class="mute" title="Mute" ng-click="player.mute()" ng-class="{'btn-pressed': player.audio.muted}"><i class="glyphicon" ng-class="{'glyphicon-volume-up': !player.audio.muted, 'glyphicon-volume-off': player.audio.muted}"></i></a>
             </div>
             <div id="volume-col">
                 <div id="volume" ui-slider="{range: 'min'}" ui-slider use-decimals min="0" max="1.0" step="0.01" ng-model="player.audio.volume"></div>
@@ -28,7 +28,7 @@
             <ul ng-class="{dragover: dragover}">
                 <li droppable-item
                     ng-repeat="item in player.playlist track by $index"
-                    ng-mousedown="select($event, item)"
+                    ng-mousedown="mousedown($event, item)"
                     ng-dblclick="player.playItem(item)"
                     ng-class="{current: item == player.state.currentItem, selected: item.selected2, dragover: item.dragover}">
                     <span><i class="glyphicon glyphicon-play"></i><i class="glyphicon glyphicon-pause"></i>&nbsp;{{item.displayName}}</span>
