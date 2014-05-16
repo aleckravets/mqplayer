@@ -22,7 +22,7 @@ angular.module('App')
                 return;
 
             $("#left").css('width', startWidth + x + 'px');
-            $("#content").css('margin-left', startWidth + handleWidth + x + 'px');
+            $("#right").css('margin-left', startWidth + handleWidth + x + 'px');
         };
 
         var mouseup = function () {

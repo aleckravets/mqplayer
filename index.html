@@ -13,33 +13,62 @@
     <script src="js/tree.js"></script>
     <script src="js/player.js"></script>
     <script src="js/services.js"></script>
-    <script src="js/resize.js"></script>
+    <script src="js/resizebar.js"></script>
+    <script src="https://apis.google.com/js/client.js?onload=bootstrap"></script>
 
     <link rel="stylesheet" href="lib/bootstrap.min.css">
     <link rel="stylesheet" href="lib/jquery-ui-1.10.4.min.css"/>
     <link rel="stylesheet" href="css/app.css"/>
-    <script src="https://apis.google.com/js/client.js?onload=bootstrap"></script>
+
 </head>
 <body ng-controller="Controller">
-<div id="auth-window" ng-if="!svc.authorized" ng-cloak>
-    <button type="button" class="btn btn-danger btn-singin" ng-if="svc.authorized === false" ng-click="svc.authorize()" ng-cloak><i class="glyphicon glyphicon-log-in"></i> Sing in with Google</button>
-    <span ng-if="svc.authorized === undefined" ng-cloak>Loading...</span>
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Google Drive Music</a>
+        <p class="navbar-text navbar-right" ng-if="svc.authorized" ng-cloak><i class="glyphicon glyphicon-user"></i> {{svc.userInfo.name}} <a ng-click="svc.signOut()">Sign out</a></p>
+        <p id="controls" class="navbar-text">
+            <a><i class="glyphicon glyphicon-step-backward"></i></a>
+            <a><i class="glyphicon glyphicon-stop"></i></a>
+            <a><i class="glyphicon glyphicon-pause"></i></a>
+            <a><i class="glyphicon glyphicon-play"></i></a>
+            <a><i class="glyphicon glyphicon-step-forward"></i></a>
+        </p>
+
+    </div>
 </div>
-<div id="player-window" ng-if="svc.authorized" ng-cloak>
-    <div id="header">
-        <div id="logo"><a href="/">Google Drive Music</a></div>
-        <div id="userinfo">
-            <span ng-if="svc.authorized"><i class="glyphicon glyphicon-user"></i> {{svc.userInfo.name}} <a ng-click="svc.signOut()">Sign out</a></span>
-        </div>
-    </div>
-    <br class="clearfix" />
-    <div id="left">
-        <tree ng-if="svc.authorized"></tree>
-    </div>
-    <resize-bar></resize-bar>
+
+<div id="login-box" ng-if="svc.authorized === false" ng-cloak>
+    <button type="button" class="btn btn-danger" ng-if="svc.authorized === false" ng-click="svc.authorize()" ng-cloak><i class="glyphicon glyphicon-log-in"></i> Sign in with Google</button>
+    <br />
+    to access your music in Google Drive
+</div>
+
+<div id="content-wrapper" ng-if="svc.authorized" ng-cloak>
     <div id="content">
-        <player></player>
+        <div id="left">
+            <tree></tree>
+        </div>
+        <resize-bar></resize-bar>
+        <div id="right">
+            <player></player>
+        </div>
+
     </div>
 </div>
+
+<!--<div id="login-box" ng-if="svc.authorized === false" ng-cloak>-->
+<!--<button type="button" class="btn btn-danger" ng-if="svc.authorized === false" ng-click="svc.authorize()" ng-cloak><i class="glyphicon glyphicon-log-in"></i> Sign in with Google</button>-->
+<!--<br />-->
+<!--to access your music in Google Drive-->
+<!--</div>-->
+<!--<div id="player-window" ng-if="svc.authorized" ng-cloak>-->
+<!--<div id="left">-->
+<!--<tree></tree>-->
+<!--</div>-->
+<!--<resize-bar></resize-bar>-->
+<!--<div id="right">-->
+<!--<player></player>-->
+<!--</div>-->
+<!--</div>-->
 </body>
 </html>
