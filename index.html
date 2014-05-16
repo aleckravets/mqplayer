@@ -8,16 +8,12 @@
 
     <script src="lib/slider.js"></script>
 
-    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js"></script>-->
-
-    <script src="js/bootstrap.js"></script>
+    <script src="js/tools.js"></script>
     <script src="js/app.js"></script>
-    <script src="js/item.js"></script>
     <script src="js/tree.js"></script>
     <script src="js/player.js"></script>
     <script src="js/services.js"></script>
-
-
+    <script src="js/resize.js"></script>
 
     <link rel="stylesheet" href="lib/bootstrap.min.css">
     <link rel="stylesheet" href="lib/jquery-ui-1.10.4.min.css"/>
@@ -25,54 +21,25 @@
     <script src="https://apis.google.com/js/client.js?onload=bootstrap"></script>
 </head>
 <body ng-controller="Controller">
-<div id="wrapper">
+<div id="auth-window" ng-if="!svc.authorized" ng-cloak>
+    <button type="button" class="btn btn-danger btn-singin" ng-if="svc.authorized === false" ng-click="svc.authorize()" ng-cloak><i class="glyphicon glyphicon-log-in"></i> Sing in with Google</button>
+    <span ng-if="svc.authorized === undefined" ng-cloak>Loading...</span>
+</div>
+<div id="player-window" ng-if="svc.authorized" ng-cloak>
     <div id="header">
-        <div id="logo"><a href="https://googledrivemusic.com">Google Drive Music</a></div>
+        <div id="logo"><a href="/">Google Drive Music</a></div>
         <div id="userinfo">
-            <button type="button" class="btn btn-danger btn-singin" ng-if="svc.authorized == false" ng-click="svc.authorize()"><i class="glyphicon glyphicon-log-in"></i> Sing in with Google</button>
-            <span ng-if="svc.authorized"><i class="glyphicon glyphicon-user"></i> {{svc.userInfo.name}} <a href="https://accounts.google.com/logout">Sign out</a></span>
+            <span ng-if="svc.authorized"><i class="glyphicon glyphicon-user"></i> {{svc.userInfo.name}} <a ng-click="svc.signOut()">Sign out</a></span>
         </div>
     </div>
     <br class="clearfix" />
     <div id="left">
-        <tree ng-if="svc.authorized"/>
+        <tree ng-if="svc.authorized"></tree>
     </div>
-    <div id="resize-handle"></div>
+    <resize-bar></resize-bar>
     <div id="content">
-        <player />
+        <player></player>
     </div>
 </div>
-
-<script>
-    var startWidth, handleWidth, startX, min;
-
-    $('#resize-handle').on('mousedown', function(event) {
-        event.preventDefault();
-
-        startWidth = $("#left").outerWidth();
-        handleWidth = $("#resize-handle").outerWidth();
-        min = parseInt($("#left").css('min-width'));
-
-        startX = event.pageX;
-
-        $(document).on('mousemove', mousemove);
-        $(document).on('mouseup', mouseup);
-    });
-
-    function mousemove(event) {
-        var x = event.pageX - startX;
-
-        if (startWidth + x < min)
-            return;
-
-        $("#left").css('width', startWidth + x + 'px');
-        $("#content").css('margin-left', startWidth + handleWidth + x + 'px');
-    }
-
-    function mouseup() {
-        $(document).off('mousemove', mousemove);
-        $(document).off('mouseup', mouseup);
-    }
-</script>
 </body>
 </html>

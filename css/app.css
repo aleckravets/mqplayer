@@ -1,12 +1,13 @@
 body {
     /*background: url(../images/bg.jpg) -200px -50px;*/
+
 }
 
 a {
     cursor: pointer;
 }
 
-#wrapper {
+#player-window {
     position: fixed;
     /*border: 1px solid red;*/
     padding: 10px 50px 50px 50px;
@@ -28,7 +29,7 @@ a {
     position: relative;
 }
 
-#resize-handle {
+#resize-bar {
     float: left;
     width: 10px;
     height: 100%;
@@ -55,6 +56,9 @@ a {
     float: right;
 }
 
+.btn {
+
+}
 
 .btn-singin {
     font-weight: bold;

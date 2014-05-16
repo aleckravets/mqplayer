@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('Player', ['ui.slider'])
-    .directive('player', ['Player', function(Player) {
+    .directive('player', ['Player', '$document', function(Player, $document) {
         return {
             restrict: 'E',
             scope: {},
@@ -13,8 +13,8 @@ angular.module('Player', ['ui.slider'])
                     lastClickedRecord: undefined
                 };
 
-                $scope.mousedown = function($event, record) {
-                    if ($event.shiftKey) {
+                $scope.mousedown = function(e, record) {
+                    if (e.shiftKey) {
                         if (state.lastClickedRecord && state.lastClickedRecord.selected != record.selected) {
                             var i1 = $scope.player.playlist.indexOf(state.lastClickedRecord);
                             var i2 = $scope.player.playlist.indexOf(record);
@@ -26,7 +26,7 @@ angular.module('Player', ['ui.slider'])
                             }
                         }
                     }
-                    else if ($event.ctrlKey) {
+                    else if (e.ctrlKey) {
                         if (!record.selected) {
                             state.selectedRecords.push(record);
                         }
@@ -51,8 +51,47 @@ angular.module('Player', ['ui.slider'])
 
                     state.lastClickedRecord = record;
 
-                    $event.preventDefault(); // no selection on double click
+                    e.preventDefault(); // no selection on double click
                 };
+
+                $scope.deleteSelected = function() {
+                    if (state.selectedRecords.length == $scope.player.playlist.length) {
+                        $scope.player.playlist.empty();
+                    }
+                    else {
+                        state.selectedRecords.forEach(function(record) {
+                            var i = $scope.player.playlist.indexOf(record);
+                            $scope.player.playlist.splice(i, 1);
+                        });
+                    }
+                    state.selectedRecords.empty();
+                };
+
+                $scope.selectAll = function() {
+                    state.selectedRecords.empty();
+                    $scope.player.playlist.forEach(function(record) {
+                        record.selected = true;
+                        state.selectedRecords.push(record);
+                    });
+                };
+
+                $document.on('keydown', function(e) {
+                    switch (e.key.toLowerCase()) {
+                        case 'del':
+                            $scope.deleteSelected();
+                            $scope.$apply();
+                            break;
+                        case 'a':
+                            if (e.ctrlKey) {
+                                e.preventDefault();
+                                $scope.selectAll();
+                                $scope.$apply();
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                });
 
                 Player.audio.addEventListener('ended', function() {
                     $scope.$apply();

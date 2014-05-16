@@ -20,10 +20,7 @@
         </div>
     </div>
     <div id="playlist-wrapper">
-        <div id="playlist-buttons">
-            <a ng-click="player.clearPlaylist()" title="Clear playlist"><i class="glyphicon glyphicon-trash"></i></a>
-        </div>
-        <div id="playlist" droppable-playlist>
+        <div id="playlist" droppable-playlist ng-keydown="keydown($event)">
             <div ng-if="player.state.loading" id="loading-label"><div>Loading...</div></div>
             <ul ng-class="{dragover: dragover}">
                 <li droppable-item

@@ -92,10 +92,7 @@ angular.module('Tree', [])
                     var dirs = [];
 
                     nodes.forEach(function(node, index) {
-//                        if (!node.isDir() && !self.isSupportedItem(node)) return;
-
                         children.push(node);
-
                         if (node.item.isDir)
                             dirs.push(node);
                     });

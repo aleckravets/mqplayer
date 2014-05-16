@@ -39,6 +39,19 @@ angular.module('Services', [])
                     $timeout(function() {}); // digest!
                 });
             },
+            signOut: function() {
+                var self = this;
+                var url = 'https://accounts.google.com/o/oauth2/revoke?token=' + this.token.access_token;
+
+                var done = function() {
+                    $timeout(function() {
+                        self.authorized = false;
+                    });
+                };
+
+                // this is strange
+                $http.get(url).then(done, done);
+            },
             loadItems: function(parentid) {
                 var deferred = $q.defer();
 
@@ -78,4 +91,3 @@ angular.module('Services', [])
 
         return Ctor;
     }]);
- 

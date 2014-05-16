@@ -2,8 +2,6 @@
 
 angular.module('App', ['ngRoute', 'Tree', 'Player', 'Services'])
     .controller('Controller', ['$scope', 'DataService', function($scope, DataService) {
-        // try to auto login
-        DataService.authorize(true);
-
+        DataService.authorize(true); // try to auto login
         $scope.svc = DataService;
     }]);
