@@ -7,24 +7,50 @@ angular.module('Player', ['ui.slider'])
             scope: {},
             controller: function($scope, $element) {
                 $scope.player = Player;
-                $scope.selectedRecords = [];
+
+                var state = {
+                    selectedRecords: [],
+                    lastClickedRecord: undefined
+                };
 
                 $scope.mousedown = function($event, record) {
                     if ($event.shiftKey) {
-
-                    } else {
-                        if ($scope.selectedRecords.length > 0 && !$event.ctrlKey) {
-                            $scope.selectedRecords.forEach(function(record) {
-                                record.selected = false;
-                            });
+                        if (state.lastClickedRecord && state.lastClickedRecord.selected != record.selected) {
+                            var i1 = $scope.player.playlist.indexOf(state.lastClickedRecord);
+                            var i2 = $scope.player.playlist.indexOf(record);
+                            var first = i1 < i2 ? i1 + 1 : i2;
+                            var last = i1 < i2 ? i2 : i1 - 1;
+                            for (var i = first; i <= last; i++) {
+                                $scope.player.playlist[i].selected = state.lastClickedRecord.selected;
+                                state.selectedRecords.push($scope.player.playlist[i]);
+                            }
+                        }
+                    }
+                    else if ($event.ctrlKey) {
+                        if (!record.selected) {
+                            state.selectedRecords.push(record);
+                        }
+                        else {
+                            var i = state.selectedRecords.indexOf(record);
+                            state.selectedRecords.splice(i, 1);
                         }
 
-                        Player.state.selectedRecord = record;
+                        record.selected = !record.selected;
+                    }
+                    else {
+                        state.selectedRecords.forEach(function(record) {
+                            record.selected = false;
+                        });
+                        state.selectedRecords.empty();
 
                         record.selected = !record.selected;
 
-                        $scope.selectedRecords.push(record);
+                        if (record.selected)
+                            state.selectedRecords.push(record);
                     }
+
+                    state.lastClickedRecord = record;
+
                     $event.preventDefault(); // no selection on double click
                 };
 
@@ -131,15 +157,12 @@ angular.module('Player', ['ui.slider'])
                 audio.play();
                 state.currentRecord = record;
             },
-            clearPlaylist: function() {
-                playlist.splice(0, playlist.length);
-            },
             isSupportedItem: function(item) {
                 return /\.mp3/.test(item.name);
             },
             playNode: function(node) {
                 this.stop();
-                this.clearPlaylist();
+                playlist.empty();
                 delete this.state.currentRecord;
 
                 this.state.loading = true;

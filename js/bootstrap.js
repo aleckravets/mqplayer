@@ -3,3 +3,7 @@ function bootstrap() {
         angular.bootstrap(document, ['App']);
     });
 }
+
+Array.prototype.empty = function() {
+    this.splice(0, this.length);
+}
