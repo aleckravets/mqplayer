@@ -12,7 +12,8 @@
 }
 
 #controls {
-    margin: 12px 0 12px 250px;
+    margin: 12px 0 12px 50px;
+    white-space: nowrap;
 }
 
 #controls a {
@@ -23,7 +24,6 @@
 
 body {
     padding-top: 70px;
-    /*background: #F5F5F5;*/
 }
 
 a {

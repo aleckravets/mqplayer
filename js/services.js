@@ -17,40 +17,44 @@ angular.module('Services', [])
                 var deferred = $q.defer();
 
                 gapi.auth.authorize({'client_id': clientid, 'scope': scopes.join(' '), 'immediate': immediate || false}, function(authResult) {
-                    if (authResult && !authResult.error) {
-                        gapi.client.drive.about.get().execute(function(resp) {
-                            self.authorized = true;
-                            self.token = gapi.auth.getToken();
-                            self.userInfo = resp;
-                            deferred.resolve();
+                    if (authResult) {
+                        if (authResult.error) {
+                            deferred.reject(error);
+                        }
+                        else {
+                            gapi.client.drive.about.get().execute(function(resp) {
+                                self.authorized = true;
+                                self.token = gapi.auth.getToken();
+                                self.userInfo = resp;
+                                deferred.resolve(true);
 //                            console.log('Current user name: ' + resp.name);
 //                            console.log('Root folder ID: ' + resp.rootFolderId);
 //                            console.log('Total quota (bytes): ' + resp.quotaBytesTotal);
 //                            console.log('Used quota (bytes): ' + resp.quotaBytesUsed);
-                        });
+                            });
+                        }
                     }
                     else {
                         self.authorized = false;
-                        deferred.resolve();
+                        deferred.resolve(false);
                     }
                 });
 
-                return deferred.promise.then(function() {
-                    $timeout(function() {}); // digest!
-                });
+                return deferred.promise;
             },
             signOut: function() {
+                var deferred = $q.defer();
+
                 var self = this;
                 var url = 'https://accounts.google.com/o/oauth2/revoke?token=' + this.token.access_token;
 
-                var done = function() {
-                    $timeout(function() {
-                        self.authorized = false;
-                    });
-                };
-
                 // this is strange
-                $http.get(url).then(done, done);
+                $http.get(url)['finally'](function() {
+                    self.authorized = false;
+                    deferred.resolve();
+                });
+
+                return deferred.promise;
             },
             loadItems: function(parentid) {
                 var deferred = $q.defer();

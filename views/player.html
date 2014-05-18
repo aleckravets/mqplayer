@@ -1,0 +1,19 @@
+<div id="content-wrapper" ng-if="svc.authorized" ng-cloak>
+    <div id="content">
+        <div id="left">
+            <tree></tree>
+        </div>
+        <resize-bar></resize-bar>
+        <div id="right">
+            <playlist></playlist>
+        </div>
+    </div>
+</div>
+
+<div id="login-box" ng-if="svc.authorized === false" ng-cloak>
+    <p ng-if="!svc.authorized">
+        <button class="btn btn-danger" ng-click="login()"><i class="glyphicon glyphicon-log-in"></i> Sign in with Google</button>
+        <br />
+        to access your music in Google Drive
+    </p>
+</div>

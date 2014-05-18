@@ -1,12 +1,17 @@
 'use strict';
 
 angular.module('Tree', [])
-    .directive('tree', ['Player', 'DataService', 'TreeNode', function(Player, DataService, TreeNode) {
+    // keep tree data outside the controller to preserve it when navigating
+    .factory('Root', function(TreeNode) {
+        return new TreeNode({ id: 'root' });
+    })
+    .directive('tree', function(Player, Root) {
         return {
             restrict: 'E',
             scope: { },
             controller: function($scope, $element) {
                 $scope.player = Player;
+
                 $scope.toggleDir = function(node) {
                     node.collapsed = !node.collapsed;
                     return node.getChildren().then(function(nodes) {
@@ -27,7 +32,7 @@ angular.module('Tree', [])
                     $scope.player.playNode(node)
                 };
 
-                $scope.root = new TreeNode({ id: 'root' });
+                $scope.root = Root;
                 $scope.loading = true;
 
                 $scope.root.getChildren().then(function(nodes) {
@@ -35,15 +40,16 @@ angular.module('Tree', [])
                     return nodes;
                 })
                     .then(function(nodes) {
-                        $scope.toggleDir(nodes[0]);
+                        if (nodes[0].collapsed)
+                            $scope.toggleDir(nodes[0]);
                     });
             },
             link: function(scope, element, attrs) {
 
             },
-            templateUrl: 'tree.html'
+            templateUrl: 'tmpl/tree.html'
         };
-    }])
+    })
     .directive('draggable', ['Player', function(Player) {
         return {
             link: function(scope, element, attrs) {
