@@ -1,7 +1,5 @@
 angular.module('App')
     .controller('AppController', function($scope, $timeout, DataService, Player) {
-        console.log('app controller created');
-
         $scope.logout = function() {
             DataService.signOut()
                 .then(function() {
@@ -25,8 +23,6 @@ angular.module('App')
         $scope.player = Player;
     })
     .controller('PlayerController', function($scope, $timeout, DataService, Player) {
-        console.log('player controller created');
-
         $scope.player = Player;
         $scope.svc = DataService;
 
