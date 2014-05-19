@@ -1,45 +1,49 @@
 'use strict';
 
 angular.module('Player', ['ui.slider'])
-    .factory('Player', function($q, Record, State) {
-        var audio = new Audio();
-        var playlist = [];
-        var state = {
+    .factory('Player', function($q, Record) {
+
+        function Ctor(playlist, selectedRecords) {
+            this.playlist = playlist;
+            this.selectedRecords = selectedRecords;
+
+            var self = this;
+            this.audio.addEventListener('ended', function() {
+                self.next(true);
+            });
+        }
+
+        Ctor.prototype = {
+            audio: new Audio(),
             currentRecord: undefined,
             repeat: false,
-            random: false
-        };
-
-        var player = {
-            audio: audio,
-            playlist: playlist, // todo: move playlist to session
-            state: state,
+            random: false,
             playRecord: function(record) {
-                audio.src = record.node.item.url;
-                audio.play();
-                state.currentRecord = record;
+                this.audio.src = record.node.item.url;
+                this.audio.play();
+                this.currentRecord = record;
             },
             isSupportedItem: function(item) {
                 return /\.mp3/.test(item.name);
             },
             playNode: function(node) {
                 this.stop();
-                playlist.empty();
-                delete this.state.currentRecord;
+                this.playlist.empty();
+                this.currentRecord = undefined;
 
-                this.state.loading = true;
+//                this.state.loading = true;
 
                 var self = this;
 
                 this.getPlayableNodes(node).then(function(nodes) {
                     nodes.forEach(function(node) {
-                        playlist.push(new Record(node));
+                        self.playlist.push(new Record(node));
                     });
 
-                    if (playlist.length > 0)
-                        self.playRecord(playlist[0]);
+                    if (this.playlist.length > 0)
+                        self.playRecord(self.playlist[0]);
 
-                    self.state.loading = false;
+//                    self.state.loading = false;
                 });
             },
             getPlayableNodes: function(node) {
@@ -55,43 +59,43 @@ angular.module('Player', ['ui.slider'])
                 });
             },
             enqueue: function(node, insertBeforeRecord) {
-                this.state.loading = true;
+//                this.state.loading = true;
 
                 var self = this;
 
                 this.getPlayableNodes(node).then(function(nodes) {
                     if (insertBeforeRecord) {
-                        var index = playlist.indexOf(insertBeforeRecord);
+                        var index = this.playlist.indexOf(insertBeforeRecord);
                         nodes.forEach(function(node){
-                            playlist.splice(index++, 0, new Record(node));
+                            self.playlist.splice(index++, 0, new Record(node));
                         });
                     }
                     else {
                         nodes.forEach(function(node){
-                            playlist.push(new Record(node));
+                            self.playlist.push(new Record(node));
                         });
                     }
 
-                    self.state.loading = false;
+//                    self.state.loading = false;
                 });
             },
             prev: function() {
-                var i = playlist.indexOf(state.currentRecord);
+                var i = this.playlist.indexOf(this.currentRecord);
                 if (i - 1 >= 0)
-                    this.playRecord(playlist[i - 1]);
+                    this.playRecord(this.playlist[i - 1]);
             },
             next: function(auto) {
-                if (state.random) {
-                    var next = Math.floor(Math.random() * playlist.length);
-                    this.playRecord(playlist[next]);
+                if (this.random) {
+                    var next = Math.floor(Math.random() * this.playlist.length);
+                    this.playRecord(this.playlist[next]);
                 } else {
-                    var i = playlist.indexOf(state.currentRecord);
-                    if (i <= playlist.length - 2) {
-                        this.playRecord(playlist[i + 1]);
+                    var i = this.playlist.indexOf(this.currentRecord);
+                    if (i <= this.playlist.length - 2) {
+                        this.playRecord(this.playlist[i + 1]);
                     }
-                    else if (i == playlist.length - 1) {
-                        if (state.repeat) {
-                            this.playRecord(playlist[0]);
+                    else if (i == this.playlist.length - 1) {
+                        if (this.repeat) {
+                            this.playRecord(this.playlist[0]);
                         }
                         else if (auto) {
                             this.stop();
@@ -100,51 +104,36 @@ angular.module('Player', ['ui.slider'])
                 }
             },
             stop: function() {
-                audio.pause();
-                audio.src = '';
-                state.currentRecord = null;
+                this.audio.pause();
+                this.audio.src = '';
+                this.currentRecord = null;
             },
             mute: function() {
-                audio.muted = !audio.muted;
+                this.audio.muted = !this.audio.muted;
             },
-            random: function() {
-                state.random = !state.random;
+            toggleRandom: function() {
+                this.random = !this.random;
             },
-            repeat: function() {
-                state.repeat = !state.repeat;
+            toggleRepeat: function() {
+                this.repeat = !this.repeat;
             },
             playPause: function() {
-                if (audio.paused) {
-                    if (state.currentRecord) {
-                        audio.play()
+                if (this.audio.paused) {
+                    if (this.currentRecord) {
+                        this.audio.play()
                     }
-                    else if (State.selectedRecords.length > 0) {
-                        this.playRecord(State.selectedRecords[State.selectedRecords.length - 1]);
+                    else if (this.selectedRecords.length > 0) {
+                        this.playRecord(this.selectedRecords[this.selectedRecords.length - 1]);
                     }
-                    else if (playlist) {
-                        this.playRecord(playlist[0]);
+                    else if (this.playlist) {
+                        this.playRecord(this.playlist[0]);
                     }
                 }
                 else {
-                    audio.pause();
+                    this.audio.pause();
                 }
             }
         };
 
-        audio.addEventListener('ended', function() {
-            player.next(true);
-        });
-
-        return player;
-    })
-    .factory('Record', [function() {
-        function Ctor(node) {
-            this.node = node;
-        }
-
-        Ctor.prototype = {
-            selected: false
-        };
-
         return Ctor;
-    }]);
+    });

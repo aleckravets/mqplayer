@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('Tree', [])
-    .directive('tree', function(Player, State, TreeNode) {
+    .directive('tree', function(Session) {
         return {
             restrict: 'E',
             scope: { },
             controller: function($scope, $element) {
-                $scope.player = Player;
+                $scope.player = Session.player;
 
                 $scope.toggleDir = function(node) {
                     node.collapsed = !node.collapsed;
@@ -16,10 +16,10 @@ angular.module('Tree', [])
                 };
 
                 $scope.mousedown = function($event, node) {
-                    if (State.selectedNode)
-                        State.selectedNode.selected = false;
+                    if (Session.selectedNode)
+                        Session.selectedNode.selected = false;
 
-                    State.selectedNode = node;
+                    Session.selectedNode = node;
 
                     node.selected = !node.selected;
                 };
@@ -28,10 +28,7 @@ angular.module('Tree', [])
                     $scope.player.playNode(node)
                 };
 
-                if (!State.root)
-                    State.root = new TreeNode({ id: 'root' });
-
-                $scope.root = State.root;
+                $scope.root = Session.root;
                 $scope.loading = true;
 
                 $scope.root.getChildren().then(function(nodes) {
@@ -49,7 +46,7 @@ angular.module('Tree', [])
             templateUrl: 'tmpl/tree.html'
         };
     })
-    .directive('draggable', function(Player) {
+    .directive('draggable', function(Session) {
         return {
             link: function(scope, element, attrs) {
                 var node = scope.node;
@@ -58,11 +55,11 @@ angular.module('Tree', [])
 
                 element[0].addEventListener('dragstart', function(e) {
                     e.dataTransfer.setData('text/html', ''); // needed for FF.
-                    Player.draggedNode = node;
+                    Session.draggedNode = node;
                 });
 
                 element[0].addEventListener('dragend', function() {
-                    delete Player.draggedNode;
+                    delete Session.draggedNode;
                 });
             }
         };
