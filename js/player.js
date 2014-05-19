@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('Player', ['ui.slider'])
-    .factory('Player', ['$q', 'Record', function($q, Record) {
+    .factory('Player', function($q, Record, State) {
         var audio = new Audio();
         var playlist = [];
         var state = {
@@ -80,16 +80,25 @@ angular.module('Player', ['ui.slider'])
                 if (i - 1 >= 0)
                     this.playRecord(playlist[i - 1]);
             },
-            next: function() {
+            next: function(auto) {
                 if (state.random) {
                     var next = Math.floor(Math.random() * playlist.length);
                     this.playRecord(playlist[next]);
                 } else {
                     var i = playlist.indexOf(state.currentRecord);
-                    if (i <= playlist.length - 2)
+                    if (i <= playlist.length - 2) {
                         this.playRecord(playlist[i + 1]);
-                    else if (i == playlist.length - 1 && state.repeat)
-                        this.playRecord(playlist[0]);
+                    }
+                    else if (i == playlist.length - 1) {
+                        if (state.repeat) {
+                            this.playRecord(playlist[0]);
+                        }
+                        else if (auto) {
+                            this.stop();
+                        }
+
+                    }
+
                 }
             },
             stop: function() {
@@ -111,8 +120,8 @@ angular.module('Player', ['ui.slider'])
                     if (state.currentRecord) {
                         audio.play()
                     }
-                    else if (state.selectedRecord) {
-                        this.playRecord(state.selectedRecord);
+                    else if (State.selectedRecords.length > 0) {
+                        this.playRecord(State.selectedRecords[State.selectedRecords.length - 1]);
                     }
                     else if (playlist) {
                         this.playRecord(playlist[0]);
@@ -125,11 +134,11 @@ angular.module('Player', ['ui.slider'])
         };
 
         audio.addEventListener('ended', function() {
-            player.next();
+            player.next(true);
         });
 
         return player;
-    }])
+    })
     .factory('Record', [function() {
         function Ctor(node) {
             this.node = node;

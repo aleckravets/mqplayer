@@ -9,6 +9,7 @@
     <script src="lib/slider.js"></script>
 
     <script src="js/app.js"></script>
+    <script src="js/state.js"></script>
     <script src="js/controllers.js"></script>
     <script src="js/tree.js"></script>
     <script src="js/player.js"></script>
@@ -28,7 +29,7 @@
     <link rel="stylesheet" href="css/app.css"/>
 
 </head>
-<body ng-controller="AppController">
+<body ng-controller="AppController" ng-class="{playing: !player.audio.paused, paused: player.audio.paused && player.state.currentRecord, stopped: !player.state.currentRecord}">
 <div class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="#/player">Brand</a>
@@ -37,11 +38,20 @@
             <li><a href="#/help">Help</a></li>
         </ul>
         <p id="controls" class="navbar-text navbar-left" ng-if="svc.authorized" ng-cloak>
-            <a class="prev" title="Previous" ng-click="player.prev()"><i class="glyphicon glyphicon-step-backward"></i></a>
-            <a class="stop" title="Stop" ng-click="player.stop()"><i class="glyphicon glyphicon-stop"></i></a>
-            <a class="pause" title="Pause" ng-click="player.playPause()"><i class="glyphicon glyphicon-pause"></i></a>
-            <a class="play" title="Play" ng-click="player.playPause()"><i class="glyphicon glyphicon-play"></i></a>
-            <a class="next" title="Next" ng-click="player.next()"><i class="glyphicon glyphicon-step-forward"></i></a>
+            <a class="prev" title="previous" ng-click="player.prev()"><i class="glyphicon glyphicon-step-backward"></i></a>
+            <a class="stop" title="stop" ng-click="player.stop()"><i class="glyphicon glyphicon-stop"></i></a>
+            <a class="pause" title="pause" ng-click="player.playPause()"><i class="glyphicon glyphicon-pause"></i></a>
+            <a class="play" title="play" ng-click="player.playPause()"><i class="glyphicon glyphicon-play"></i></a>
+            <a class="next" title="next" ng-click="player.next()"><i class="glyphicon glyphicon-step-forward"></i></a>
+        </p>
+        <div id="track" ng-if="svc.authorized" ng-cloak ui-slider="{range: 'min'}" use-decimals min="0" max="{{player.audio.duration}}" step="0.01" ng-model="player.audio.currentTime"></div>
+        <p id="controls2" class="navbar-text navbar-left" ng-if="svc.authorized" ng-cloak>
+            <a title="mute" ng-click="player.mute()"><i class="glyphicon" ng-class="{'glyphicon-volume-up': !player.audio.muted, 'glyphicon-volume-off': player.audio.muted}"></i></a>
+        </p>
+        <div id="volume" ng-if="svc.authorized" ui-slider="{range: 'min'}" ui-slider use-decimals min="0" max="1.0" step="0.01" ng-model="player.audio.volume"></div>
+        <p id="controls3" class="navbar-text navbar-left" ng-if="svc.authorized" ng-cloak>
+            <a title="repeat" ng-click="player.repeat()" ng-class="{'pressed': player.state.repeat}"><i class="glyphicon glyphicon-repeat"></i></a>
+            <a title="shuffle" ng-click="player.random()" ng-class="{'pressed': player.state.random}"><i class="glyphicon glyphicon-random"></i></a>
         </p>
         <p class="navbar-text navbar-right" ng-if="svc.authorized" ng-cloak><i class="glyphicon glyphicon-user"></i> {{svc.userInfo.name}} <a ng-click="logout()">Sign out</a></p>
     </div>
@@ -49,19 +59,5 @@
 
 <div ng-view></div>
 
-<!--<div id="login-box" ng-if="svc.authorized === false" ng-cloak>-->
-<!--<button type="button" class="btn btn-danger" ng-if="svc.authorized === false" ng-click="svc.authorize()" ng-cloak><i class="glyphicon glyphicon-log-in"></i> Sign in with Google</button>-->
-<!--<br />-->
-<!--to access your music in Google Drive-->
-<!--</div>-->
-<!--<div id="player-window" ng-if="svc.authorized" ng-cloak>-->
-<!--<div id="left">-->
-<!--<tree></tree>-->
-<!--</div>-->
-<!--<resize-bar></resize-bar>-->
-<!--<div id="right">-->
-<!--<player></player>-->
-<!--</div>-->
-<!--</div>-->
 </body>
 </html>

@@ -5,7 +5,7 @@ angular.module('Tree', [])
     .factory('Root', function(TreeNode) {
         return new TreeNode({ id: 'root' });
     })
-    .directive('tree', function(Player, Root) {
+    .directive('tree', function(Player, Root, State) {
         return {
             restrict: 'E',
             scope: { },
@@ -20,10 +20,10 @@ angular.module('Tree', [])
                 };
 
                 $scope.mousedown = function($event, node) {
-                    if ($scope.selectedRecord)
-                        $scope.selectedRecord.selected = false;
+                    if (State.selectedNode)
+                        State.selectedNode.selected = false;
 
-                    $scope.selectedRecord = node;
+                    State.selectedNode = node;
 
                     node.selected = !node.selected;
                 };
@@ -50,7 +50,7 @@ angular.module('Tree', [])
             templateUrl: 'tmpl/tree.html'
         };
     })
-    .directive('draggable', ['Player', function(Player) {
+    .directive('draggable', function(Player) {
         return {
             link: function(scope, element, attrs) {
                 var node = scope.node;
@@ -67,8 +67,8 @@ angular.module('Tree', [])
                 });
             }
         };
-    }])
-    .factory('TreeNode', ['$q', 'DataService', function($q, DataService) {
+    })
+    .factory('TreeNode', function($q, DataService) {
         function Ctor(item) {
             this.item = item;
         }
@@ -120,4 +120,4 @@ angular.module('Tree', [])
         };
 
         return Ctor;
-    }]);
+    });

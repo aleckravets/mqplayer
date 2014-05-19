@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('Playlist', ['ui.slider'])
-    .directive('playlist', function(Player, $document) {
+    .directive('playlist', function(Player, $document, State) {
         return {
             restrict: 'E',
             scope: {},
@@ -9,7 +9,7 @@ angular.module('Playlist', ['ui.slider'])
                 $scope.player = Player;
 
                 var state = {
-                    selectedRecords: [],
+//                    selectedRecords: $scope.player.selectedRecords,
                     lastClickedRecord: undefined
                 };
 
@@ -22,31 +22,31 @@ angular.module('Playlist', ['ui.slider'])
                             var last = i1 < i2 ? i2 : i1 - 1;
                             for (var i = first; i <= last; i++) {
                                 $scope.player.playlist[i].selected = state.lastClickedRecord.selected;
-                                state.selectedRecords.push($scope.player.playlist[i]);
+                                State.selectedRecords.push($scope.player.playlist[i]);
                             }
                         }
                     }
                     else if (e.ctrlKey) {
                         if (!record.selected) {
-                            state.selectedRecords.push(record);
+                            State.selectedRecords.push(record);
                         }
                         else {
-                            var i = state.selectedRecords.indexOf(record);
-                            state.selectedRecords.splice(i, 1);
+                            var i = State.selectedRecords.indexOf(record);
+                            State.selectedRecords.splice(i, 1);
                         }
 
                         record.selected = !record.selected;
                     }
                     else {
-                        state.selectedRecords.forEach(function(record) {
+                        State.selectedRecords.forEach(function(record) {
                             record.selected = false;
                         });
-                        state.selectedRecords.empty();
+                        State.selectedRecords.empty();
 
                         record.selected = !record.selected;
 
                         if (record.selected)
-                            state.selectedRecords.push(record);
+                            State.selectedRecords.push(record);
                     }
 
                     state.lastClickedRecord = record;
@@ -55,23 +55,23 @@ angular.module('Playlist', ['ui.slider'])
                 };
 
                 $scope.deleteSelected = function() {
-                    if (state.selectedRecords.length == $scope.player.playlist.length) {
+                    if (State.selectedRecords.length == $scope.player.playlist.length) {
                         $scope.player.playlist.empty();
                     }
                     else {
-                        state.selectedRecords.forEach(function(record) {
+                        State.selectedRecords.forEach(function(record) {
                             var i = $scope.player.playlist.indexOf(record);
                             $scope.player.playlist.splice(i, 1);
                         });
                     }
-                    state.selectedRecords.empty();
+                    State.selectedRecords.empty();
                 };
 
                 $scope.selectAll = function() {
-                    state.selectedRecords.empty();
+                    State.selectedRecords.empty();
                     $scope.player.playlist.forEach(function(record) {
                         record.selected = true;
-                        state.selectedRecords.push(record);
+                        State.selectedRecords.push(record);
                     });
                 };
 
@@ -129,7 +129,7 @@ angular.module('Playlist', ['ui.slider'])
             }
         };
     })
-    .directive('droppableItem', ['Player', function(Player) {
+    .directive('droppableItem', function(Player) {
         return {
             link: function(scope, element, attrs) {
                 element[0].addEventListener('dragover', function(e) {
@@ -165,4 +165,4 @@ angular.module('Playlist', ['ui.slider'])
                 });
             }
         }
-    }]);
+    });
