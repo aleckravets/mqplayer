@@ -12,7 +12,7 @@ angular.module('Player', ['ui.slider'])
 
         var player = {
             audio: audio,
-            playlist: playlist,
+            playlist: playlist, // todo: move playlist to session
             state: state,
             playRecord: function(record) {
                 audio.src = record.node.item.url;
@@ -96,9 +96,7 @@ angular.module('Player', ['ui.slider'])
                         else if (auto) {
                             this.stop();
                         }
-
                     }
-
                 }
             },
             stop: function() {

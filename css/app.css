@@ -110,8 +110,8 @@ ul.tree li {
 }
 
 .tree-label.selected {
-    background: #eee;
-    border: 1px solid #ccc;
+    background: #c4e3f3;
+    border: 1px solid #285e8e;
 }
 
 #tree-buttons {
@@ -348,7 +348,7 @@ ul.tree li {
 }
 
 #playlist li.selected {
-    background: #eee;
+    background: #c4e3f3;
 }
 
 #playlist li.current {

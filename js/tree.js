@@ -1,11 +1,7 @@
 'use strict';
 
 angular.module('Tree', [])
-    // keep tree data outside the controller to preserve it when navigating
-    .factory('Root', function(TreeNode) {
-        return new TreeNode({ id: 'root' });
-    })
-    .directive('tree', function(Player, Root, State) {
+    .directive('tree', function(Player, State, TreeNode) {
         return {
             restrict: 'E',
             scope: { },
@@ -32,7 +28,10 @@ angular.module('Tree', [])
                     $scope.player.playNode(node)
                 };
 
-                $scope.root = Root;
+                if (!State.root)
+                    State.root = new TreeNode({ id: 'root' });
+
+                $scope.root = State.root;
                 $scope.loading = true;
 
                 $scope.root.getChildren().then(function(nodes) {

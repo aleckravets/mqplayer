@@ -68,7 +68,8 @@ angular.module('Services', [])
                         if (nextPageToken) {
                             request = gapi.client.drive.files.list({ q: q, pageToken: nextPageToken });
                             retrievePageOfFiles(request, result);
-                        } else {
+                        }
+                        else {
                             deferred.resolve(result);
                         }
                     });
@@ -78,9 +79,18 @@ angular.module('Services', [])
                 retrievePageOfFiles(initialRequest, []);
 
                 return deferred.promise.then(function(rawItems) {
-                    return rawItems.map(function(rawItem) {
+                    var items = rawItems.map(function(rawItem) {
                         return new Item(rawItem);
                     });
+
+                    items.sort(function(a, b) {
+                        if (a.isDir == b.isDir)
+                            return a.name < b.name ? -1 : 1;
+                        else
+                            return a.isDir ? -1 : 1;
+                    });
+
+                    return items;
                 });
             }
         };

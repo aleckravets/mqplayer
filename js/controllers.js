@@ -5,7 +5,7 @@ angular.module('App')
         $scope.logout = function() {
             DataService.signOut()
                 .then(function() {
-                    delete Player;
+                    // delete player, clear state
                     $timeout(function() {});
                 });
         };
