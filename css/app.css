@@ -219,7 +219,7 @@ ul.tree li {
 }
 
 .paused #controls a.play,
-.stopped a.play {
+.stopped #controls a.play {
     display: block;
 }
 
@@ -285,16 +285,6 @@ ul.tree li {
     border: 1px solid #fff;
     top: 0;
 }
-
-/*.playing #current-time .ui-slider .ui-slider-handle,*/
-/*.paused #current-time .ui-slider .ui-slider-handle{*/
-    /*display: inline;*/
-/*}*/
-
-/*#player.playing #current-time a.ui-slider-handle,*/
-/*#player.paused #current-time a.ui-slider-handle{*/
-    /*display: block;*/
-/*}*/
 
 /******************************** PLAYLIST *************************/
 /*#playlist-wrapper {*/

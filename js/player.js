@@ -40,7 +40,7 @@ angular.module('Player', ['ui.slider'])
                         self.playlist.push(new Record(node));
                     });
 
-                    if (this.playlist.length > 0)
+                    if (self.playlist.length > 0)
                         self.playRecord(self.playlist[0]);
 
 //                    self.state.loading = false;

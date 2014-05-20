@@ -23,8 +23,6 @@
     <script src="views/player.html"></script>
     <script src="views/about.html"></script>
 
-
-
     <script src="https://apis.google.com/js/client.js?onload=bootstrap"></script>
 
     <link rel="stylesheet" href="lib/bootstrap.min.css">
@@ -32,7 +30,7 @@
     <link rel="stylesheet" href="css/app.css"/>
 
 </head>
-<body ng-controller="AppController" ng-class="{playing: !player.audio.paused, paused: player.audio.paused && player.state.currentRecord, stopped: !player.state.currentRecord}">
+<body ng-controller="AppController" ng-class="{playing: !player.audio.paused, paused: player.audio.paused && player.currentRecord, stopped: !player.currentRecord}">
 <div class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="#/player">Brand</a>
@@ -53,8 +51,8 @@
         </p>
         <div id="volume" ng-if="svc.authorized" ui-slider="{range: 'min'}" ui-slider use-decimals min="0" max="1.0" step="0.01" ng-model="player.audio.volume"></div>
         <p id="controls3" class="navbar-text navbar-left" ng-if="svc.authorized" ng-cloak>
-            <a title="repeat" ng-click="player.repeat()" ng-class="{'pressed': player.state.repeat}"><i class="glyphicon glyphicon-repeat"></i></a>
-            <a title="shuffle" ng-click="player.random()" ng-class="{'pressed': player.state.random}"><i class="glyphicon glyphicon-random"></i></a>
+            <a title="repeat" ng-click="player.toggleRepeat()" ng-class="{'pressed': player.repeat}"><i class="glyphicon glyphicon-repeat"></i></a>
+            <a title="shuffle" ng-click="player.toggleRandom()" ng-class="{'pressed': player.random}"><i class="glyphicon glyphicon-random"></i></a>
         </p>
         <p class="navbar-text navbar-right" ng-if="svc.authorized" ng-cloak><i class="glyphicon glyphicon-user"></i> {{svc.userInfo.name}} <a ng-click="logout()">Sign out</a></p>
     </div>
