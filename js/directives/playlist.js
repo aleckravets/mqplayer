@@ -1,77 +1,79 @@
 'use strict';
 
 angular.module('Playlist', ['ui.slider'])
-    .directive('playlist', function($document, Session) {
+    .directive('playlist', function($document, player, playlist, tree) {
         return {
             restrict: 'E',
             scope: {},
             controller: function($scope, $element) {
-                $scope.player = Session.player;
+                $scope.player = player;
 
                 var state = {
 //                    selectedRecords: $scope.player.selectedRecords,
                     lastClickedRecord: undefined
                 };
 
+                var lastClickedRecord;
+
                 $scope.mousedown = function(e, record) {
                     if (e.shiftKey) {
-                        if (state.lastClickedRecord && state.lastClickedRecord.selected != record.selected) {
-                            var i1 = $scope.player.playlist.indexOf(state.lastClickedRecord);
-                            var i2 = $scope.player.playlist.indexOf(record);
+                        if (lastClickedRecord && lastClickedRecord.selected != record.selected) {
+                            var i1 = playlist.records.indexOf(lastClickedRecord);
+                            var i2 = playlist.records.indexOf(record);
                             var first = i1 < i2 ? i1 + 1 : i2;
                             var last = i1 < i2 ? i2 : i1 - 1;
                             for (var i = first; i <= last; i++) {
-                                $scope.player.playlist[i].selected = state.lastClickedRecord.selected;
-                                Session.selectedRecords.push($scope.player.playlist[i]);
+                                playlist.records[i].selected = lastClickedRecord.selected;
+                                playlist.selectedRecords.push(playlist.records[i]);
                             }
                         }
                     }
                     else if (e.ctrlKey) {
                         if (!record.selected) {
-                            Session.selectedRecords.push(record);
+                            playlist.selectedRecords.push(record);
                         }
                         else {
-                            var i = Session.selectedRecords.indexOf(record);
-                            Session.selectedRecords.splice(i, 1);
+                            var i = playlist.selectedRecords.indexOf(record);
+                            playlist.selectedRecords.splice(i, 1);
                         }
 
                         record.selected = !record.selected;
                     }
                     else {
-                        Session.selectedRecords.forEach(function(record) {
+                        playlist.selectedRecords.forEach(function(record) {
                             record.selected = false;
                         });
-                        Session.selectedRecords.empty();
+                        playlist.selectedRecords.empty();
 
                         record.selected = !record.selected;
 
                         if (record.selected)
-                            Session.selectedRecords.push(record);
+                            playlist.selectedRecords.push(record);
                     }
 
-                    state.lastClickedRecord = record;
+                    lastClickedRecord = record;
 
                     e.preventDefault(); // no selection on double click
                 };
 
                 $scope.deleteSelected = function() {
-                    if (Session.selectedRecords.length == $scope.player.playlist.length) {
-                        $scope.player.playlist.empty();
+                    if (playlist.selectedRecords.length == playlist.records.length) {
+                        playlist.records.empty();
                     }
                     else {
-                        Session.selectedRecords.forEach(function(record) {
-                            var i = $scope.player.playlist.indexOf(record);
-                            $scope.player.playlist.splice(i, 1);
+                        playlist.selectedRecords.forEach(function(record) {
+                            var i = playlist.records.indexOf(record);
+                            playlist.records.splice(i, 1);
                         });
                     }
-                    Session.selectedRecords.empty();
+                    playlist.selectedRecords.empty();
                 };
 
                 $scope.selectAll = function() {
-                    Session.selectedRecords.empty();
-                    $scope.player.playlist.forEach(function(record) {
+                    playlist.selectedRecords.empty();
+                    playlist.records.forEach(function(record) {
                         record.selected = true;
-                        Session.selectedRecords.push(record);
+                        playlist.selectedRecords.push(record);
                     });
                 };
 
@@ -124,12 +126,12 @@ angular.module('Playlist', ['ui.slider'])
                         scope.dragover = false;
                     });
 
-                    Session.player.enqueue(Session.draggedNode);
+                    player.enqueue(tree.draggedNode);
                 });
             }
         };
     })
-    .directive('droppableItem', function(Session) {
+    .directive('droppableItem', function(player, tree) {
         return {
             link: function(scope, element, attrs) {
                 element[0].addEventListener('dragover', function(e) {
@@ -158,22 +160,11 @@ angular.module('Playlist', ['ui.slider'])
                     e.preventDefault();
                     e.stopPropagation();
 
-                    Session.player.enqueue(Session.draggedNode, scope.record);
+                    player.enqueue(tree.draggedNode, scope.record);
 
                     scope.record.dragover = false;
                     scope.$apply();
                 });
             }
         }
-    })
-    .factory('Record', [function() {
-        function Ctor(node) {
-            this.node = node;
-        }
-
-        Ctor.prototype = {
-            selected: false
-        };
-
-        return Ctor;
-    }]);
+    });

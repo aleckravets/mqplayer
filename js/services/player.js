@@ -3,9 +3,9 @@
 angular.module('Player', ['ui.slider'])
     .factory('Player', function($q, Record) {
 
-        function Ctor(playlist, selectedRecords) {
-            this.playlist = playlist;
-            this.selectedRecords = selectedRecords;
+        function Ctor(playlist) {
+            this.playlist = playlist.records;
+            this.selectedRecords = playlist.selectedRecords;
 
             var self = this;
             this.audio.addEventListener('ended', function() {

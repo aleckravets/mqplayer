@@ -12,6 +12,6 @@
 
 <div ng-if="loading" id="loading-label"><div>Loading...</div></div>
 <ul class="tree">
-    <li ng-repeat="node in root.children" ng-include="'node.html'" class="tree-item"></li>
+    <li ng-repeat="node in tree.root.children" ng-include="'node.html'" class="tree-item"></li>
 </ul>
 

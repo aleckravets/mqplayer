@@ -6,37 +6,34 @@
     <script src="lib/angular/angular.js"></script>
     <script src="lib/angular/angular-route.js"></script>
 
-
-
     <script src="lib/slider.js"></script>
 
     <script src="js/tools.js"></script>
     <script src="js/app.js"></script>
-    <script src="js/session.js"></script>
     <script src="js/controllers.js"></script>
-    <script src="js/tree.js"></script>
-    <script src="js/player.js"></script>
-    <script src="js/playlist.js"></script>
-    <script src="js/services.js"></script>
-    <script src="js/resizebar.js"></script>
-
-    <script src="views/player.html"></script>
-    <script src="views/about.html"></script>
+    <script src="js/classes.js"></script>
+    <script src="js/services/session.js"></script>
+    <script src="js/services/playlist.js"></script>
+    <script src="js/services/services.js"></script>
+    <script src="js/services/player.js"></script>
+    <script src="js/services/tree.js"></script>
+    <script src="js/directives/tree.js"></script>
+    <script src="js/directives/playlist.js"></script>
+    <script src="js/directives/resizebar.js"></script>
 
     <script src="https://apis.google.com/js/client.js?onload=bootstrap"></script>
 
     <link rel="stylesheet" href="lib/bootstrap.min.css">
     <link rel="stylesheet" href="lib/jquery-ui-1.10.4.min.css"/>
     <link rel="stylesheet" href="css/app.css"/>
-
 </head>
 <body ng-controller="AppController" ng-class="{playing: !player.audio.paused, paused: player.audio.paused && player.currentRecord, stopped: !player.currentRecord}">
 <div class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#/player">Brand</a>
+        <a class="navbar-brand" href="#/player">brand</a>
         <ul class="nav navbar-nav">
-            <li><a href="#/about">About</a></li>
-            <li><a href="#/help">Help</a></li>
+            <li><a href="#/about">about</a></li>
+            <li><a href="#/help">help</a></li>
         </ul>
         <p id="controls" class="navbar-text navbar-left" ng-if="svc.authorized" ng-cloak>
             <a class="prev" title="previous" ng-click="player.prev()"><i class="glyphicon glyphicon-step-backward"></i></a>

@@ -1,37 +1,39 @@
 angular.module('App')
-    .controller('AppController', function($scope, $timeout, DataService, Session) {
+    .controller('AppController', function($scope, $timeout, DataService, player) {
         $scope.logout = function() {
             DataService.signOut()
                 .then(function() {
-                    Session.reset();
+                    Session.end();
                     $timeout(function() {});
                 });
         };
 
         $scope.svc = DataService;
 
-        var player = Session.player;
-
-        player.audio.addEventListener('ended', function() {
-            $timeout(function() {});
-        });
-
-        player.audio.addEventListener('timeupdate', function() {
-            $timeout(function() {});
-        });
-
-        player.audio.volume = 0.5;
-
-        $scope.player = player;
+//        var player = Session.player;
+//
+//        player.audio.addEventListener('ended', function() {
+//            $timeout(function() {});
+//        });
+//
+//        player.audio.addEventListener('timeupdate', function() {
+//            $timeout(function() {});
+//        });
+//
+//        player.audio.volume = 0.5;
+//
+//        $scope.player = player;
     })
     .controller('PlayerController', function($scope, $timeout, DataService, Session) {
-        $scope.player = Session.player;
+
         $scope.svc = DataService;
 
         $scope.login = function(immediate) {
             DataService.authorize(immediate)
                 .then(function(authorized) {
                     if (authorized) {
+                        Session.start();
+                        $scope.player = Session.player;
                         $timeout(function() {});
                     }
                 })
