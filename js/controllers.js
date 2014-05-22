@@ -30,7 +30,7 @@ angular.module('App')
                 player.playRecord(rec);
         };
 
-        $scope.next = function() {
+        $scope.next = function(implicit) {
             var playlist = session.playlist,
                 player = session.player;
 
@@ -38,6 +38,8 @@ angular.module('App')
 
             if (rec !== false)
                 player.playRecord(rec);
+            else if (implicit)
+                player.stop();
         };
 
         $scope.playPause = function() {
@@ -63,6 +65,10 @@ angular.module('App')
         $scope.stop = function() {
             session.player.stop()
         };
+
+        $scope.$on('playerEnded', function(event, data) {
+            $scope.next(true);
+        });
 
 //        var self = this;
 //        this.audio.addEventListener('ended', function() {

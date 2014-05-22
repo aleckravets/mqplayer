@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('App')
-    .factory('session', function(Player, Playlist, Tree, DataService) {
+    .factory('session', function($rootScope, Player, Playlist, Tree, DataService) {
         return {
             active: false,
             userInfo: undefined,
@@ -27,6 +27,10 @@ angular.module('App')
                 this.playlist = new Playlist();
                 this.tree = new Tree();
                 this.player = new Player();
+
+                this.player.audio.addEventListener('ended', function() {
+                    $rootScope.$broadcast('playerEnded');
+                });
             },
             end: function() {
                 this.player.stop();
