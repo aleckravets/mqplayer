@@ -4,15 +4,16 @@ angular.module('App')
     .factory('session', function(Player, Playlist, Tree, DataService) {
         return {
             active: false,
+            userInfo: undefined,
             login: function(auto) {
                 var self = this;
                 return DataService.authorize(auto)
                     .then(function() {
                         self.start();
                         self.active = true;
+                        self.userInfo = DataService.userInfo;
                         console.log('session started');
                     });
-
             },
             logout: function() {
                 var self = this;

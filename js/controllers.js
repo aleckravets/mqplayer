@@ -69,7 +69,6 @@ angular.module('App')
 //            self.next(true);
 //        });
 
-
         console.log('app controller');
     })
     .controller('PlayerController', function($scope, $timeout, $location, session) {

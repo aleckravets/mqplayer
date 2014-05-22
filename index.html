@@ -51,7 +51,7 @@
             <a title="repeat" ng-click="session.playlist.toggleRepeat()" ng-class="{'pressed': session.playlist.repeat}"><i class="glyphicon glyphicon-repeat"></i></a>
             <a title="shuffle" ng-click="session.playlist.toggleRandom()" ng-class="{'pressed': session.playlist.random}"><i class="glyphicon glyphicon-random"></i></a>
         </p>
-        <p class="navbar-text navbar-right" ng-if="session.active" ng-cloak><i class="glyphicon glyphicon-user"></i> {{svc.userInfo.name}} <a ng-click="logout()">Sign out</a></p>
+        <p class="navbar-text navbar-right" ng-if="session.active" ng-cloak><i class="glyphicon glyphicon-user"></i> {{session.userInfo.name}} <a ng-click="logout()">Sign out</a></p>
     </div>
 </div>
 
