@@ -12,7 +12,7 @@ angular.module('Playlist', ['ui.slider'])
                 var lastClickedRecord;
 
                 $scope.dblclick = function(e, record) {
-                    player.playRecord(record)
+                    player.playRecord(record);
                 };
 
                 $scope.mousedown = function(e, record) {
@@ -124,11 +124,7 @@ angular.module('Playlist', ['ui.slider'])
                         scope.dragover = false;
                     });
 
-                    scope.loading = true;
-
-                    playlist.enqueue(tree.draggedNode).then(function() {
-                        scope.loading = false;
-                    });
+                    playlist.enqueue(tree.draggedNode);
                 });
             }
         };
@@ -162,11 +158,7 @@ angular.module('Playlist', ['ui.slider'])
                     e.preventDefault();
                     e.stopPropagation();
 
-                    scope.loading = true;
-
-                    playlist.enqueue(tree.draggedNode, scope.record).then(function() {
-                        scope.loading = false;
-                    });
+                    playlist.enqueue(tree.draggedNode, scope.record);
 
                     $timeout(function() {
                         scope.record.dragover = false;

@@ -27,10 +27,10 @@
     <link rel="stylesheet" href="lib/jquery-ui-1.10.4.min.css"/>
     <link rel="stylesheet" href="css/app.css"/>
 </head>
-<body ng-controller="AppController" ng-class="{playing: !session.player.audio.paused, paused: session.player.audio.paused && session.player.currentRecord, stopped: !session.player.currentRecord}">
+<body ng-controller="AppController" ng-class="session.player.state">
 <div class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#/player">brand</a>
+        <a class="navbar-brand" href="#/player">nq player</a>
         <ul class="nav navbar-nav">
             <li><a href="#/about">about</a></li>
             <li><a href="#/help">help</a></li>

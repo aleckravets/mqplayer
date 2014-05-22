@@ -1,5 +1,5 @@
 angular.module('App')
-    .controller('AppController', function($scope, $location, session) {
+    .controller('AppController', function($scope, $location, $timeout, session) {
         $scope.session = session;
 
         $scope.login = function() {
@@ -28,6 +28,8 @@ angular.module('App')
 
             if (rec !== false)
                 player.playRecord(rec);
+
+            $timeout(function(){ });
         };
 
         $scope.next = function(implicit) {
@@ -40,6 +42,8 @@ angular.module('App')
                 player.playRecord(rec);
             else if (implicit)
                 player.stop();
+
+            $timeout(function(){ });
         };
 
         $scope.playPause = function() {
@@ -60,6 +64,7 @@ angular.module('App')
             else {
                 player.pause();
             }
+            $timeout(function(){ });
         }
 
         $scope.stop = function() {
@@ -68,6 +73,7 @@ angular.module('App')
 
         $scope.$on('playerEnded', function(event, data) {
             $scope.next(true);
+            $timeout(function(){ });
         });
 
 //        var self = this;

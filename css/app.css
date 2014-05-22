@@ -210,11 +210,13 @@ ul.tree li {
     display: none;
 }
 
-.playing #controls a.play {
+.playing #controls a.play,
+.buffering #controls a.play {
     display: none;
 }
 
-.playing #controls a.pause {
+.playing #controls a.pause,
+.buffering #controls a.pause{
     display: block;
 }
 
@@ -287,15 +289,9 @@ ul.tree li {
 }
 
 /******************************** PLAYLIST *************************/
-/*#playlist-wrapper {*/
-    /*height: 100%;*/
-    /*position: absolute;*/
-    /*left: 0px;*/
-    /*right: 0px;*/
-    /*bottom: 0px;*/
-/*}*/
 
 #playlist {
+    position: relative;
     overflow: auto;
     height: 100%;
     width: 100%;
@@ -323,6 +319,15 @@ ul.tree li {
 #playlist li i {
     display: none;
     margin-left: -14px;
+}
+
+.buffering #playlist li.current .loading {
+    background: url('../images/loading.gif') -5px 1px no-repeat;
+    margin-left: -5px;
+    display: block;
+    width: 16px;
+    height: 16px;
+    float: left;
 }
 
 .playing #playlist li.current i.glyphicon-play {

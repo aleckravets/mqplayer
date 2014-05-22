@@ -2,17 +2,17 @@
 
 angular.module('App')
     .factory('Playlist', function($q, Record) {
-
         function Ctor() {
+            this.repeat =  false;
+            this.random = false;
+            this.records = [];
+            this.selectedRecords = [];
+            this.loading = false;
         }
 
         Ctor.prototype = {
-            repeat: false,
-            random: false,
-            records: [],
-            selectedRecords: [],
-            loading: false,
             getPlayableNodes: function(node) {
+                this.loading = true;
                 var self = this;
                 return $q.when(node.item.isDir ? node.getAllChildren(): [node]).then(function(nodes) {
                     var playable = [];
@@ -20,6 +20,8 @@ angular.module('App')
                         if (!node.item.isDir && self.isSupportedItem(node.item))
                             playable.push(node);
                     });
+
+                    self.loading = false;
 
                     return playable;
                 });
