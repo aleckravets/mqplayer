@@ -1,19 +1,19 @@
 'use strict';
 
 angular.module('Playlist', ['ui.slider'])
-    .directive('playlist', function($document, player, playlist, tree) {
+    .directive('playlist', function($document, $timeout, player, playlist, tree) {
         return {
             restrict: 'E',
             scope: {},
             controller: function($scope, $element) {
                 $scope.player = player;
-
-                var state = {
-//                    selectedRecords: $scope.player.selectedRecords,
-                    lastClickedRecord: undefined
-                };
+                $scope.playlist = playlist;
 
                 var lastClickedRecord;
+
+                $scope.dblclick = function(e, record) {
+                    player.playRecord(record)
+                };
 
                 $scope.mousedown = function(e, record) {
                     if (e.shiftKey) {
@@ -94,8 +94,6 @@ angular.module('Playlist', ['ui.slider'])
                             break;
                     }
                 });
-
-
             },
             templateUrl: 'tmpl/playlist.html',
             link: function(scope, element, attrs) {
@@ -116,7 +114,7 @@ angular.module('Playlist', ['ui.slider'])
                     e.preventDefault();
                     e.stopPropagation();
 
-                    scope.$apply(function() {
+                    $timeout(function() {
                         scope.dragover = false;
                     });
                 });
@@ -126,12 +124,16 @@ angular.module('Playlist', ['ui.slider'])
                         scope.dragover = false;
                     });
 
-                    player.enqueue(tree.draggedNode);
+                    scope.loading = true;
+
+                    playlist.enqueue(tree.draggedNode).then(function() {
+                        scope.loading = false;
+                    });
                 });
             }
         };
     })
-    .directive('droppableItem', function(player, tree) {
+    .directive('droppableItem', function($timeout, tree, playlist) {
         return {
             link: function(scope, element, attrs) {
                 element[0].addEventListener('dragover', function(e) {
@@ -151,7 +153,7 @@ angular.module('Playlist', ['ui.slider'])
                     e.preventDefault();
                     e.stopPropagation();
 
-                    scope.$apply(function() {
+                    $timeout(function() {
                         scope.record.dragover = false;
                     });
                 });
@@ -160,10 +162,15 @@ angular.module('Playlist', ['ui.slider'])
                     e.preventDefault();
                     e.stopPropagation();
 
-                    player.enqueue(tree.draggedNode, scope.record);
+                    scope.loading = true;
 
-                    scope.record.dragover = false;
-                    scope.$apply();
+                    playlist.enqueue(tree.draggedNode, scope.record).then(function() {
+                        scope.loading = false;
+                    });
+
+                    $timeout(function() {
+                        scope.record.dragover = false;
+                    });
                 });
             }
         }

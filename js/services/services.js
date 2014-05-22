@@ -17,26 +17,21 @@ angular.module('Services', [])
                 var deferred = $q.defer();
 
                 gapi.auth.authorize({'client_id': clientid, 'scope': scopes.join(' '), 'immediate': immediate || false}, function(authResult) {
-                    if (authResult) {
-                        if (authResult.error) {
-                            deferred.reject(error);
-                        }
-                        else {
-                            gapi.client.drive.about.get().execute(function(resp) {
-                                self.authorized = true;
-                                self.token = gapi.auth.getToken();
-                                self.userInfo = resp;
-                                deferred.resolve(true);
+                    if (authResult && !authResult.error) {
+                        gapi.client.drive.about.get().execute(function(resp) {
+                            self.authorized = true;
+                            self.token = gapi.auth.getToken();
+                            self.userInfo = resp;
+                            deferred.resolve();
 //                            console.log('Current user name: ' + resp.name);
 //                            console.log('Root folder ID: ' + resp.rootFolderId);
 //                            console.log('Total quota (bytes): ' + resp.quotaBytesTotal);
 //                            console.log('Used quota (bytes): ' + resp.quotaBytesUsed);
-                            });
-                        }
+                        });
                     }
                     else {
                         self.authorized = false;
-                        deferred.resolve(false);
+                        deferred.reject();
                     }
                 });
 

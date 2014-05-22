@@ -1,21 +1,31 @@
 'use strict';
 
 angular.module('App')
-    .factory('Session', function(Player, Playlist, Tree) {
+    .factory('session', function(Player, Playlist, Tree, DataService) {
         return {
+            active: false,
+            login: function(auto) {
+                var self = this;
+                return DataService.authorize(auto)
+                    .then(function() {
+                        self.start();
+                        self.active = true;
+                        console.log('session started');
+                    });
+
+            },
+            logout: function() {
+                var self = this;
+                return DataService.signOut()
+                    .then(function() {
+                        self.end();
+                        self.active = false;
+                    });
+            },
             start: function() {
                 this.playlist = new Playlist();
                 this.tree = new Tree();
-                this.player = new Player(this.playlist);
-
-//                this.root = new TreeNode({ id: 'root' });
-//                this.selectedNode = undefined;
-//                this.selectedRecords.empty();
-//                this.playlist.empty();
-//                if (this.player)
-//                    this.player.stop();
-//                this.player = new Player(this.playlist, this.selectedRecords);
-                console.log('session started');
+                this.player = new Player();
             },
             end: function() {
                 this.player.stop();
@@ -27,12 +37,13 @@ angular.module('App')
             }
         };
     })
-    .factory('player', function(Session) {
-        return Session.player;
+    // shortcuts to session objects
+    .factory('player', function(session) {
+        return session.player;
     })
-    .factory('tree', function(Session) {
-        return Session.tree;
+    .factory('tree', function(session) {
+        return session.tree;
     })
-    .factory('playlist', function(Session) {
-        return Session.playlist;
+    .factory('playlist', function(session) {
+        return session.playlist;
     });

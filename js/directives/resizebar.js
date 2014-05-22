@@ -33,7 +33,7 @@ angular.module('App')
         return {
             restrict: 'E',
             scope: { },
-            replace: true,
+            replace: true, // deprecated use transclude: 'element'
             controller: function($scope, $element) {
             },
             link: function(scope, element, attrs) {

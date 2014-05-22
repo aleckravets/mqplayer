@@ -1,0 +1,8 @@
+<div id="login-box">
+    <p ng-if="!loggedin">
+        <button class="btn btn-danger" ng-click="login()"><i class="glyphicon glyphicon-log-in"></i> Sign in with Google</button>
+        <br />
+        to access your music in Google Drive
+    </p>
+    <p ng-if="loggedin">Logged in</p>
+</div>

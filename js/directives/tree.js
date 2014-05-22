@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('Tree', [])
-    .directive('Tree', function(tree, player) {
+    .directive('tree', function(tree, player, playlist) {
         return {
             restrict: 'E',
             scope: { },
             controller: function($scope, $element) {
+                $scope.tree = tree;
                 $scope.player = player;
 
                 $scope.toggleDir = function(node) {
@@ -25,7 +26,11 @@ angular.module('Tree', [])
                 };
 
                 $scope.dblclick = function ($event, node) {
-                    player.playNode(node)
+                    player.stop();
+                    playlist.set(node).then(function(records) {
+                        if (records.length > 0)
+                            player.playRecord(records[0]);
+                    });
                 };
 
                 $scope.loading = true;

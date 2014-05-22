@@ -1,47 +1,95 @@
 angular.module('App')
-    .controller('AppController', function($scope, $timeout, DataService, player) {
-        $scope.logout = function() {
-            DataService.signOut()
+    .controller('AppController', function($scope, $location, session) {
+        $scope.session = session;
+
+        $scope.login = function() {
+            session.login()
                 .then(function() {
-                    Session.end();
-                    $timeout(function() {});
+                    $scope.loggedin = true;
+                    console.log('redirect to player');
+                    $location.path('/player');
                 });
         };
 
-        $scope.svc = DataService;
+        $scope.logout = function() {
+            session.logout()
+                .then(function() {
+                    $scope.loggedin = false;
+                    console.log('redirect to login');
+                    $location.path('/login');
+                });
+        };
 
-//        var player = Session.player;
-//
-//        player.audio.addEventListener('ended', function() {
-//            $timeout(function() {});
+        $scope.prev = function() {
+            var playlist = session.playlist,
+                player = session.player;
+
+            var rec = playlist.prev(player.currentRecord);
+
+            if (rec !== false)
+                player.playRecord(rec);
+        };
+
+        $scope.next = function() {
+            var playlist = session.playlist,
+                player = session.player;
+
+            var rec = playlist.next(player.currentRecord);
+
+            if (rec !== false)
+                player.playRecord(rec);
+        };
+
+        $scope.playPause = function() {
+            var playlist = session.playlist,
+                player = session.player;
+
+            if (player.isPaused()) {
+                if (player.currentRecord) {
+                    player.play();
+                }
+                else if (playlist.selectedRecords.length > 0) {
+                    player.playRecord(playlist.selectedRecords[playlist.selectedRecords.length - 1]);
+                }
+                else if (playlist.length > 0) {
+                    player.playRecord(playlist[0]);
+                }
+            }
+            else {
+                player.pause();
+            }
+        }
+
+        $scope.stop = function() {
+            session.player.stop()
+        };
+
+//        var self = this;
+//        this.audio.addEventListener('ended', function() {
+//            self.next(true);
 //        });
-//
-//        player.audio.addEventListener('timeupdate', function() {
-//            $timeout(function() {});
-//        });
-//
-//        player.audio.volume = 0.5;
-//
-//        $scope.player = player;
+
+
+        console.log('app controller');
     })
-    .controller('PlayerController', function($scope, $timeout, DataService, Session) {
+    .controller('PlayerController', function($scope, $timeout, $location, session) {
+        if (!session.active) {
+            console.log('redirect to login');
+            $location.path('/login');
+            return;
+        }
 
-        $scope.svc = DataService;
+        var player = session.player;
 
-        $scope.login = function(immediate) {
-            DataService.authorize(immediate)
-                .then(function(authorized) {
-                    if (authorized) {
-                        Session.start();
-                        $scope.player = Session.player;
-                        $timeout(function() {});
-                    }
-                })
-                .catch(function(error) {
-                    console.log('failed to login: ' + error);
-                });
-        };
+        player.audio.addEventListener('ended', function() {
+            $timeout(function() {});
+        });
 
-        if (DataService.authorized === undefined)
-            $scope.login(true); // try to auto login
+        player.audio.addEventListener('timeupdate', function() {
+            $timeout(function() {});
+        });
+
+        console.log('player controller');
+    })
+    .controller('LoginController', function($scope) {
     });
