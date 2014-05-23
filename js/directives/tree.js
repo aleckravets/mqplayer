@@ -1,11 +1,17 @@
 'use strict';
 
 angular.module('Tree', [])
-    .directive('tree', function(tree, player, playlist) {
+    .directive('tree', function(session) {
         return {
             restrict: 'E',
             scope: { },
             controller: function($scope, $element) {
+                console.log('tree directive controller');
+
+                var tree = session.tree,
+                    player = session.player,
+                    playlist = session.playlist;
+
                 $scope.tree = tree;
                 $scope.player = player;
 
@@ -50,9 +56,13 @@ angular.module('Tree', [])
             templateUrl: 'tmpl/tree.html'
         };
     })
-    .directive('draggable', function(tree) {
+    .directive('draggable', function(session) {
         return {
             link: function(scope, element, attrs) {
+                var tree = session.tree,
+                    player = session.player,
+                    playlist = session.playlist;
+
                 var node = scope.node;
 
                 element.attr('draggable', true);

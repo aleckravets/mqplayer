@@ -77,13 +77,8 @@ angular.module('App')
 
         console.log('app controller');
     })
+    // todo: remove handlers on $destroy!!!
     .controller('PlayerController', function($scope, $timeout, $location, session) {
-        if (!session.active) {
-            console.log('redirect to login');
-            $location.path('/login');
-            return;
-        }
-
         var player = session.player;
 
         player.audio.addEventListener('ended', function() {

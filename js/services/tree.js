@@ -3,13 +3,11 @@
 angular.module('App')
     .factory('Tree', function(TreeNode) {
         function Ctor() {
+            this.root = new TreeNode({ id: 'root' });
+            this.selected = undefined; // TreeNode
+            this.selectedNode = undefined; // TreeNode
+            this.draggedNode = undefined; // TreeNode
         }
 
-        Ctor.prototype = {
-            root: new TreeNode({ id: 'root' }),
-            selectedNode: undefined,
-            draggedNode: undefined
-        };
-
         return Ctor;
-    })
+    });

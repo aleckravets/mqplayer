@@ -4,14 +4,14 @@ angular.module('App')
     .factory('Playlist', function($q, Record) {
 
         function Ctor() {
+            this.repeat = false;
+            this.random = false;
+            this.records = [];
+            this.selectedRecords = [];
+            this.loading = false;
         }
 
         Ctor.prototype = {
-            repeat: false,
-            random: false,
-            records: [],
-            selectedRecords: [],
-            loading: false,
             getPlayableNodes: function(node) {
                 var self = this;
                 return $q.when(node.item.isDir ? node.getAllChildren(): [node]).then(function(nodes) {
