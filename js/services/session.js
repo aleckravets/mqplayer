@@ -29,7 +29,7 @@ angular.module('App')
                 this.player = new Player();
 
                 this.player.audio.addEventListener('ended', function() {
-                    $rootScope.$broadcast('playerEnded');
+                    $rootScope.$broadcast('trackended');
                 });
             },
             end: function() {

@@ -7,7 +7,7 @@ angular.module('App')
                 .then(function() {
                     $scope.loggedin = true;
                     console.log('redirect to player');
-                    $location.path('/player');
+                    $location.path('/');
                 });
         };
 
@@ -50,15 +50,15 @@ angular.module('App')
             var playlist = session.playlist,
                 player = session.player;
 
-            if (player.isPaused()) {
-                if (player.currentRecord) {
-                    player.play();
-                }
-                else if (playlist.selectedRecords.length > 0) {
+            if (player.state == 'paused') {
+                player.play();
+            }
+            else if (player.state == 'stopped') {
+                if (playlist.selectedRecords.length > 0) {
                     player.playRecord(playlist.selectedRecords[playlist.selectedRecords.length - 1]);
                 }
-                else if (playlist.length > 0) {
-                    player.playRecord(playlist[0]);
+                else if (playlist.records.length > 0) {
+                    player.playRecord(playlist.records[0]);
                 }
             }
             else {
@@ -71,7 +71,7 @@ angular.module('App')
             session.player.stop()
         };
 
-        $scope.$on('playerEnded', function(event, data) {
+        $scope.$on('trackended', function(event, data) {
             $scope.next(true);
             $timeout(function(){ });
         });
@@ -87,8 +87,8 @@ angular.module('App')
     .controller('PlayerController', function($scope, $timeout, $location, session) {
         var player = session.player;
 
-        player.audio.addEventListener('ended', function() {
-            $timeout(function() {});
+        $scope.$on('trackended', function(event) {
+            $timeout(function(){ });
         });
 
         player.audio.addEventListener('timeupdate', function() {

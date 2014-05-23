@@ -5,14 +5,9 @@ angular.module('Player', ['ui.slider'])
         function Ctor() {
             this.audio = new Audio();
             this.audio.volume = 0.5;
-this.state = 'stopped';
+            this.state = 'stopped';
 
             this.currentRecord = undefined; // Record
-
-//            var self = this;
-//            this.audio.addEventListener('ended', function() {
-//                self.next(true);
-//            });
         }
 
         Ctor.prototype = {
@@ -43,7 +38,7 @@ this.state = 'stopped';
                 return this.audio.paused;
             },
             play: function() {
-                    this.audio.play();
+                this.audio.play();
                 this.state = 'playing';
             },
             pause: function() {

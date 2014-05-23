@@ -2,7 +2,7 @@
 
 angular.module('App', ['ngRoute', 'Tree', 'Playlist', 'Player', 'Services'])
     .config(function($routeProvider) {
-        $routeProvider.when('/player', {
+        $routeProvider.when('/', {
             templateUrl: 'views/player.html',
             controller: 'PlayerController',
             resolve: {
@@ -12,7 +12,7 @@ angular.module('App', ['ngRoute', 'Tree', 'Playlist', 'Player', 'Services'])
         $routeProvider.when('/login', {templateUrl: 'views/login.html', controller: 'LoginController'});
         $routeProvider.when('/about', {templateUrl: 'views/about.html'});
         $routeProvider.when('/help', {templateUrl: 'views/help.html'});
-        $routeProvider.otherwise({redirectTo: '/player'});
+        $routeProvider.otherwise({redirectTo: '/'});
     });
 
 var auth = function($q, $location, session) {
@@ -20,6 +20,9 @@ var auth = function($q, $location, session) {
         var deferred = $q.defer();
 
         session.login(true)
+            .then(function() {
+                deferred.resolve();
+            })
             .catch(function() {
                 console.log('redirect to login');
                 deferred.reject();

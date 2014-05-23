@@ -30,11 +30,11 @@
 <body ng-controller="AppController" ng-class="session.player.state">
 <div class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#/player">nq player</a>
-        <ul class="nav navbar-nav">
-            <li><a href="#/about">about</a></li>
-            <li><a href="#/help">help</a></li>
-        </ul>
+        <a class="navbar-brand" href="#/player"><span><i class="glyphicon glyphicon-music"></i>nq player</span></a>
+        <!--<ul class="nav navbar-nav">-->
+            <!--<li><a href="#/about">about</a></li>-->
+            <!--<li><a href="#/help">help</a></li>-->
+        <!--</ul>-->
         <p id="controls" class="navbar-text navbar-left" ng-if="session.active" ng-cloak>
             <a class="prev" title="previous" ng-click="prev()"><i class="glyphicon glyphicon-step-backward"></i></a>
             <a class="stop" title="stop" ng-click="stop()"><i class="glyphicon glyphicon-stop"></i></a>

@@ -28,7 +28,7 @@ body {
 
 a {
     cursor: pointer;
-    text-decoration: underline;
+    text-decoration: underline !important;
 }
 
 .navbar {
@@ -40,7 +40,16 @@ a {
     color: #fff !important;
 }
 
-.glyphicon {
+.navbar-brand span * {
+    vertical-align: middle;
+}
+.navbar .glyphicon-music {
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+.tree .glyphicon,
+#playlist li .glyphicon {
     color: #285e8e;
 }
 
@@ -261,6 +270,7 @@ ul.tree li {
     margin-top: 19px;
     margin-right: 20px;
     background: #fff;
+    opacity: 1 !important;
     border-color: #999;
     border: none;
     border-radius: 1px;
@@ -321,14 +331,17 @@ ul.tree li {
     margin-left: -14px;
 }
 
-.buffering #playlist li.current .loading {
-    background: url('../images/loading.gif') -5px 1px no-repeat;
-    margin-left: -5px;
-    display: block;
-    width: 16px;
-    height: 16px;
-    float: left;
+.buffering #playlist li.current .glyphicon-time {
+    display: inline;
 }
+/*.buffering #playlist li.current .loading {*/
+    /*background: url('../images/loading.gif') -5px 1px no-repeat;*/
+    /*margin-left: -5px;*/
+    /*display: block;*/
+    /*width: 16px;*/
+    /*height: 16px;*/
+    /*float: left;*/
+/*}*/
 
 .playing #playlist li.current i.glyphicon-play {
     display: inline;
@@ -370,7 +383,7 @@ ul.tree li {
     cursor: pointer;
 }
 
-#loading-label {
+.loading-label {
     position: absolute;
     left: 50%;
     top: 45%;
@@ -378,7 +391,12 @@ ul.tree li {
     color: #ccc;
     z-index: 1;
 }
-#loading-label div {
+.loading-label div {
     position: relative;
     left: -50%;
+}
+.loading-label div i,
+.loading-label div span {
+    vertical-align: middle;
+    margin-right: 5px;
 }

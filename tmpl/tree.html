@@ -10,7 +10,7 @@
     </div>
 </script>
 
-<div ng-if="loading" id="loading-label"><div>Loading...</div></div>
+<div ng-if="loading" class="loading-label"><div><i class="glyphicon glyphicon-time"></i><span>Loading...</span></div></div>
 <ul class="tree">
     <li ng-repeat="node in tree.root.children" ng-include="'node.html'" class="tree-item"></li>
 </ul>
