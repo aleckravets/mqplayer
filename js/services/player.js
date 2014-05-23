@@ -3,7 +3,12 @@
 angular.module('Player', ['ui.slider'])
     .factory('Player', function($q) {
         function Ctor() {
+            this.audio = new Audio();
             this.audio.volume = 0.5;
+this.state = 'stopped';
+
+            this.currentRecord = undefined; // Record
+
 //            var self = this;
 //            this.audio.addEventListener('ended', function() {
 //                self.next(true);
@@ -11,9 +16,6 @@ angular.module('Player', ['ui.slider'])
         }
 
         Ctor.prototype = {
-            audio: new Audio(),
-            currentRecord: undefined,
-            state: 'stopped',
             playRecord: function(record) {
                 var deferred = $q.defer(),
                     self = this;
@@ -41,7 +43,7 @@ angular.module('Player', ['ui.slider'])
                 return this.audio.paused;
             },
             play: function() {
-                this.audio.play();
+                    this.audio.play();
                 this.state = 'playing';
             },
             pause: function() {

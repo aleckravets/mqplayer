@@ -14,13 +14,14 @@ angular.module('App')
     .factory('TreeNode', function($q, DataService) {
         function Ctor(item) {
             this.item = item;
+
+            this.collapsed = true;
+            this.selected = false;
+            this.loading = false;
+            this.children = undefined;
         }
 
         Ctor.prototype = {
-            collapsed: true,
-            selected: false,
-            loading: false,
-            children: undefined,
             getChildren: function() {
                 var self = this;
                 if (!this.children)
@@ -67,11 +68,9 @@ angular.module('App')
     .factory('Record', [function() {
         function Ctor(node) {
             this.node = node;
-        }
 
-        Ctor.prototype = {
-            selected: false
-        };
+            this.selected = false;
+        }
 
         return Ctor;
     }]);

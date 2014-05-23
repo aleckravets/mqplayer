@@ -1,11 +1,16 @@
 'use strict';
 
 angular.module('Playlist', ['ui.slider'])
-    .directive('playlist', function($document, $timeout, player, playlist, tree) {
+    .directive('playlist', function($document, $timeout, session) {
         return {
             restrict: 'E',
             scope: {},
             controller: function($scope, $element) {
+                console.log('playlist directive controller');
+
+                var player = session.player,
+                    playlist = session.playlist;
+
                 $scope.player = player;
                 $scope.playlist = playlist;
 
@@ -97,6 +102,9 @@ angular.module('Playlist', ['ui.slider'])
             },
             templateUrl: 'tmpl/playlist.html',
             link: function(scope, element, attrs) {
+                var tree = session.tree,
+                    playlist = session.playlist;
+
                 element[0].addEventListener('dragover', function(e) {
                     e.preventDefault(); // allow drop
                 });
@@ -129,9 +137,12 @@ angular.module('Playlist', ['ui.slider'])
             }
         };
     })
-    .directive('droppableItem', function($timeout, tree, playlist) {
+    .directive('droppableItem', function($timeout, session) {
         return {
             link: function(scope, element, attrs) {
+                var tree = session.tree,
+                    playlist = session.playlist;
+
                 element[0].addEventListener('dragover', function(e) {
                     e.preventDefault(); // allow drop
                 });

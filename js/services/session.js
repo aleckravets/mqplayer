@@ -41,14 +41,4 @@ angular.module('App')
                 console.log('session ended');
             }
         };
-    })
-    // shortcuts to session objects
-    .factory('player', function(session) {
-        return session.player;
-    })
-    .factory('tree', function(session) {
-        return session.tree;
-    })
-    .factory('playlist', function(session) {
-        return session.playlist;
     });
