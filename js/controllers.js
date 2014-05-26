@@ -1,5 +1,5 @@
 angular.module('App')
-    .controller('AppController', function($scope, $location, $timeout, session) {
+    .controller('AppController', function($scope, $location, $timeout, $document, session) {
         $scope.session = session;
 
         $scope.login = function() {
@@ -74,6 +74,33 @@ angular.module('App')
         $scope.$on('trackended', function(event, data) {
             $scope.next(true);
             $timeout(function(){ });
+        });
+
+        $document.on('keydown', function(e) {
+            var playlist = session.playlist,
+                player = session.player;
+
+            switch (e.keyCode) {
+                case 98: // numpad down
+                    player.volumeDown();
+                    $scope.$apply();
+                    break;
+                case 104: // numpad up
+                    player.volumeUp();
+                    $scope.$apply();
+                    break;
+                // todo: add a delay before the record starts loading when manual navigation is used
+                case 37: // left arrow
+                case 100: // numpad left
+                    $scope.prev();
+                    break;
+                case 39: // right arrow
+                case 102: // numpad right
+                    $scope.next();
+                    break;
+                default:
+                    break;
+            }
         });
 
 //        var self = this;

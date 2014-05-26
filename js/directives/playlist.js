@@ -11,10 +11,54 @@ angular.module('Playlist', ['ui.slider'])
                 var player = session.player,
                     playlist = session.playlist;
 
+
+
                 $scope.player = player;
                 $scope.playlist = playlist;
 
                 var lastClickedRecord;
+
+                var deleteSelected = function() {
+                    if (playlist.selectedRecords.length == playlist.records.length) {
+                        playlist.records.empty();
+                    }
+                    else {
+                        playlist.selectedRecords.forEach(function(record) {
+                            var i = playlist.records.indexOf(record);
+                            playlist.records.splice(i, 1);
+                        });
+                    }
+                    playlist.selectedRecords.empty();
+                };
+
+                var selectAll = function() {
+                    playlist.selectedRecords.empty();
+                    playlist.records.forEach(function(record) {
+                        record.selected = true;
+                        playlist.selectedRecords.push(record);
+                    });
+                };
+
+                var selectNone = function() {
+                    playlist.selectedRecords.forEach(function(record) {
+                        record.selected = false;
+                    });
+                    playlist.selectedRecords.empty();
+                };
+
+                var moveUp = function(e) {
+                    var nextRecord = playlist.prev(lastClickedRecord, false, false);
+                    if (nextRecord) {
+                        $scope.mousedown(e, nextRecord);
+                    }
+                };
+
+                var moveDown = function(e) {
+                    var nextRecord = playlist.next(lastClickedRecord, false, false);
+                    if (nextRecord) {
+                        $scope.mousedown(e, nextRecord);
+                    }
+                };
 
                 $scope.dblclick = function(e, record) {
                     player.playRecord(record);
@@ -61,53 +105,33 @@ angular.module('Playlist', ['ui.slider'])
                     e.preventDefault(); // no selection on double click
                 };
 
-                $scope.deleteSelected = function() {
-                    if (playlist.selectedRecords.length == playlist.records.length) {
-                        playlist.records.empty();
-                    }
-                    else {
-                        playlist.selectedRecords.forEach(function(record) {
-                            var i = playlist.records.indexOf(record);
-                            playlist.records.splice(i, 1);
-                        });
-                    }
-                    playlist.selectedRecords.empty();
-                };
-
-                $scope.selectAll = function() {
-                    playlist.selectedRecords.empty();
-                    playlist.records.forEach(function(record) {
-                        record.selected = true;
-                        playlist.selectedRecords.push(record);
-                    });
-                };
-
-                $scope.selectNone = function() {
-                    playlist.selectedRecords.forEach(function(record) {
-                        record.selected = false;
-                    });
-                    playlist.selectedRecords.empty();
-                };
-
                 $scope.playlistClick = function(e, record) {
                     if (!record)
-                        $scope.selectNone();
+                        selectNone();
 
                     e.stopPropagation();
                 };
 
                 $document.on('keydown', function(e) {
-                    switch (e.key.toLowerCase()) {
-                        case 'del':
-                            $scope.deleteSelected();
+                    switch (e.keyCode) {
+                        case 46: // delete
+                            deleteSelected();
                             $scope.$apply();
                             break;
-                        case 'a':
+                        case 65: // A
                             if (e.ctrlKey) {
                                 e.preventDefault();
-                                $scope.selectAll();
+                                selectAll();
                                 $scope.$apply();
                             }
+                            break;
+                        case 38: // up arrow
+                            moveUp(e);
+                            $scope.$apply();
+                            break;
+                        case 40: // down arrow
+                            moveDown(e);
+                            $scope.$apply();
                             break;
                         default:
                             break;

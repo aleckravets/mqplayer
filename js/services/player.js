@@ -4,6 +4,7 @@ angular.module('Player', ['ui.slider'])
     .factory('Player', function($q) {
         function Ctor() {
             this.audio = new Audio();
+            this.volumeStep = 0.05;
             this.audio.volume = 0.5;
             this.state = 'stopped';
 
@@ -47,6 +48,14 @@ angular.module('Player', ['ui.slider'])
             },
             mute: function() {
                 this.audio.muted = !this.audio.muted;
+            },
+            volumeUp: function() {
+                if (this.audio.volume + this.volumeStep <= 1)
+                    this.audio.volume += this.volumeStep;
+            },
+            volumeDown: function() {
+                if (this.audio.volume - this.volumeStep >= 0)
+                    this.audio.volume -= this.volumeStep;
             }
         };
 

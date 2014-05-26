@@ -50,8 +50,8 @@ angular.module('App')
                 this.selectedRecords.empty();
                 return this.enqueue(node);
             },
-            prev: function(record) {
-                if (this.random) {
+            prev: function(record, random, repeat) {
+                if (random === undefined ? this.random : random) {
                     var i = Math.floor(Math.random() * this.records.length);
                     return this.records[i];
                 } else {
@@ -59,14 +59,14 @@ angular.module('App')
                     if (i > 0) {
                         return this.records[i - 1];
                     }
-                    else if (i == 0 && this.repeat) {
+                    else if (i == 0 && (repeat === undefined ? this.repeat : repeat)) {
                         return this.records[this.records.length - 1];
                     }
                 }
                 return false;
             },
-            next: function(record) {
-                if (this.random) {
+            next: function(record, random, repeat) {
+                if (random === undefined ? this.random : random) {
                     var i = Math.floor(Math.random() * this.records.length);
                     return this.records[i];
                 } else {
@@ -74,7 +74,7 @@ angular.module('App')
                     if (i <= this.records.length - 2) {
                         return this.records[i + 1];
                     }
-                    else if (i == this.records.length - 1 && this.repeat) {
+                    else if (i == this.records.length - 1 && (repeat === undefined ? this.repeat : repeat)) {
                         return this.records[0];
                     }
                 }

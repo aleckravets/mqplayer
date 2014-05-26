@@ -46,7 +46,7 @@
         <p id="controls2" class="navbar-text navbar-left" ng-if="session.active" ng-cloak>
             <a title="mute" ng-click="session.player.mute()"><i class="glyphicon" ng-class="{'glyphicon-volume-up': !session.player.audio.muted, 'glyphicon-volume-off': session.player.audio.muted}"></i></a>
         </p>
-        <div id="volume" ng-if="session.active" ui-slider="{range: 'min'}" ui-slider use-decimals min="0" max="1.0" step="0.01" ng-model="session.player.audio.volume"></div>
+        <div id="volume" ng-if="session.active" ui-slider="{range: 'min'}" ui-slider use-decimals min="0" max="1.0" step="{{session.player.volumeStep}}" ng-model="session.player.audio.volume"></div>
         <p id="controls3" class="navbar-text navbar-left" ng-if="session.active" ng-cloak>
             <a title="repeat" ng-click="session.playlist.toggleRepeat()" ng-class="{'pressed': session.playlist.repeat}"><i class="glyphicon glyphicon-repeat"></i></a>
             <a title="shuffle" ng-click="session.playlist.toggleRandom()" ng-class="{'pressed': session.playlist.random}"><i class="glyphicon glyphicon-random"></i></a>
