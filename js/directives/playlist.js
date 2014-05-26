@@ -82,6 +82,20 @@ angular.module('Playlist', ['ui.slider'])
                     });
                 };
 
+                $scope.selectNone = function() {
+                    playlist.selectedRecords.forEach(function(record) {
+                        record.selected = false;
+                    });
+                    playlist.selectedRecords.empty();
+                };
+
+                $scope.playlistClick = function(e, record) {
+                    if (!record)
+                        $scope.selectNone();
+
+                    e.stopPropagation();
+                };
+
                 $document.on('keydown', function(e) {
                     switch (e.key.toLowerCase()) {
                         case 'del':
