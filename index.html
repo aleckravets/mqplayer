@@ -1,7 +1,8 @@
 <!doctype html>
-<html>
+<html ng-controller="AppController">
 <head>
-    <script src="lib/jquery-1.11.0.min.js"></script>
+    <title ng-bind="Page.title()">nq player</title>
+    <script src="lib/jquery-1.11.1.js"></script>
     <script src="lib/jquery-ui-1.10.4.min.js"></script>
     <script src="lib/angular/angular.js"></script>
     <script src="lib/angular/angular-route.js"></script>
@@ -23,18 +24,19 @@
 
     <script src="https://apis.google.com/js/client.js?onload=bootstrap"></script>
 
-    <link rel="stylesheet" href="lib/bootstrap.min.css">
+    <link href="favicon.ico" rel="shortcut icon" type="image/ico" />
+    <link rel="stylesheet" href="lib/bootstrap.min.css" />
     <link rel="stylesheet" href="lib/jquery-ui-1.10.4.min.css"/>
     <link rel="stylesheet" href="css/app.css"/>
 </head>
-<body ng-controller="AppController" ng-class="session.player.state">
+<body ng-class="session.player.state">
 <div class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#/player"><span><i class="glyphicon glyphicon-music"></i>nq player</span></a>
-        <!--<ul class="nav navbar-nav">-->
-            <!--<li><a href="#/about">about</a></li>-->
-            <!--<li><a href="#/help">help</a></li>-->
-        <!--</ul>-->
+        <a class="navbar-brand" href="#/player"><span>nq player</span></a>
+        <ul class="nav navbar-nav">
+            <li><a href="#/about">about</a></li>
+            <li><a href="#/help">help</a></li>
+        </ul>
         <p id="controls" class="navbar-text navbar-left" ng-if="session.active" ng-cloak>
             <a class="prev" title="previous" ng-click="prev()"><i class="glyphicon glyphicon-step-backward"></i></a>
             <a class="stop" title="stop" ng-click="stop()"><i class="glyphicon glyphicon-stop"></i></a>
@@ -42,7 +44,7 @@
             <a class="play" title="play" ng-click="playPause()"><i class="glyphicon glyphicon-play"></i></a>
             <a class="next" title="next" ng-click="next()"><i class="glyphicon glyphicon-step-forward"></i></a>
         </p>
-        <div id="track" ng-if="session.active" ng-cloak ui-slider="{range: 'min'}" use-decimals min="0" max="{{session.player.audio.duration}}" step="0.01" ng-model="session.player.audio.currentTime"></div>
+        <div id="track" ng-if="session.active" ng-cloak ui-slider="{range: 'min'}" min="0" max="{{session.player.audio.duration}}" step="1" ng-model="state.currentTime"></div>
         <p id="controls2" class="navbar-text navbar-left" ng-if="session.active" ng-cloak>
             <a title="mute" ng-click="session.player.mute()"><i class="glyphicon" ng-class="{'glyphicon-volume-up': !session.player.audio.muted, 'glyphicon-volume-off': session.player.audio.muted}"></i></a>
         </p>

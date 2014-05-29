@@ -1,22 +1,44 @@
 'use strict';
 
 angular.module('Player', ['ui.slider'])
-    .factory('Player', function($q) {
+    .factory('Player', function($rootScope, $q, Page) {
         function Ctor() {
             this.audio = new Audio();
             this.volumeStep = 0.05;
             this.audio.volume = 0.5;
             this.state = 'stopped';
+            this.currentTime = 0;
 
             this.currentRecord = undefined; // Record
+
+            this.audio.addEventListener('ended', function() {
+                $rootScope.$broadcast('player.trackended');
+            });
+
+            var self = this;
+
+            // emit timeupdate event once a second
+            this.audio.addEventListener('timeupdate', function(e) {
+                $rootScope.$broadcast('player.timeupdate', self.audio.currentTime);
+//                if (self.currentTime && Math.abs(self.audio.currentTime - self.currentTime) <= 1)
+//                    return;
+//
+//                self.currentTime = self.audio.currentTime;
+//                $rootScope.$broadcast('player.timeupdate', self.currentTime);
+            });
         }
 
         Ctor.prototype = {
+            setTime: function(time) {
+                this.audio.currentTime = time;
+            },
             playRecord: function(record) {
                 var deferred = $q.defer(),
                     self = this;
 
                 this.state = 'buffering';
+
+                $rootScope.$broadcast('player.timeupdate', 0);
 
                 this.audio.src = record.node.item.url;
                 self.currentRecord = record;
@@ -26,6 +48,8 @@ angular.module('Player', ['ui.slider'])
                     self.state = 'playing';
                     deferred.resolve();
                 });
+
+                Page.setTitle(record.node.item.name);
 
                 return deferred.promise;
             },

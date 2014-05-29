@@ -1,6 +1,28 @@
 angular.module('App')
-    .controller('AppController', function($scope, $location, $timeout, $document, session) {
+    .controller('AppController', function($scope, $location, $timeout, $document, session, Page) {
+        $scope.Page = Page;
+
         $scope.session = session;
+
+        $scope.state = {};
+
+        $scope.$on('player.timeupdate', function(e, time) {
+            if (time > 0 && $scope.state.currentTime && Math.abs(time - $scope.state.currentTime) <= 1)
+                return;
+
+            $scope.state.currentTime = Math.round(time);
+            $timeout(function(){});
+
+            console.log('time update ' + time);
+        });
+
+        $scope.$watch('state.currentTime', function(value) {
+            if (session.player && Math.abs(value - session.player.audio.currentTime) > 1) {
+                session.player.setTime(value);
+
+                console.log('implicitly set time: ' + value);
+            }
+        });
 
         $scope.login = function() {
             session.login()
@@ -29,6 +51,7 @@ angular.module('App')
             if (rec !== false)
                 player.playRecord(rec);
 
+            $scope.state.currentTime = 0;
             $timeout(function(){ });
         };
 
@@ -43,6 +66,7 @@ angular.module('App')
             else if (implicit)
                 player.stop();
 
+            $scope.state.currentTime = 0;
             $timeout(function(){ });
         };
 
@@ -68,10 +92,11 @@ angular.module('App')
         }
 
         $scope.stop = function() {
-            session.player.stop()
+            session.player.stop();
+            $scope.state.currentTime = 0;
         };
 
-        $scope.$on('trackended', function(event, data) {
+        $scope.$on('player.trackended', function(event, data) {
             $scope.next(true);
             $timeout(function(){ });
         });
@@ -103,24 +128,25 @@ angular.module('App')
             }
         });
 
-//        var self = this;
-//        this.audio.addEventListener('ended', function() {
-//            self.next(true);
-//        });
-
         console.log('app controller');
     })
-    // todo: remove handlers on $destroy!!!
+    // todo: remove handlers on $destroy
     .controller('PlayerController', function($scope, $timeout, $location, session) {
         var player = session.player;
 
-        $scope.$on('trackended', function(event) {
+        $scope.$on('player.trackended', function(event) {
             $timeout(function(){ });
         });
 
-        player.audio.addEventListener('timeupdate', function() {
-            $timeout(function() {});
-        });
+        var currentTime;
+
+//        session.player.audio.addEventListener('timeupdate', function(e) {
+//            if (currentTime && session.player.audio.currentTime - currentTime <= 1)
+//                return;
+//
+//            $timeout(function() {});
+//        });
+
 
         console.log('player controller');
     })

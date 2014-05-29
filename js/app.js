@@ -13,6 +13,16 @@ angular.module('App', ['ngRoute', 'Tree', 'Playlist', 'Player', 'Services'])
         $routeProvider.when('/about', {templateUrl: 'views/about.html'});
         $routeProvider.when('/help', {templateUrl: 'views/help.html'});
         $routeProvider.otherwise({redirectTo: '/'});
+    })
+    .factory('Page', function() {
+        var title = 'nq player';
+        return {
+            title: function() { return title; },
+            setTitle: function(newTitle) { title = newTitle }
+        };
+    })
+    .directive('delay', function() {
+
     });
 
 var auth = function($q, $location, session) {
