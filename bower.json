@@ -1,0 +1,16 @@
+{
+  "name": "music-queue",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "angular": "1.2.x",
+    "angular-route": "1.2.x",
+    "jquery": "1.11.x",
+    "jquery-ui": "1.10.x",
+    "bootstrap": "3.1.x",
+    "slider": "https://github.com/angular-ui/ui-slider.git#26b160a1521a4fd6f3ac1892f5f4de7e866f14c7"
+  },
+  "resolutions": {
+    "angular": "1.2.16"
+  }
+}

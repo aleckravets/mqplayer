@@ -1,0 +1,7 @@
+#<FilesMatch "index\.html$">
+    FileETag None
+    <ifModule mod_headers.c>
+        Header unset ETag
+        Header set Cache-Control "max-age=0, no-cache, no-store, must-revalidate"
+    </ifModule>
+#</FilesMatch>

@@ -1,0 +1,370 @@
+#content-wrapper {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    padding-top: 50px;
+}
+
+#content {
+    /*border: 1px solid red;*/
+    height: 100%;
+}
+
+#controls {
+    margin: 12px 0 12px 40px;
+    white-space: nowrap;
+}
+
+#controls a {
+    margin-right: 10px;
+    font-size: 21px;
+    line-height: 21px;
+}
+
+body {
+    padding-top: 70px;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: underline !important;
+}
+
+.navbar {
+    background: #285e8e;
+    border: none;
+}
+.navbar a,
+.navbar p{
+    color: #fff !important;
+}
+
+.navbar-brand span * {
+    vertical-align: middle;
+}
+.navbar .glyphicon-music {
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+.tree .glyphicon,
+#playlist li .glyphicon {
+    color: #285e8e;
+}
+
+#login-box {
+    margin: 30px auto;
+    padding: 30px;
+    width: 500px;
+    text-align: center;
+    font-size: 150%;
+}
+#login-box button {
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+#login-box button .glyphicon,
+.navbar .glyphicon{
+    color: #fff;
+}
+
+#left {
+    float: left;
+    width: 400px;
+    min-width: 5px;
+    height: 100%;
+    padding: 5px;
+    overflow: auto;
+    background: white;
+    position: relative;
+}
+
+#resize-bar {
+    float: left;
+    width: 5px;
+    background: #285e8e;
+    height: 100%;
+    cursor: ew-resize;
+}
+
+#right {
+    /*border: 1px solid red;*/
+    height: 100%;
+    margin-left: 405px;
+}
+
+/*********************************** TREE ***********************************/
+ul.tree,
+ul.tree ul{
+    white-space: nowrap;
+    padding-left: 20px;
+    list-style-type: none;
+}
+
+ul.tree li {
+    cursor: default;
+}
+
+.tree-label {
+    padding: 1px 4px;
+    border: 1px solid transparent;
+}
+
+.tree-label.selected {
+    background: #c4e3f3;
+    border: 1px solid #285e8e;
+}
+
+#tree-buttons {
+    text-align: right;
+    padding: 5px 0;
+}
+
+.tree a {
+    cursor: pointer;
+}
+
+.tree .glyphicon {
+    font-size: 12px;
+}
+
+.tree .glyphicon-plus {
+    font-size: 9px;
+    margin-left: -15px;
+    padding-right: 5px;
+    margin-top: -3px;
+    vertical-align: middle;
+    line-height: 18px;
+}
+
+.tree .glyphicon-folder-closed {
+    line-height: 18px;
+}
+
+.tree .glyphicon-file {
+    color: #555
+}
+
+.collapsed ul {
+    display: none;
+}
+
+.loading {
+    font-size: 85%;
+}
+
+/************************************** PLAYER ******************************/
+#volume-col {
+    float: left;
+    height: 100%;
+    border-right: 1px solid #ccc;
+    padding: 11px;
+}
+
+#controls a {
+    display: block;
+    float: left;
+    height: 100%;
+    width: 34px;
+}
+
+#controls2 {
+    margin: 13px 10px 0 0;
+}
+#controls3 {
+    margin: 14px 0; /* reduce the original margin of nav-text so the bottom border fits */
+}
+
+#controls2 a {
+    font-size: 18px;
+}
+
+#controls2 a,
+#controls3 a{
+    width: 16px;
+    display: block;
+    float: left;
+    /*padding: 1px 0;*/
+    margin-left: 20px;
+}
+
+#controls3 a.pressed{
+    border-bottom: 2px solid #fff;
+}
+
+
+#controls a.pause {
+    display: none;
+}
+
+.playing #controls a.play,
+.buffering #controls a.play {
+    display: none;
+}
+
+.playing #controls a.pause,
+.buffering #controls a.pause{
+    display: block;
+}
+
+.paused #controls a.play,
+.stopped #controls a.play {
+    display: block;
+}
+
+#volume {
+    float: left;
+    margin-top: 19px;
+    width: 100px;
+    border: none;
+    border-radius: 1px;
+    height: 10px;
+}
+
+#volume .ui-slider-handle {
+    background: url('../img/handle.png') no-repeat 50% 50%;
+    border: none;
+    outline: none;
+    width: 20px;
+    height: 20px;
+    margin-top: -1px;
+    margin-right: -4px;
+}
+
+#volume .ui-slider-range {
+    background:  #285e8e;
+    opacity: 0.7;
+    margin: 1px;
+    height: 8px !important;
+    /*position: absolute;*/
+    border: 0;
+    border-radius: 0;
+    top: 0;
+}
+
+#track {
+    float: left;
+    width: 300px;
+    margin-top: 19px;
+    margin-right: 20px;
+    background: #fff;
+    opacity: 1 !important;
+    border-color: #999;
+    border: none;
+    border-radius: 1px;
+    height: 10px;
+}
+
+#track .ui-slider-handle {
+    display: none;
+    border: none;
+    outline: none;
+    width: 25px;
+    height: 25px;
+    margin-top: -5px;
+}
+
+#track .ui-slider-range {
+    background:  #285e8e;
+    opacity: 0.7;
+    border-radius: 0;
+    border: 1px solid #fff;
+    top: 0;
+}
+
+/******************************** PLAYLIST *************************/
+
+#playlist {
+    position: relative;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+    padding: 10px 5px 10px 0;
+    background: white;
+}
+
+#playlist ul {
+    list-style-type: none;
+    padding-left: 0;
+    cursor: default;
+    pointer-events: none;
+}
+
+#playlist ul.dragover li:last-child {
+    border-bottom: 2px dotted #000;
+}
+
+#playlist li {
+    margin: 0 0 0 20px;
+    border-top: 2px solid transparent;
+    pointer-events: all;
+}
+
+#playlist li i {
+    display: none;
+    margin-left: -14px;
+}
+
+.buffering #playlist li.current .glyphicon-time {
+    display: inline;
+}
+
+.playing #playlist li.current i.glyphicon-play {
+    display: inline;
+}
+
+.paused #playlist li.current i.glyphicon-pause {
+    display: inline;
+}
+
+#playlist li:nth-child(2n+1) {
+    background-color: #F9F9F9;
+}
+
+#playlist li.selected {
+    background: #c4e3f3;
+}
+
+#playlist li.current {
+    font-weight: bold;
+}
+
+#playlist li span {
+    pointer-events: none; /* do not fire dragenter/dragleave events on li's contents */
+}
+
+#playlist li.dragover{
+    border-top: 2px dotted #000;
+}
+
+#playlist-buttons {
+        position: absolute;
+        right: -30px;
+        padding: 0 5px;
+    font-size: 18px;
+
+}
+
+#playlist-buttons a {
+    cursor: pointer;
+}
+
+.loading-label {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    font-size: 30px;
+    color: #ccc;
+    z-index: 1;
+}
+.loading-label div {
+    position: relative;
+    left: -50%;
+}
+.loading-label div i,
+.loading-label div span {
+    vertical-align: middle;
+    margin-right: 5px;
+}

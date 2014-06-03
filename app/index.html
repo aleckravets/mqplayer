@@ -1,0 +1,72 @@
+<!doctype html>
+<html ng-controller="AppController">
+<head>
+    <meta charset="utf-8">
+    <title ng-bind="Page.title()">Music Queue</title>
+    <link href="favicon.ico" rel="shortcut icon" type="image/ico" />
+
+    <!-- build:css css/lib.css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/jquery.ui.theme.css">
+    <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/jquery.ui.slider.css">
+    <!-- endbuild -->
+    <!-- build:css css/app.css -->
+    <link rel="stylesheet" href="css/app.css"/>
+    <!-- endbuild -->
+</head>
+<body ng-class="session.player.state">
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#/player"><span>Music Queue</span></a>
+        <!--<ul class="nav navbar-nav">-->
+        <!--<li><a href="#/about">about</a></li>-->
+        <!--<li><a href="#/help">help</a></li>-->
+        <!--</ul>-->
+        <p id="controls" class="navbar-text navbar-left" ng-if="session.active" ng-cloak>
+            <a class="prev" title="previous" ng-click="prev()"><i class="glyphicon glyphicon-step-backward"></i></a>
+            <a class="stop" title="stop" ng-click="stop()"><i class="glyphicon glyphicon-stop"></i></a>
+            <a class="pause" title="pause" ng-click="playPause()"><i class="glyphicon glyphicon-pause"></i></a>
+            <a class="play" title="play" ng-click="playPause()"><i class="glyphicon glyphicon-play"></i></a>
+            <a class="next" title="next" ng-click="next()"><i class="glyphicon glyphicon-step-forward"></i></a>
+        </p>
+        <div id="track" ng-if="session.active" ng-cloak ui-slider="{range: 'min'}" min="0" max="{{session.player.audio.duration}}" step="1" ng-model="state.currentTime"></div>
+        <p id="controls2" class="navbar-text navbar-left" ng-if="session.active" ng-cloak>
+            <a title="mute" ng-click="session.player.mute()"><i class="glyphicon" ng-class="{'glyphicon-volume-up': !session.player.audio.muted, 'glyphicon-volume-off': session.player.audio.muted}"></i></a>
+        </p>
+        <div id="volume" ng-if="session.active" ui-slider="{range: 'min'}" use-decimals min="0" max="1.0" step="{{session.player.volumeStep}}" ng-model="session.player.audio.volume"></div>
+        <p id="controls3" class="navbar-text navbar-left" ng-if="session.active" ng-cloak>
+            <a title="repeat" ng-click="session.playlist.toggleRepeat()" ng-class="{'pressed': session.playlist.repeat}"><i class="glyphicon glyphicon-repeat"></i></a>
+            <a title="shuffle" ng-click="session.playlist.toggleRandom()" ng-class="{'pressed': session.playlist.random}"><i class="glyphicon glyphicon-random"></i></a>
+        </p>
+        <p class="navbar-text navbar-right" ng-if="session.active" ng-cloak><i class="glyphicon glyphicon-user"></i> {{session.userInfo.name}} <a ng-click="logout()">Sign out</a></p>
+    </div>
+</div>
+
+<div ng-view></div>
+
+<!-- build:js js/lib.js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/jquery-ui/ui/jquery-ui.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/slider/src/slider.js"></script>
+<!-- endbuild -->
+
+<!-- build:js js/app.js -->
+<script src="js/tools.js"></script>
+<script src="js/app.js"></script>
+<script src="js/controllers.js"></script>
+<script src="js/classes.js"></script>
+<script src="js/services/session.js"></script>
+<script src="js/services/playlist.js"></script>
+<script src="js/services/services.js"></script>
+<script src="js/services/player.js"></script>
+<script src="js/services/tree.js"></script>
+<script src="js/directives/tree.js"></script>
+<script src="js/directives/playlist.js"></script>
+<script src="js/directives/resizebar.js"></script>
+<!-- endbuild -->
+
+<script src="https://apis.google.com/js/client.js?onload=bootstrap"></script>
+</body>
+</html>
