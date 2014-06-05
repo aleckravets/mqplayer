@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('Types')
+angular.module('App')
     .factory('TreeNode', function($q, DataService) {
         function Ctor(item) {
             this.item = item;
@@ -12,12 +12,17 @@ angular.module('Types')
         }
 
         Ctor.prototype = {
+            /**
+             * Returns a promise of child records
+             * @param {Boolean} recursive when set to true, returns the flat array of all child nodes
+             * @returns {Promise<TreeNode[]>}
+             */
             getChildren: function(recursive) {
-                var promise = this.getChildrenPromise();
+                if (!this.childrenPromise) this.childrenPromise = this.loadChildren();
 
-                if (!recursive) return promise;
+                if (!recursive) return this.childrenPromise;
 
-                return promise.then(function(nodes) {
+                return this.childrenPromise.then(function(nodes) {
                     var children = [];
                     var dirs = [];
 
@@ -41,11 +46,11 @@ angular.module('Types')
                     return result;
                 });
             },
-            getChildrenPromise: function() {
-                if (!this.childrenPromise) this.childrenPromise = this.loadChildren();
 
-                return this.childrenPromise;
-            },
+            /**
+             * Loads direct children of the node
+             * @returns {Promise<TreeNode[]>} a promise resolved to a child nodes array
+             */
             loadChildren: function() {
                 var self  = this;
 
