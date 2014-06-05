@@ -22,22 +22,7 @@
         <!--<li><a href="#/about">about</a></li>-->
         <!--<li><a href="#/help">help</a></li>-->
         <!--</ul>-->
-        <p id="controls" class="navbar-text navbar-left" ng-if="session.active" ng-cloak>
-            <a class="prev" title="previous" ng-click="prev()"><i class="glyphicon glyphicon-step-backward"></i></a>
-            <a class="stop" title="stop" ng-click="stop()"><i class="glyphicon glyphicon-stop"></i></a>
-            <a class="pause" title="pause" ng-click="playPause()"><i class="glyphicon glyphicon-pause"></i></a>
-            <a class="play" title="play" ng-click="playPause()"><i class="glyphicon glyphicon-play"></i></a>
-            <a class="next" title="next" ng-click="next()"><i class="glyphicon glyphicon-step-forward"></i></a>
-        </p>
-        <div id="track" ng-if="session.active" ng-cloak ui-slider="{range: 'min'}" min="0" max="{{session.player.audio.duration}}" step="1" ng-model="state.currentTime"></div>
-        <p id="controls2" class="navbar-text navbar-left" ng-if="session.active" ng-cloak>
-            <a title="mute" ng-click="session.player.mute()"><i class="glyphicon" ng-class="{'glyphicon-volume-up': !session.player.audio.muted, 'glyphicon-volume-off': session.player.audio.muted}"></i></a>
-        </p>
-        <div id="volume" ng-if="session.active" ui-slider="{range: 'min'}" use-decimals min="0" max="1.0" step="{{session.player.volumeStep}}" ng-model="session.player.audio.volume"></div>
-        <p id="controls3" class="navbar-text navbar-left" ng-if="session.active" ng-cloak>
-            <a title="repeat" ng-click="session.playlist.toggleRepeat()" ng-class="{'pressed': session.playlist.repeat}"><i class="glyphicon glyphicon-repeat"></i></a>
-            <a title="shuffle" ng-click="session.playlist.toggleRandom()" ng-class="{'pressed': session.playlist.random}"><i class="glyphicon glyphicon-random"></i></a>
-        </p>
+        <player ng-if="session.active" ng-cloak></player>
         <p class="navbar-text navbar-right" ng-if="session.active" ng-cloak><i class="glyphicon glyphicon-user"></i> {{session.userInfo.name}} <a ng-click="logout()">Sign out</a></p>
     </div>
 </div>
@@ -66,6 +51,7 @@
 <script src="js/services/session.js"></script>
 <script src="js/services/services.js"></script>
 <script src="js/directives/tree.js"></script>
+<script src="js/directives/player.js"></script>
 <script src="js/directives/playlist.js"></script>
 <script src="js/directives/resizebar.js"></script>
 <!-- endbuild -->

@@ -2,9 +2,9 @@
 
 angular.module('Types', []);
 angular.module('Services', ['Types'])
-angular.module('Directives', ['Types', 'Services'])
+angular.module('Directives', ['Types', 'Services', 'ui.slider'])
 
-angular.module('App', ['ngRoute', 'Directives', 'Services', 'Types', 'ui.slider'])
+angular.module('App', ['ngRoute', 'Directives', 'Services', 'Types'])
     .config(function($routeProvider) {
         $routeProvider.when('/', {
             templateUrl: 'partials/player.html',
