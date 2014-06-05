@@ -58,7 +58,7 @@ angular.module('Services')
 
                 var retrievePageOfFiles = function(request, result) {
                     request.execute(function(resp) {
-                        result = result.concat(resp.items);
+                        if (resp.items) result = result.concat(resp.items);
                         var nextPageToken = resp.nextPageToken;
                         if (nextPageToken) {
                             request = gapi.client.drive.files.list({ q: q, pageToken: nextPageToken });

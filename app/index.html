@@ -17,7 +17,7 @@
 <body ng-class="session.player.state">
 <div class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#/player"><span>Music Queue</span></a>
+        <a class="navbar-brand" href="#/player"><i class="glyphicon glyphicon-headphones"></i><span>Music Queue</span></a>
         <!--<ul class="nav navbar-nav">-->
         <!--<li><a href="#/about">about</a></li>-->
         <!--<li><a href="#/help">help</a></li>-->
@@ -26,6 +26,8 @@
         <p class="navbar-text navbar-right" ng-if="session.active" ng-cloak><i class="glyphicon glyphicon-user"></i> {{session.userInfo.name}} <a ng-click="logout()">Sign out</a></p>
     </div>
 </div>
+
+<div ng-if="session.authorizing" ng-cloak class="loading-label"><div><i class="glyphicon glyphicon-time"></i><span>Loading...</span></div></div>
 
 <div ng-view></div>
 

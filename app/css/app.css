@@ -28,7 +28,7 @@ body {
 
 a {
     cursor: pointer;
-    text-decoration: underline !important;
+    text-decoration: underline;
 }
 
 .navbar {
@@ -42,6 +42,13 @@ a {
 
 .navbar-brand span * {
     vertical-align: middle;
+}
+.navbar-brand i{
+    margin-right: 5px;
+}
+
+a.navbar-brand {
+    text-decoration: none;
 }
 .navbar .glyphicon-music {
     margin-right: 5px;
@@ -355,16 +362,22 @@ ul.tree li {
     position: absolute;
     left: 50%;
     top: 45%;
-    font-size: 30px;
+    font-size: 20px;
     color: #ccc;
     z-index: 1;
+    text-align: center;
 }
 .loading-label div {
+    /*border: 1px solid green;*/
     position: relative;
     left: -50%;
 }
 .loading-label div i,
 .loading-label div span {
-    vertical-align: middle;
+    /*vertical-align: middle;*/
     margin-right: 5px;
+}
+.loading-label div i {
+    font-size: 25px;
+    vertical-align: top;
 }

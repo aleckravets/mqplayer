@@ -23,7 +23,7 @@ angular.module('Types')
                 this.loading = true;
 
                 var self = this,
-                    index = insertBeforeRecord ? this.records.indexOf(insertBeforeRecord) : this.records.length - 1;
+                    index = insertBeforeRecord ? this.records.indexOf(insertBeforeRecord) : this.records.length;
 
                 return recordsPromise.then(function(records) {
                     records.forEach(function (record) {

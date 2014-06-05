@@ -39,6 +39,9 @@ angular.module('Directives')
 
                 tree.root.getChildren().then(function(nodes) {
                     $scope.loading = false;
+
+                    if (nodes.length == 0) $scope.empty = true;
+
                     return nodes;
                 });
 //                    .then(function(nodes) {

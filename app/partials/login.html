@@ -1,8 +1,8 @@
 <div id="login-box">
-    <p ng-if="!loggedin">
+    <p ng-if="!session.active" ng-cloak>
         <button class="btn btn-danger" ng-click="login()"><i class="glyphicon glyphicon-log-in"></i> Sign in with Google</button>
         <br />
-        to access your music in Google Drive
+        to play your music from Google Drive
     </p>
-    <p ng-if="loggedin">Logged in</p>
+    <p ng-if="session.active" ng-cloak>Logged in as {{session.userInfo.name}}</p>
 </div>

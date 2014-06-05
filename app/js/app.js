@@ -24,9 +24,6 @@ angular.module('App', ['ngRoute', 'Directives', 'Services', 'Types'])
             title: function() { return title; },
             setTitle: function(newTitle) { title = newTitle }
         };
-    })
-    .directive('delay', function() {
-
     });
 
 var auth = ['$q', '$location', 'session', function($q, $location, session) {

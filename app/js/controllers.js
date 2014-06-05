@@ -1,5 +1,7 @@
+'use strict';
+
 angular.module('App')
-    .controller('AppController', function($scope, $location, $timeout, $document, session, Page) {
+    .controller('AppController', function($scope, $location, session, Page) {
         $scope.Page = Page;
 
         $scope.session = session;
@@ -7,7 +9,6 @@ angular.module('App')
         $scope.login = function() {
             session.login()
                 .then(function() {
-                    $scope.loggedin = true;
                     $location.path('/');
                 });
         };
@@ -22,5 +23,6 @@ angular.module('App')
     })
     .controller('PlayerController', function() {
     })
-    .controller('LoginController', function() {
+    .controller('LoginController', function($scope, session) {
+        $scope.session = session;
     });
