@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('Player', ['ui.slider'])
+angular.module('Types')
     .factory('Player', function($rootScope, $q, Page) {
         function Ctor() {
             this.audio = new Audio();
@@ -40,7 +40,7 @@ angular.module('Player', ['ui.slider'])
 
                 $rootScope.$broadcast('player.timeupdate', 0);
 
-                this.audio.src = record.node.item.url;
+                this.audio.src = record.url;
                 self.currentRecord = record;
 
                 this.audio.addEventListener('loadeddata', function() {
@@ -49,7 +49,7 @@ angular.module('Player', ['ui.slider'])
                     deferred.resolve();
                 });
 
-                Page.setTitle(record.node.item.name);
+                Page.setTitle(record.name);
 
                 return deferred.promise;
             },

@@ -1,15 +1,13 @@
 'use strict';
 
-angular.module('Playlist', ['ui.slider'])
-    .directive('playlist', function($document, $timeout, session) {
+angular.module('Directives')
+    .directive('playlist', function($document, $timeout, session, Record, helper) {
         return {
             restrict: 'E',
             scope: {},
             controller: function($scope, $element) {
                 var player = session.player,
                     playlist = session.playlist;
-
-
 
                 $scope.player = player;
                 $scope.playlist = playlist;
@@ -168,12 +166,12 @@ angular.module('Playlist', ['ui.slider'])
                         scope.dragover = false;
                     });
 
-                    playlist.enqueue(tree.draggedNode);
+                    playlist.enqueue(helper.getNodeRecords(tree.draggedNode));
                 });
             }
         };
     })
-    .directive('droppableItem', function($timeout, session) {
+    .directive('droppableItem', function($timeout, session, helper) {
         return {
             link: function(scope, element, attrs) {
                 var tree = session.tree,
@@ -205,7 +203,7 @@ angular.module('Playlist', ['ui.slider'])
                     e.preventDefault();
                     e.stopPropagation();
 
-                    playlist.enqueue(tree.draggedNode, scope.record);
+                    playlist.enqueue(helper.getNodeRecords(tree.draggedNode), scope.record);
 
                     $timeout(function() {
                         scope.record.dragover = false;

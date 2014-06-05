@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('App')
+angular.module('Services')
     .factory('session', function(Player, Playlist, Tree, DataService, Page) {
         return {
             active: false,

@@ -1,6 +1,10 @@
 'use strict';
 
-angular.module('App', ['ngRoute', 'Tree', 'Playlist', 'Player', 'Services'])
+angular.module('Types', []);
+angular.module('Services', ['Types'])
+angular.module('Directives', ['Types', 'Services'])
+
+angular.module('App', ['ngRoute', 'Directives', 'Services', 'Types', 'ui.slider'])
     .config(function($routeProvider) {
         $routeProvider.when('/', {
             templateUrl: 'partials/player.html',

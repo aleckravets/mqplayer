@@ -1,4 +1,6 @@
-angular.module('App')
+'use strict';
+
+angular.module('Directives')
     .directive('resizeBar', function($document) {
         var startWidth, handleWidth, startX, min;
 

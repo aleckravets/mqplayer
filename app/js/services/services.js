@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('Services', [])
+angular.module('Services')
     .factory('DataService', function($http, $q, $timeout, Item){
         var clientid = '97071318931-0pqadkdeov03b36bhthnri1n3h64eg7d.apps.googleusercontent.com';
 

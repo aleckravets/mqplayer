@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('Tree', [])
-    .directive('tree', function(session) {
+angular.module('Directives')
+    .directive('tree', function(session, helper) {
         return {
             restrict: 'E',
             scope: { },
@@ -15,9 +15,7 @@ angular.module('Tree', [])
 
                 $scope.toggleDir = function(node) {
                     node.collapsed = !node.collapsed;
-                    return node.getChildren().then(function(nodes) {
-                        return nodes;
-                    });
+                    node.getChildren(); // load children if not loaded yet
                 };
 
                 $scope.mousedown = function($event, node) {
@@ -31,9 +29,9 @@ angular.module('Tree', [])
 
                 $scope.dblclick = function ($event, node) {
                     player.stop();
-                    playlist.set(node).then(function(records) {
-                        if (records.length > 0)
-                            player.playRecord(records[0]);
+
+                    playlist.set(helper.getNodeRecords(node)).then(function(records) {
+                        if (records.length > 0) player.playRecord(records[0]);
                     });
                 };
 
