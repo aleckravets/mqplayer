@@ -30,11 +30,15 @@ var auth = ['$q', '$location', 'session', function($q, $location, session) {
     if (!session.active) {
         var deferred = $q.defer();
 
+        session.authorizing = true;
+
         session.login(true)
             .then(function() {
+                session.authorizing = false;
                 deferred.resolve();
             })
             .catch(function() {
+                session.authorizing = false;
                 deferred.reject();
                 $location.path('/login');
             });

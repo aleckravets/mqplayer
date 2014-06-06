@@ -6,9 +6,6 @@ angular.module('Services')
             active: false,
             userInfo: undefined,
             login: function(auto) {
-                if (auto)
-                    this.authorizing = true;
-
                 var self = this;
 
                 return DataService.authorize(auto)
@@ -16,8 +13,6 @@ angular.module('Services')
                         self.start();
                         self.active = true;
                         self.userInfo = DataService.userInfo;
-
-                        self.authorizing = false;
                     });
             },
             logout: function() {
