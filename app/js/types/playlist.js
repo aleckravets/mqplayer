@@ -63,15 +63,16 @@ angular.module('Types')
              * @returns {Record|false} The previous record or false.
              */
             prev: function(record, random, repeat) {
+                var i;
                 if (random === undefined ? this.random : random) {
-                    var i = Math.floor(Math.random() * this.records.length);
+                    i = Math.floor(Math.random() * this.records.length);
                     return this.records[i];
                 } else {
-                    var i = this.records.indexOf(record);
+                    i = this.records.indexOf(record);
                     if (i > 0) {
                         return this.records[i - 1];
                     }
-                    else if (i == 0 && (repeat === undefined ? this.repeat : repeat)) {
+                    else if (i === 0 && (repeat === undefined ? this.repeat : repeat)) {
                         return this.records[this.records.length - 1];
                     }
                 }
@@ -86,23 +87,32 @@ angular.module('Types')
              * @returns {Record|false} The next record or false.
              */
             next: function(record, random, repeat) {
+                var i;
                 if (random === undefined ? this.random : random) {
-                    var i = Math.floor(Math.random() * this.records.length);
+                    i = Math.floor(Math.random() * this.records.length);
                     return this.records[i];
                 } else {
-                    var i = this.records.indexOf(record);
+                    i = this.records.indexOf(record);
                     if (i <= this.records.length - 2) {
                         return this.records[i + 1];
                     }
-                    else if (i == this.records.length - 1 && (repeat === undefined ? this.repeat : repeat)) {
+                    else if (i === this.records.length - 1 && (repeat === undefined ? this.repeat : repeat)) {
                         return this.records[0];
                     }
                 }
                 return false;
             },
+
+            /**
+             * Toggles the boolean value of "random" property
+             */
             toggleRandom: function() {
                 this.random = !this.random;
             },
+
+            /**
+             * Toggles the boolean value of "repeat" property
+             */
             toggleRepeat: function() {
                 this.repeat = !this.repeat;
             }

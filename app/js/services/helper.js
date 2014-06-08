@@ -13,7 +13,7 @@ angular.module('Services')
             },
 
             /**
-             * Returns all records found inside the node
+             * Returns all records found inside the node including the node itself
              * @param {TreeNode} node A node to get the records from
              * @returns {Promise} A promise that resolves to Record[]
              */
@@ -23,8 +23,9 @@ angular.module('Services')
                 return (node.item.isDir ? node.getChildren(true) : $q.when([node])).then(function(nodes) {
                     var records = [];
                     nodes.forEach(function(node) {
-                        if (!node.item.isDir && self.isSupportedType(node.item.name))
+                        if (!node.item.isDir && self.isSupportedType(node.item.name)) {
                             records.push(self.recordFromNode(node));
+                        }
                     });
 
                     return records;

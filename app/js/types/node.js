@@ -2,6 +2,11 @@
 
 angular.module('App')
     .factory('TreeNode', function($q, DataService) {
+        /**
+         * Creates a new TreeNode
+         * @param item
+         * @constructor TreeNode
+         */
         function Ctor(item) {
             this.item = item;
 
@@ -13,14 +18,18 @@ angular.module('App')
 
         Ctor.prototype = {
             /**
-             * Returns a promise of child records
-             * @param {Boolean} recursive when set to true, returns the flat array of all child nodes
+             * Returns a promise of child nodes
+             * @param {Boolean} recursive when set to true, returns a flat array of all child nodes
              * @returns {Promise<TreeNode[]>}
              */
             getChildren: function(recursive) {
-                if (!this.childrenPromise) this.childrenPromise = this.loadChildren();
+                if (!this.childrenPromise) {
+                    this.childrenPromise = this.loadChildren();
+                }
 
-                if (!recursive) return this.childrenPromise;
+                if (!recursive) {
+                    return this.childrenPromise;
+                }
 
                 return this.childrenPromise.then(function(nodes) {
                     var children = [];
@@ -28,7 +37,9 @@ angular.module('App')
 
                     nodes.forEach(function(node) {
                         children.push(node);
-                        if (node.item.isDir) dirs.push(node);
+                        if (node.item.isDir) {
+                            dirs.push(node);
+                        }
                     });
 
                     var result = $q.when(children);
