@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('App')
+angular.module('Types')
     .factory('TreeNode', function($q, DataService) {
         /**
          * Creates a new TreeNode
@@ -8,7 +8,7 @@ angular.module('App')
          * @constructor TreeNode
          */
         function Ctor(item) {
-            this.item = item;
+            this.item = item || {};
 
             this.collapsed = true;
             this.selected = false;

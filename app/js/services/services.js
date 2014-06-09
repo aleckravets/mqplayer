@@ -54,7 +54,7 @@ angular.module('Services')
             loadItems: function(parentid) {
                 var deferred = $q.defer();
 
-                var q = "'" + parentid + "' in parents and trashed = false";
+                var q = "'" + (parentid || 'root') + "' in parents and trashed = false";
 
                 var retrievePageOfFiles = function(request, result) {
                     request.execute(function(resp) {
