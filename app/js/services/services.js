@@ -8,6 +8,15 @@ angular.module('Services')
             'https://www.googleapis.com/auth/drive.readonly'
         ];
 
+        /**
+         * Instantiates the Item based on data received from drive api
+         * @param data raw data object received from drive.files.list method
+         * @returns {Item}
+         */
+        function getItem(data) {
+            return new Item(data.id, data.title, data.mimeType == 'application/vnd.google-apps.folder', data.webContentLink);
+        }
+
         return {
             authorized: undefined,
             token: null,
@@ -75,7 +84,7 @@ angular.module('Services')
 
                 return deferred.promise.then(function(rawItems) {
                     var items = rawItems.map(function(rawItem) {
-                        return new Item(rawItem);
+                        return getItem(rawItem);
                     });
 
                     items.sort(function(a, b) {

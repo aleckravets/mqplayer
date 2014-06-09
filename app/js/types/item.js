@@ -2,11 +2,19 @@
 
 angular.module('Types')
     .factory('Item', function() {
-        function Ctor(data) {
-            this.id = data.id;
-            this.name = data.title;
-            this.isDir = data.mimeType == 'application/vnd.google-apps.folder';
-            this.url = data.webContentLink;
+        /**
+         * Instantiates an Item
+         * @param {string} id unique identifier
+         * @param {string} name
+         * @param {boolean} isDir
+         * @param {string} url absolute url
+         * @constructor
+         */
+        function Ctor(id, name, isDir, url) {
+            this.id = id;
+            this.name = name;
+            this.isDir = isDir;
+            this.url = url;
         }
 
         return Ctor;
