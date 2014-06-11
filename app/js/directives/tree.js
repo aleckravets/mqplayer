@@ -15,7 +15,7 @@ angular.module('Directives')
 
                 $scope.toggleDir = function(node) {
                     node.collapsed = !node.collapsed;
-                    node.getChildren(); // load children if not loaded yet
+                    return node.getChildren(); // load children if not loaded yet
                 };
 
                 $scope.mousedown = function($event, node) {
@@ -67,8 +67,12 @@ angular.module('Directives')
                 element.attr('draggable', true);
 
                 element[0].addEventListener('dragstart', function(e) {
-                    e.dataTransfer.setData('text/html', ''); // needed for FF.
                     tree.draggedNode = node;
+
+                    // needed for FF.
+                    if (isFF) {
+                        e.dataTransfer.setData('test', 'adfa');
+                    }
                 });
 
                 element[0].addEventListener('dragend', function() {

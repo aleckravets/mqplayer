@@ -59,5 +59,21 @@
 <!-- endbuild -->
 
 <script src="https://apis.google.com/js/client.js?onload=bootstrap"></script>
+
+<!--[if lt IE 9]>
+
+<![endif]-->
+
+<!-- fix drag and drop missing for elements other that A in IE 9 -->
+<!--[if IE 9]>
+<script>
+    $(document).on("selectstart", "[draggable]", function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        this.dragDrop();
+    });
+</script>
+<![endif]-->
+
 </body>
 </html>
