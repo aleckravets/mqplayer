@@ -1,8 +1,8 @@
 'use strict';
 
-angular.module('App')
-    .controller('AppController', function($scope, $location, session, Page) {
-        $scope.Page = Page;
+angular.module('app')
+    .controller('AppController', function($scope, $location, session, page) {
+        $scope.page = page;
 
         $scope.session = session;
 

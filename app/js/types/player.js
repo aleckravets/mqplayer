@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('Types')
-    .factory('Player', function($rootScope, $q, Page) {
+angular.module('types')
+    .factory('Player', function($rootScope, $q, page) {
         function Ctor() {
             this.audio = new Audio();
             this.volumeStep = 0.05;
@@ -18,6 +18,7 @@ angular.module('Types')
             var self = this;
 
             // emit timeupdate event once a second
+            // todo: replace with setInterval?
             this.audio.addEventListener('timeupdate', function(e) {
                 $rootScope.$broadcast('player.timeupdate', self.audio.currentTime);
 //                if (self.currentTime && Math.abs(self.audio.currentTime - self.currentTime) <= 1)
@@ -49,7 +50,7 @@ angular.module('Types')
                     deferred.resolve();
                 });
 
-                Page.setTitle(record.name);
+                page.setTitle(record.name);
 
                 return deferred.promise;
             },

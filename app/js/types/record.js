@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('Types')
+angular.module('types')
      .factory('Record', function() {
         /**
          * Creates a Record instance

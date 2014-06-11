@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('Directives')
+angular.module('directives')
     .directive('playlist', function($document, $timeout, session, Record, helper) {
         return {
             restrict: 'E',

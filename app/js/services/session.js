@@ -1,23 +1,23 @@
 'use strict';
 
-angular.module('Services')
-    .factory('session', function(Player, Playlist, Tree, DataService, Page) {
+angular.module('services')
+    .factory('session', function(Player, Playlist, Tree, dataService, page) {
         return {
             active: false,
             userInfo: undefined,
             login: function(auto) {
                 var self = this;
 
-                return DataService.authorize(auto)
+                return dataService.authorize(auto)
                     .then(function() {
                         self.start();
                         self.active = true;
-                        self.userInfo = DataService.userInfo;
+                        self.userInfo = dataService.userInfo;
                     });
             },
             logout: function() {
                 var self = this;
-                return DataService.signOut()
+                return dataService.signOut()
                     .then(function() {
                         self.end();
                         self.active = false;

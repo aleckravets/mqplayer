@@ -4,8 +4,8 @@ describe('TreeNode', function() {
     var tree;
 
     beforeEach(function() {
-        module('Services');
-        module('Types');
+        module('services');
+        module('types');
 
         inject(function(Tree) {
             tree = new Tree();

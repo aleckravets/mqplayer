@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('Types')
+angular.module('types')
     .factory('Tree', function(TreeNode) {
         function Ctor() {
             this.root = new TreeNode();

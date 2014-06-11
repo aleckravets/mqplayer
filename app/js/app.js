@@ -1,10 +1,10 @@
 'use strict';
 
-angular.module('Types', []);
-angular.module('Services', ['Types'])
-angular.module('Directives', ['Types', 'Services', 'ui.slider'])
+angular.module('types', []);
+angular.module('services', ['types'])
+angular.module('directives', ['types', 'services', 'ui.slider'])
 
-angular.module('App', ['ngRoute', 'Directives', 'Services', 'Types'])
+angular.module('app', ['ngRoute', 'directives', 'services', 'types'])
     .config(function($routeProvider) {
         $routeProvider.when('/', {
             templateUrl: 'partials/player.html',
@@ -18,11 +18,11 @@ angular.module('App', ['ngRoute', 'Directives', 'Services', 'Types'])
         $routeProvider.when('/help', {templateUrl: 'partials/help.html'});
         $routeProvider.otherwise({redirectTo: '/'});
     })
-    .factory('Page', function() {
+    .factory('page', function() {
         var title = 'Music Queue';
         return {
             title: function() { return title; },
-            setTitle: function(newTitle) { title = newTitle }
+            setTitle: function(newTitle) { title = newTitle; }
         };
     });
 

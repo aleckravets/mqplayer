@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('Types')
-    .factory('TreeNode', function($q, DataService) {
+angular.module('types')
+    .factory('TreeNode', function($q, dataService) {
         /**
          * Creates a new TreeNode
          * @param item
@@ -66,7 +66,7 @@ angular.module('Types')
                 var self  = this;
 
                 this.loading = true;
-                return DataService.loadItems(this.item.id).then(function(items) {
+                return dataService.loadItems(this.item.id).then(function(items) {
                     self.children = items.map(function(item){
                         var node = new Ctor(item);
                         return node;

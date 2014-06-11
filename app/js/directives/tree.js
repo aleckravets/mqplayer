@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('Directives')
+angular.module('directives')
     .directive('tree', function(session, helper) {
         return {
             restrict: 'E',

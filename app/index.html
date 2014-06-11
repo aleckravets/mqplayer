@@ -2,7 +2,7 @@
 <html ng-controller="AppController">
 <head>
     <meta charset="utf-8">
-    <title ng-bind="Page.title()">Music Queue</title>
+    <title ng-bind="page.title()">Music Queue</title>
     <link href="favicon.ico" rel="shortcut icon" type="image/ico" />
 
     <!-- build:css css/lib.css -->
@@ -51,11 +51,11 @@
 <script src="js/types/item.js"></script>
 <script src="js/services/helper.js"></script>
 <script src="js/services/session.js"></script>
-<script src="js/services/services.js"></script>
+<script src="js/services/dataService.js"></script>
 <script src="js/directives/tree.js"></script>
 <script src="js/directives/player.js"></script>
 <script src="js/directives/playlist.js"></script>
-<script src="js/directives/resizebar.js"></script>
+<script src="js/directives/resizeBar.js"></script>
 <!-- endbuild -->
 
 <script src="https://apis.google.com/js/client.js?onload=bootstrap"></script>
@@ -64,7 +64,7 @@
 
 <![endif]-->
 
-<!-- fix drag and drop missing for elements other that A in IE 9 -->
+<!-- fix drag and drop missing for elements other than <a></a> in IE 9 -->
 <!--[if IE 9]>
 <script>
     $(document).on("selectstart", "[draggable]", function (e) {

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('Types')
+angular.module('types')
     .factory('Playlist', function(Record) {
         function Ctor() {
             this.repeat =  false;

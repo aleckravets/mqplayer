@@ -1,7 +1,7 @@
 'use strict';
 
 // todo: remove handlers on $destroy
-angular.module('Directives')
+angular.module('directives')
     .directive('player', function(session) {
         return {
             restrict: 'E',

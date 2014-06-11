@@ -4,16 +4,16 @@ describe('TreeNode', function() {
     var tree;
 
     beforeEach(function() {
-        module('Services');
-        module('Types');
+        module('services');
+        module('types');
 
         inject(function(Tree) {
             tree = new Tree();
         });
     });
 
-    it("should call DataService.loadItems only once", inject(function($q, $rootScope, DataService) {
-        spyOn(DataService, 'loadItems').and.callFake(function() {
+    it("should call dataService.loadItems only once", inject(function($q, $rootScope, dataService) {
+        spyOn(dataService, 'loadItems').and.callFake(function() {
             return $q.when([]);
         });
 
@@ -22,10 +22,10 @@ describe('TreeNode', function() {
 
         $rootScope.$apply();
 
-        expect(DataService.loadItems.calls.count()).toBe(1);
+        expect(dataService.loadItems.calls.count()).toBe(1);
     }));
 
-    it("should load data and instantiate children", inject(function($q, $rootScope, DataService, Item) {
+    it("should load data and instantiate children", inject(function($q, $rootScope, dataService, Item) {
         var items = [
             new Item('0', '0', false, '0'),
             new Item('1', '1', false, '1'),
@@ -33,7 +33,7 @@ describe('TreeNode', function() {
             new Item('3', '3', false, '3')
         ];
 
-        spyOn(DataService, 'loadItems').and.callFake(function(parentid) {
+        spyOn(dataService, 'loadItems').and.callFake(function(parentid) {
             return $q.when(items);
         });
 
@@ -48,10 +48,10 @@ describe('TreeNode', function() {
         expect(tree.root.children[1].item).toBe(items[1]);
     }));
 
-    it("should load children recursively and flatten them", inject(function($q, $rootScope, DataService, Item) {
+    it("should load children recursively and flatten them", inject(function($q, $rootScope, dataService, Item) {
         var filesServed = 0;
 
-        spyOn(DataService, 'loadItems').and.callFake(function(parentid) {
+        spyOn(dataService, 'loadItems').and.callFake(function(parentid) {
             var items = [];
 
             for (var i = 0; i < 4; i++) {

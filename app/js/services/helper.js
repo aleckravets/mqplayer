@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('Services')
+angular.module('services')
     .factory('helper', function($q, Record) {
         return {
             /**

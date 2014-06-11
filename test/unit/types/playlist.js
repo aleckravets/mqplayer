@@ -4,7 +4,7 @@ describe('Playlist', function() {
     var playlist, $q, Record, records1, records2, $rootScope;
 
     beforeEach(function() {
-        module('Types');
+        module('types');
         inject(function(Playlist, _$q_, _Record_, _$rootScope_) {
             playlist = new Playlist();
             $q = _$q_;
