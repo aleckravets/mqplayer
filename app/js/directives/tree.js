@@ -19,8 +19,9 @@ angular.module('directives')
                 };
 
                 $scope.mousedown = function($event, node) {
-                    if (tree.selectedNode)
+                    if (tree.selectedNode){
                         tree.selectedNode.selected = false;
+                    }
 
                     tree.selectedNode = node;
 
@@ -30,8 +31,10 @@ angular.module('directives')
                 $scope.dblclick = function ($event, node) {
                     player.stop();
 
-                    playlist.set(helper.getNodeRecords(node)).then(function(records) {
-                        if (records.length > 0) player.playRecord(records[0]);
+                    playlist.set(helper.getItemRecords(node.item)).then(function(records) {
+                        if (records.length > 0) {
+                            player.playRecord(records[0]);
+                        }
                     });
                 };
 
@@ -40,7 +43,9 @@ angular.module('directives')
                 tree.root.getChildren().then(function(nodes) {
                     $scope.loading = false;
 
-                    if (nodes.length == 0) $scope.empty = true;
+                    if (nodes.length === 0) {
+                        $scope.empty = true;
+                    }
 
                     return nodes;
                 });
@@ -70,7 +75,7 @@ angular.module('directives')
                     tree.draggedNode = node;
 
                     // needed for FF.
-                    if (isFF) {
+                    if (window.isFF) {
                         e.dataTransfer.setData('test', 'adfa');
                     }
                 });

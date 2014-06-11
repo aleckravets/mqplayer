@@ -33,7 +33,7 @@ angular.module('services')
                 this.player = undefined;
                 this.tree = undefined;
                 this.playlist = undefined;
-                Page.setTitle('Music Queue');
+                page.setTitle('Music Queue');
             }
         };
     });

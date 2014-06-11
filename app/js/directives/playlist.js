@@ -164,7 +164,7 @@ angular.module('directives')
                 element[0].addEventListener('drop', function(e) {
                     scope.$apply(function() {
                         scope.dragover = false;
-                        playlist.enqueue(helper.getNodeRecords(tree.draggedNode));
+                        playlist.enqueue(helper.getItemRecords(tree.draggedNode.item));
                     });
                 });
             }
@@ -202,7 +202,7 @@ angular.module('directives')
                     e.preventDefault();
                     e.stopPropagation();
 
-                    playlist.enqueue(helper.getNodeRecords(tree.draggedNode), scope.record);
+                    playlist.enqueue(helper.getItemRecords(tree.draggedNode.item), scope.record);
 
                     $timeout(function() {
                         scope.record.dragover = false;

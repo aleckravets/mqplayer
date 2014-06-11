@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('services')
-    .factory('helper', function($q, Record) {
+    .factory('helper', function($q, Record, dataService) {
         return {
             /**
              * Checks whether provided file's type is supported by looking at its extension
@@ -13,18 +13,18 @@ angular.module('services')
             },
 
             /**
-             * Returns all records found inside the node including the node itself
-             * @param {TreeNode} node A node to get the records from
-             * @returns {Promise} A promise that resolves to Record[]
+             * Returns all records found inside the item in case of directory or item itself in case of file
+             * @param {TreeNode} item A item to get the records from
+             * @returns {Promise<Record[]>} A promise that resolves to Record[]
              */
-            getNodeRecords: function(node) {
+            getItemRecords: function(item) {
                 var self = this;
 
-                return (node.item.isDir ? node.getChildren(true) : $q.when([node])).then(function(nodes) {
+                return (item.isDir ? this.getAllItems(item.id) : $q.when([item])).then(function(items) {
                     var records = [];
-                    nodes.forEach(function(node) {
-                        if (!node.item.isDir && self.isSupportedType(node.item.name)) {
-                            records.push(self.recordFromNode(node));
+                    items.forEach(function(item) {
+                        if (!item.isDir && self.isSupportedType(item.name)) {
+                            records.push(self.recordFromItem(item));
                         }
                     });
 
@@ -33,12 +33,42 @@ angular.module('services')
             },
 
             /**
-             * Creates a Record from TreeNode
-             * @param {TreeNode} node
+             * Creates a Record from Item
+             * @param {Item} item
              * @returns {Record}
              */
-            recordFromNode: function(node) {
-                return new Record(node.item.name, node.item.url);
+            recordFromItem: function(item) {
+                return new Record(item.name, item.url);
+            },
+
+            getAllItems: function(parentid) {
+                var self = this;
+
+                return dataService.getItems(parentid).then(function(items) {
+                    var children = [];
+                    var dirs = [];
+
+                    items.forEach(function(item) {
+                        children.push(item);
+                        if (item.isDir) {
+                            dirs.push(item);
+                        }
+                    });
+
+                    var result = $q.when(children);
+
+                    dirs.forEach(function(item) {
+                        result = result.then(function() {
+                            return self.getAllItems(item.id).then(function(items) {
+                                // apply is used since then number of arguments for splice is dynamic
+                                Array.prototype.splice.apply(children, [children.indexOf(item), 1].concat(items));
+                                return children;
+                            });
+                        });
+                    });
+
+                    return result;
+                });
             }
         };
     });

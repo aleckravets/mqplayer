@@ -4,7 +4,7 @@ angular.module('types')
     .factory('TreeNode', function($q, dataService) {
         /**
          * Creates a new TreeNode
-         * @param item
+         * @param {Item} [item] data item, considered root if omitted
          * @constructor TreeNode
          */
         function Ctor(item) {
@@ -18,55 +18,14 @@ angular.module('types')
 
         Ctor.prototype = {
             /**
-             * Returns a promise of child nodes
-             * @param {Boolean} recursive when set to true, returns a flat array of all child nodes
-             * @returns {Promise<TreeNode[]>}
-             */
-            getChildren: function(recursive) {
-                if (!this.childrenPromise) {
-                    this.childrenPromise = this.loadChildren();
-                }
-
-                if (!recursive) {
-                    return this.childrenPromise;
-                }
-
-                return this.childrenPromise.then(function(nodes) {
-                    var children = [];
-                    var dirs = [];
-
-                    nodes.forEach(function(node) {
-                        children.push(node);
-                        if (node.item.isDir) {
-                            dirs.push(node);
-                        }
-                    });
-
-                    var result = $q.when(children);
-
-                    dirs.forEach(function(node) {
-                        result = result.then(function() {
-                            return node.getChildren(true).then(function(nodes) {
-                                // apply is used since then number of arguments for splice is dynamic
-                                Array.prototype.splice.apply(children, [children.indexOf(node), 1].concat(nodes));
-                                return children;
-                            });
-                        });
-                    });
-
-                    return result;
-                });
-            },
-
-            /**
-             * Loads direct children of the node
+             * Returns the promise of direct children of the node
              * @returns {Promise<TreeNode[]>} a promise resolved to a child nodes array
              */
-            loadChildren: function() {
+            getChildren: function() {
                 var self  = this;
 
                 this.loading = true;
-                return dataService.loadItems(this.item.id).then(function(items) {
+                return dataService.getItems(this.item.id).then(function(items) {
                     self.children = items.map(function(item){
                         var node = new Ctor(item);
                         return node;
