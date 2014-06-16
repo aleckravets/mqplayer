@@ -22,19 +22,24 @@ angular.module('types')
              * @returns {Promise<TreeNode[]>} a promise of child nodes.
              */
             getChildren: function() {
-                var self  = this;
+                if (!this.childrenPromise) {
+                    var self  = this;
 
-                this.loading = true;
-                return dataService.getItems(this.item.id).then(function(items) {
-                    self.children = items.map(function(item){
-                        var node = new Ctor(item);
-                        return node;
+                    this.loading = true;
+
+                    this.childrenPromise = dataService.getItems(this.item.id).then(function(items) {
+                        self.children = items.map(function(item){
+                            var node = new Ctor(item);
+                            return node;
+                        });
+
+                        self.loading = false;
+
+                        return self.children;
                     });
+                }
 
-                    self.loading = false;
-
-                    return self.children;
-                });
+                return this.childrenPromise;
             }
         };
 

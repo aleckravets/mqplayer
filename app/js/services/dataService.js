@@ -70,7 +70,7 @@ angular.module('services')
 
         /**
          * Loads child Items from server by parent id (if not cached) and caches them internally to reuse further.
-         * @param {number} parentid parent item id.
+         * @param {string} [parentid = 'root'] parent item id.
          * @returns {Promise<Item[]>}
          */
         that.getItems = function(parentid) {
