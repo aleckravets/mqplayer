@@ -2,38 +2,43 @@
 
 angular.module('services')
     .factory('session', function(Player, Playlist, Tree, dataService, page) {
-        return {
+        var self = {
             active: false,
             userInfo: undefined,
-            login: function(auto) {
+            login: function (auto) {
                 var self = this;
 
                 return dataService.authorize(auto)
-                    .then(function() {
-                        self.start();
+                    .then(function () {
+                        start();
                         self.active = true;
                         self.userInfo = dataService.userInfo;
                     });
             },
-            logout: function() {
+            logout: function () {
                 var self = this;
                 return dataService.signOut()
-                    .then(function() {
-                        self.end();
+                    .then(function () {
+                        end();
                         self.active = false;
                     });
-            },
-            start: function() {
-                this.playlist = new Playlist();
-                this.tree = new Tree();
-                this.player = new Player();
-            },
-            end: function() {
-                this.player.stop();
-                this.player = undefined;
-                this.tree = undefined;
-                this.playlist = undefined;
-                page.setTitle('Music Queue');
             }
         };
+
+        // private
+        function start() {
+            self.playlist = new Playlist();
+            self.tree = new Tree();
+            self.player = new Player();
+        }
+
+        function end() {
+            self.player.stop();
+            self.player = undefined;
+            self.tree = undefined;
+            self.playlist = undefined;
+            page.setTitle('Music Queue');
+        }
+
+        return self;
     });
