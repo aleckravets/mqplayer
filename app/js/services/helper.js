@@ -2,73 +2,78 @@
 
 angular.module('services')
     .factory('helper', function($q, Record, dataService) {
-        return {
-            /**
-             * Checks whether provided file's type is supported by looking at its extension
-             * @param {string} name
-             * @returns {boolean}
-             */
-            isSupportedType: function(name) {
-                return /\.mp3/.test(name);
-            },
+        var that = {
+        };
 
-            /**
-             * Returns all records found inside the item in case of directory or item itself in case of file
-             * @param {TreeNode} item A item to get the records from
-             * @returns {Promise<Record[]>} A promise that resolves to Record[]
-             */
-            getItemRecords: function(item) {
-                var self = this;
+        /**
+         * Converts a single Item to a Record.
+         * @param {Item} item
+         * @returns {Record}
+         */
+        function recordFromItem(item) {
+            return new Record(item.name, item.url);
+        }
 
-                return (item.isDir ? this.getAllItems(item.id) : $q.when([item])).then(function(items) {
-                    var records = [];
-                    items.forEach(function(item) {
-                        if (!item.isDir && self.isSupportedType(item.name)) {
-                            records.push(self.recordFromItem(item));
-                        }
-                    });
+        /**
+         *
+         * @param parentid
+         * @returns {Promise|*}
+         */
+        function getAllItems(parentid) {
+            return dataService.getItems(parentid).then(function(items) {
+                var children = [];
+                var dirs = [];
 
-                    return records;
+                items.forEach(function(item) {
+                    children.push(item);
+                    if (item.isDir) {
+                        dirs.push(item);
+                    }
                 });
-            },
 
-            /**
-             * Creates a Record from Item
-             * @param {Item} item
-             * @returns {Record}
-             */
-            recordFromItem: function(item) {
-                return new Record(item.name, item.url);
-            },
+                var result = $q.when(children);
 
-            getAllItems: function(parentid) {
-                var self = this;
-
-                return dataService.getItems(parentid).then(function(items) {
-                    var children = [];
-                    var dirs = [];
-
-                    items.forEach(function(item) {
-                        children.push(item);
-                        if (item.isDir) {
-                            dirs.push(item);
-                        }
-                    });
-
-                    var result = $q.when(children);
-
-                    dirs.forEach(function(item) {
-                        result = result.then(function() {
-                            return self.getAllItems(item.id).then(function(items) {
-                                // apply is used since then number of arguments for splice is dynamic
-                                Array.prototype.splice.apply(children, [children.indexOf(item), 1].concat(items));
-                                return children;
-                            });
+                dirs.forEach(function(item) {
+                    result = result.then(function() {
+                        return getAllItems(item.id).then(function(items) {
+                            // apply is used since then number of arguments for splice is dynamic
+                            Array.prototype.splice.apply(children, [children.indexOf(item), 1].concat(items));
+                            return children;
                         });
                     });
-
-                    return result;
                 });
-            }
+
+                return result;
+            });
+        }
+
+        /**
+         * Checks whether provided file's type is supported by looking at its extension.
+         * @param {string} name A file's name.
+         * @returns {boolean}
+         */
+        that.isSupportedType = function(name) {
+            return (/\.mp3/).test(name);
         };
+
+        /**
+         * Returns array of Records by specified Item. If item is a directory - returns all its children recursively,
+         * otherwise - returns only item itself.
+         * @param {TreeNode} item An item to get the records from.
+         * @returns {Promise<Record[]>}
+         */
+        that.getItemRecords = function(item) {
+            return (item.isDir ? getAllItems(item.id) : $q.when([item])).then(function(items) {
+                var records = [];
+                items.forEach(function(item) {
+                    if (!item.isDir && that.isSupportedType(item.name)) {
+                        records.push(recordFromItem(item));
+                    }
+                });
+
+                return records;
+            });
+        };
+
+        return that;
     });

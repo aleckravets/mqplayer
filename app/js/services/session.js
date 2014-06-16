@@ -2,43 +2,51 @@
 
 angular.module('services')
     .factory('session', function(Player, Playlist, Tree, dataService, page) {
-        var self = {
+        var that = {
             active: false,
-            userInfo: undefined,
-            login: function (auto) {
-                var self = this;
-
-                return dataService.authorize(auto)
-                    .then(function () {
-                        start();
-                        self.active = true;
-                        self.userInfo = dataService.userInfo;
-                    });
-            },
-            logout: function () {
-                var self = this;
-                return dataService.signOut()
-                    .then(function () {
-                        end();
-                        self.active = false;
-                    });
-            }
+            userInfo: undefined
         };
 
-        // private
         function start() {
-            self.playlist = new Playlist();
-            self.tree = new Tree();
-            self.player = new Player();
+            that.playlist = new Playlist();
+            that.tree = new Tree();
+            that.player = new Player();
         }
 
         function end() {
-            self.player.stop();
-            self.player = undefined;
-            self.tree = undefined;
-            self.playlist = undefined;
+            that.player.stop();
+            that.player = undefined;
+            that.tree = undefined;
+            that.playlist = undefined;
             page.setTitle('Music Queue');
         }
 
-        return self;
+        /**
+         * Logs in and starts the session on success.
+         * @param {boolean} auto If set to "true" will try to sign in quietly by using cookies.
+         * @returns {Promise<session>} A promise of started session.
+         */
+        that.login = function (auto) {
+            return dataService.authorize(auto)
+                .then(function () {
+                    start();
+                    that.active = true;
+                    that.userInfo = dataService.userInfo;
+                    return that;
+                });
+        };
+
+        /**
+         * Logs out and stops the session.
+         * @returns {Promise} A promised resolved when done.
+         */
+        that.logout = function () {
+            return dataService.signOut()
+                .then(function () {
+                    end();
+                    that.active = false;
+                });
+        };
+
+        return that;
     });

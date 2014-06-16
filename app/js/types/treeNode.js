@@ -4,7 +4,7 @@ angular.module('types')
     .factory('TreeNode', function($q, dataService) {
         /**
          * Creates a new TreeNode
-         * @param {Item} [item] data item, considered root if omitted
+         * @param {Item} [item={}] data item, considered root if omitted
          * @constructor TreeNode
          */
         function Ctor(item) {
@@ -18,8 +18,8 @@ angular.module('types')
 
         Ctor.prototype = {
             /**
-             * Returns the promise of direct children of the node
-             * @returns {Promise<TreeNode[]>} a promise resolved to a child nodes array
+             * Returns the promise of direct children of the node.
+             * @returns {Promise<TreeNode[]>} a promise of child nodes.
              */
             getChildren: function() {
                 var self  = this;

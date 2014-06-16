@@ -13,11 +13,10 @@ angular.module('types')
         Ctor.prototype = {
             /**
              * Adds one or multiple records to the playlist.
-             * @param {Promise<Record[]>} recordsPromise A promise that resolves to an array of records to enqueue.
-             * @param {Record} [insertBeforeRecord] A record in the playlist before which the new records should be.
+             * @param {Promise<Record[]>} recordsPromise records to enqueue.
+             * @param {Record} [insertBeforeRecord] A record in the playlist before which the new records should be
              * inserted, if omitted - the records are inserted at the end.
-             * @returns {Promise<Record[]} a promise resolved to the array of records that are currently in the playlist
-             * when done.
+             * @returns {Promise<Record[]} the whole playlist when enqueue is done.
              */
             enqueue: function(recordsPromise, insertBeforeRecord) {
                 this.loading = true;
@@ -38,9 +37,8 @@ angular.module('types')
 
             /**
              * Clears the playlist and enqueues passed record(s).
-             * @param {Promise<Record[]>} recordsPromise A promise that resolves to an array of records to enqueue.
-             * @returns {Promise<Record[]} a promise resolved to the array of records that are currently in the playlist
-             * when done.
+             * @param {Promise<Record[]>} recordsPromise records to enqueue.
+             * @returns {Promise<Record[]} the whole playlist when enqueue is done.
              */
             set: function(recordsPromise) {
                 this.clear();
