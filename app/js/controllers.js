@@ -21,7 +21,8 @@ angular.module('app')
                 });
         };
     })
-    .controller('PlayerController', function() {
+    .controller('PlayerController', function($scope, $location, helper, session) {
+        helper.checkState();
     })
     .controller('LoginController', function($scope, session) {
         $scope.session = session;

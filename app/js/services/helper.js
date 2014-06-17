@@ -1,9 +1,8 @@
 'use strict';
 
 angular.module('services')
-    .factory('helper', function($q, Record, dataService) {
-        var that = {
-        };
+    .factory('helper', function($q, Record, dataService, session) {
+        var that = { };
 
         /**
          * Converts a single Item to a Record.
@@ -15,12 +14,12 @@ angular.module('services')
         }
 
         /**
-         *
-         * @param parentid
-         * @returns {Promise|*}
+         * Recursively loads the children items and returns them as a flat array.
+         * @param {string} parentid
+         * @returns {Promise<Item[]>}
          */
         function getAllItems(parentid) {
-            return dataService.getItems(parentid).then(function(items) {
+            return dataService.getItemsByParent(parentid).then(function(items) {
                 var children = [];
                 var dirs = [];
 
@@ -73,6 +72,75 @@ angular.module('services')
 
                 return records;
             });
+        };
+
+        /**
+         * Returns all child Records by specified item ids as a flat array ready to be used by playlist.
+         * @param {string[]} ids Item ids to get the records for.
+         * @returns {Promise<Record[]>}
+         */
+        that.getRecordsByItemIds = function(ids) {
+            return dataService.getItemById(ids[0]).then(function(item) {
+                if (ids.length === 1) {
+                    return that.getItemRecords(item);
+                }
+
+                return dataService.getItemsByParent(item.parentid).then(function(siblings) {
+                    var items = [];
+
+                    siblings.forEach(function(item) {
+                        if (ids.indexOf(item.id) !== -1) {
+                            items.push(item);
+                        }
+                    });
+
+                    var records = [];
+
+                    var result = $q.when(records);
+
+                    items.forEach(function(item) {
+                        result = result.then(function() {
+                            return that.getItemRecords(item).then(function(itemRecords) {
+                                records.pushArray(itemRecords);
+                                return records;
+                            });
+                        });
+                    });
+
+                    return result;
+                });
+            });
+        };
+
+        /**
+         * Parses the "state" query parameter passed by Google Drive on "Open with..." and plays the specified files.
+         */
+        that.checkState = function() {
+            var st = getParameterByName('state');
+
+//        st = "%7B%22ids%22%3A%5B%220B9OzzXRNwUnXVnRxU2kzQTdsUm8%22%2C%220B9OzzXRNwUnXdEpyOVJNUkxwcDg%22%5D%2C%22action%22%3A%22open%22%2C%22userId%22%3A%22103354693083460731603%22%7D";
+
+            if (st) {
+                var state = angular.fromJson(decodeURI(st));
+
+//            // debug
+//            state = {
+//                "ids": [
+//                    "0B9OzzXRNwUnXVnRxU2kzQTdsUm8",
+//                    "0B9OzzXRNwUnXdEpyOVJNUkxwcDg"
+//                ],
+//                "action": "open",
+//                "userId": "103354693083460731603"
+//            };
+
+                if (state.ids && state.ids.length > 0) {
+                    session.playlist.set(that.getRecordsByItemIds(state.ids)).then(function(records) {
+                        if (records.length > 0) {
+                            session.player.playRecord(records[0]);
+                        }
+                    });
+                }
+            }
         };
 
         return that;

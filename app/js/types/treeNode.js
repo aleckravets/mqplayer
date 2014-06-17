@@ -27,7 +27,7 @@ angular.module('types')
 
                     this.loading = true;
 
-                    this.childrenPromise = dataService.getItems(this.item.id).then(function(items) {
+                    this.childrenPromise = dataService.getItemsByParent(this.item.id).then(function(items) {
                         self.children = items.map(function(item){
                             var node = new Ctor(item);
                             return node;

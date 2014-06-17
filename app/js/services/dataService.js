@@ -26,7 +26,53 @@ angular.module('services')
          * @returns {Item}
          */
         function getItem(data) {
-            return new Item(data.id, data.title, data.mimeType === 'application/vnd.google-apps.folder', data.webContentLink);
+            return new Item(data.id, data.title, data.mimeType === 'application/vnd.google-apps.folder', data.webContentLink, data.parents[0].id);
+        }
+
+        /**
+         * Loads files from server by query and returns the promise of Items array
+         * @param {string} query Search query. See https://developers.google.com/drive/web/search-parameters?hl=ru for
+         * details.
+         * @returns {Promise<Item[]>}
+         */
+        function getItems(query) {
+            var deferred = $q.defer();
+
+            var retrievePageOfFiles = function (request, result) {
+                request.execute(function (resp) {
+                    if (resp.items) {
+                        result = result.concat(resp.items);
+                    }
+                    var nextPageToken = resp.nextPageToken;
+                    if (nextPageToken) {
+                        request = gapi.client.drive.files.list({ q: query, pageToken: nextPageToken });
+                        retrievePageOfFiles(request, result);
+                    }
+                    else {
+                        deferred.resolve(result);
+                    }
+                });
+            };
+
+            var initialRequest = gapi.client.drive.files.list({ q: query });
+            retrievePageOfFiles(initialRequest, []);
+
+            return deferred.promise.then(function (rawItems) {
+                var items = rawItems.map(function (rawItem) {
+                    return getItem(rawItem);
+                });
+
+                items.sort(function (a, b) {
+                    if (a.isDir === b.isDir) {
+                        return a.name < b.name ? -1 : 1;
+                    }
+                    else {
+                        return a.isDir ? -1 : 1;
+                    }
+                });
+
+                return items;
+            });
         }
 
         that.authorize = function(immediate) {
@@ -69,54 +115,37 @@ angular.module('services')
         };
 
         /**
-         * Loads child Items from server by parent id (if not cached) and caches them internally to reuse further.
+         * Loads child Items from drive by parent id (if not cached) and caches them internally to reuse further.
          * @param {string} [parentid = 'root'] parent item id.
          * @returns {Promise<Item[]>}
          */
-        that.getItems = function(parentid) {
+        that.getItemsByParent = function(parentid) {
             if (!cache[parentid]) {
-                var deferred = $q.defer();
 
-                var q = "'" + (parentid || 'root') + "' in parents and trashed = false";
-
-                var retrievePageOfFiles = function (request, result) {
-                    request.execute(function (resp) {
-                        if (resp.items) {
-                            result = result.concat(resp.items);
-                        }
-                        var nextPageToken = resp.nextPageToken;
-                        if (nextPageToken) {
-                            request = gapi.client.drive.files.list({ q: q, pageToken: nextPageToken });
-                            retrievePageOfFiles(request, result);
-                        }
-                        else {
-                            deferred.resolve(result);
-                        }
-                    });
-                };
-
-                var initialRequest = gapi.client.drive.files.list({ q: q });
-                retrievePageOfFiles(initialRequest, []);
-
-                cache[parentid] = deferred.promise.then(function (rawItems) {
-                    var items = rawItems.map(function (rawItem) {
-                        return getItem(rawItem);
-                    });
-
-                    items.sort(function (a, b) {
-                        if (a.isDir === b.isDir) {
-                            return a.name < b.name ? -1 : 1;
-                        }
-                        else {
-                            return a.isDir ? -1 : 1;
-                        }
-                    });
-
-                    return items;
-                });
+                var query = "'" + (parentid || 'root') + "' in parents and trashed = false";
+                cache[parentid] = getItems(query);
             }
 
             return cache[parentid];
+        };
+
+        /**
+         * Loads the file from drive by id.
+         * @param {integer} id File id.
+         * @returns {Promise<Item>}
+         */
+        that.getItemById = function(id) {
+            var deferred = $q.defer();
+
+            var request = gapi.client.drive.files.get({
+                'fileId': id
+            });
+
+            request.execute(function(resp) {
+                deferred.resolve(getItem(resp));
+            });
+
+            return deferred.promise;
         };
 
         return that;
