@@ -1,0 +1,19 @@
+{
+    "manifest_version": 2,
+    "name": "Music Queue",
+    "description": "Play music from Google Drive",
+    "version": "1",
+    "app": {
+        "urls": [
+            "http://mqplayer.com/"
+        ],
+        "launch": {
+            "web_url": "http://mqplayer.com"
+        }
+    },
+    "icons": {
+        "128": "mq-128x128.png"
+    },
+    "permissions": [
+    ]
+}
