@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('services')
-    .factory('helper', function($q, Record, dataService, session) {
+    .factory('helper', function($q, Record, dataService) {
         var that = { };
 
         /**
@@ -110,37 +110,6 @@ angular.module('services')
                     return result;
                 });
             });
-        };
-
-        /**
-         * Parses the "state" query parameter passed by Google Drive on "Open with..." and plays the specified files.
-         */
-        that.checkState = function() {
-            var st = getParameterByName('state');
-
-//        st = "%7B%22ids%22%3A%5B%220B9OzzXRNwUnXVnRxU2kzQTdsUm8%22%2C%220B9OzzXRNwUnXdEpyOVJNUkxwcDg%22%5D%2C%22action%22%3A%22open%22%2C%22userId%22%3A%22103354693083460731603%22%7D";
-
-            if (st) {
-                var state = angular.fromJson(decodeURI(st));
-
-//            // debug
-//            state = {
-//                "ids": [
-//                    "0B9OzzXRNwUnXVnRxU2kzQTdsUm8",
-//                    "0B9OzzXRNwUnXdEpyOVJNUkxwcDg"
-//                ],
-//                "action": "open",
-//                "userId": "103354693083460731603"
-//            };
-
-                if (state.ids && state.ids.length > 0) {
-                    session.playlist.set(that.getRecordsByItemIds(state.ids)).then(function(records) {
-                        if (records.length > 0) {
-                            session.player.playRecord(records[0]);
-                        }
-                    });
-                }
-            }
         };
 
         return that;

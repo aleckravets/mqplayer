@@ -24,15 +24,18 @@ angular.module('types')
                 var self = this,
                     index = insertBeforeRecord ? this.records.indexOf(insertBeforeRecord) : this.records.length;
 
-                return recordsPromise.then(function(records) {
-                    records.forEach(function (record) {
-                        //if (!record.node.item.isDir && !self.isSupportedRecord(record)) return;
-                        self.records.splice(index++, 0, record);
-                    });
-                    self.loading = false;
+                return recordsPromise
+                    .then(function(records) {
+                        records.forEach(function (record) {
+                            //if (!record.node.item.isDir && !self.isSupportedRecord(record)) return;
+                            self.records.splice(index++, 0, record);
+                        });
 
-                    return self.records;
-                });
+                        return self.records;
+                    })
+                    .finally(function() {
+                        self.loading = false;
+                    });
             },
 
             /**

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app')
-    .controller('AppController', function($scope, $location, session, page) {
+    .controller('AppController', function($scope, $location, session, page, helper) {
         $scope.page = page;
 
         $scope.session = session;
@@ -22,7 +22,7 @@ angular.module('app')
         };
     })
     .controller('PlayerController', function($scope, $location, helper, session) {
-        helper.checkState();
+
     })
     .controller('LoginController', function($scope, session) {
         $scope.session = session;

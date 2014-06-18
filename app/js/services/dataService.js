@@ -40,16 +40,23 @@ angular.module('services')
 
             var retrievePageOfFiles = function (request, result) {
                 request.execute(function (resp) {
-                    if (resp.items) {
-                        result = result.concat(resp.items);
-                    }
-                    var nextPageToken = resp.nextPageToken;
-                    if (nextPageToken) {
-                        request = gapi.client.drive.files.list({ q: query, pageToken: nextPageToken });
-                        retrievePageOfFiles(request, result);
+                    if (resp.error) {
+                        var error = resp.error.code + " " + resp.error.message;
+                        deferred.reject(error);
+                        console.log(error);
                     }
                     else {
-                        deferred.resolve(result);
+                        if (resp.items) {
+                            result = result.concat(resp.items);
+                        }
+
+                        if (resp.nextPageToken) {
+                            request = gapi.client.drive.files.list({ q: query, pageToken: resp.nextPageToken });
+                            retrievePageOfFiles(request, result);
+                        }
+                        else {
+                            deferred.resolve(result);
+                        }
                     }
                 });
             };
@@ -81,19 +88,29 @@ angular.module('services')
             gapi.auth.authorize({'client_id': clientid, 'scope': scopes.join(' '), 'immediate': immediate || false}, function(authResult) {
                 if (authResult && !authResult.error) {
                     gapi.client.drive.about.get().execute(function(resp) {
-                        that.authorized = true;
-                        that.token = gapi.auth.getToken();
-                        that.userInfo = resp;
-                        deferred.resolve();
+                        if (resp.error) {
+                            var error = resp.error.code + " " + resp.error.message;
+                            deferred.reject(error);
+                            console.log(error);
+                        }
+                        else {
+                            that.authorized = true;
+                            that.token = gapi.auth.getToken();
+                            that.userInfo = resp;
+                            deferred.resolve();
 //                            console.log('Current user name: ' + resp.name);
 //                            console.log('Root folder ID: ' + resp.rootFolderId);
 //                            console.log('Total quota (bytes): ' + resp.quotaBytesTotal);
 //                            console.log('Used quota (bytes): ' + resp.quotaBytesUsed);
+                        }
                     });
                 }
                 else {
                     that.authorized = false;
-                    deferred.reject();
+
+                    var error = authResult && authResult.error;
+                    deferred.reject(error);
+                    console.log(error);
                 }
             });
 
@@ -101,17 +118,19 @@ angular.module('services')
         };
 
         that.signOut = function() {
-            var deferred = $q.defer();
+            // reset cache
+            cache = {};
 
-            var url = 'https://accounts.google.com/o/oauth2/revoke?token=' + that.token.access_token;
+            var url = 'https://accounts.google.com/o/oauth2/revoke?token=' + that.token.access_token + "&callback=JSON_CALLBACK";
 
-            // this is strange
-            $http.get(url)['finally'](function() {
-                that.authorized = false;
-                deferred.resolve();
-            });
-
-            return deferred.promise;
+            // always rejected because the the callback is called without arguments
+            // whereas $http expects something to be returned
+            // that's why we suppress the rejection and call finally
+            return $http.jsonp(url)
+                .catch(function() {})
+                .finally(function() {
+                    that.authorized = false;
+                });
         };
 
         /**
@@ -142,7 +161,14 @@ angular.module('services')
             });
 
             request.execute(function(resp) {
-                deferred.resolve(getItem(resp));
+                if (resp.error) {
+                    var error = resp.error.code + " " + resp.error.message;
+                    deferred.reject(error);
+                    console.log(error);
+                }
+                else {
+                    deferred.resolve(getItem(resp));
+                }
             });
 
             return deferred.promise;

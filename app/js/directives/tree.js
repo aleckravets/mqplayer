@@ -40,15 +40,17 @@ angular.module('directives')
 
                 $scope.loading = true;
 
-                tree.root.getChildren().then(function(nodes) {
-                    $scope.loading = false;
+                tree.root.getChildren()
+                    .then(function(nodes) {
+                        if (nodes.length === 0) {
+                            $scope.empty = true;
+                        }
 
-                    if (nodes.length === 0) {
-                        $scope.empty = true;
-                    }
-
-                    return nodes;
-                });
+                        return nodes;
+                    })
+                    .finally(function() {
+                        $scope.loading = false;
+                    });
 //                    .then(function(nodes) {
 //                        if (nodes[0].collapsed)
 //                            $scope.toggleDir(nodes[0]);

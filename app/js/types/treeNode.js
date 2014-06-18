@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('types')
-    .factory('TreeNode', function($q, dataService) {
+    .factory('TreeNode', function(dataService) {
         /**
          * Creates a new TreeNode
          * @param {Item} [item={}] data item, considered root if omitted
@@ -27,16 +27,21 @@ angular.module('types')
 
                     this.loading = true;
 
-                    this.childrenPromise = dataService.getItemsByParent(this.item.id).then(function(items) {
-                        self.children = items.map(function(item){
-                            var node = new Ctor(item);
-                            return node;
+                    this.childrenPromise = dataService.getItemsByParent(this.item.id)
+                        .then(function(items) {
+                            self.children = items.map(function(item){
+                                var node = new Ctor(item);
+                                return node;
+                            });
+
+                            return self.children;
+                        })
+                        .catch(function() {
+
+                        })
+                        .finally(function() {
+                            self.loading = false;
                         });
-
-                        self.loading = false;
-
-                        return self.children;
-                    });
                 }
 
                 return this.childrenPromise;
