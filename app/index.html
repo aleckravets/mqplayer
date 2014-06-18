@@ -18,10 +18,10 @@
 <div class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="#/player"><i class="glyphicon glyphicon-headphones"></i><span>Music Queue</span></a>
-        <!--<ul class="nav navbar-nav">-->
-        <!--<li><a href="#/about">about</a></li>-->
-        <!--<li><a href="#/help">help</a></li>-->
-        <!--</ul>-->
+        <ul class="nav navbar-nav">
+        <li><a href="#/about">about</a></li>
+        <li><a href="#/help">help</a></li>
+        </ul>
         <player ng-if="session.active" ng-cloak></player>
         <p class="navbar-text navbar-right" ng-if="session.active" ng-cloak><i class="glyphicon glyphicon-user"></i> {{session.userInfo.name}} <a ng-click="logout()">Sign out</a></p>
     </div>

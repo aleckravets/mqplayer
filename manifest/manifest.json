@@ -2,7 +2,9 @@
     "manifest_version": 2,
     "name": "Music Queue",
     "description": "Play music from Google Drive",
-    "version": "1",
+    "version": "1.1",
+    "container" : "GOOGLE_DRIVE",
+    "api_console_project_id" : "97071318931",
     "app": {
         "urls": [
             "http://mqplayer.com/"

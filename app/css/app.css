@@ -47,7 +47,8 @@ a {
     margin-right: 5px;
 }
 
-a.navbar-brand {
+a.navbar-brand,
+.navbar-nav a{
     text-decoration: none;
 }
 .navbar .glyphicon-music {
@@ -380,4 +381,31 @@ ul.tree li {
 .loading-label div i {
     font-size: 25px;
     vertical-align: top;
+}
+
+#text {
+    padding: 0 20px;
+}
+
+#browsers .br td {
+    background: #eee;
+    font-weight: bold;
+}
+
+#browsers td {
+    border: 1px solid #000;
+    padding: 5px;
+    text-align: center;
+}
+
+#browsers td.yes {
+    /*background: #b2dba1;*/
+}
+
+#shortcuts th {
+    padding: 5px 20px;
+    text-align: center;
+}
+#features li {
+    margin-top: 5px;
 }

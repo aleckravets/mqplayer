@@ -94,6 +94,18 @@ angular.module('directives')
                         player = session.player;
 
                     switch (e.keyCode) {
+                        case 82: // r
+                            playlist.toggleRepeat();
+                            $scope.$apply();
+                            break;
+                        case 83: // s
+                            playlist.toggleRandom();
+                            $scope.$apply();
+                            break;
+                        case 77: //m
+                            player.mute();
+                            $scope.$apply();
+                            break;
                         case 98: // numpad down
                             player.volumeDown();
                             $scope.$apply();
