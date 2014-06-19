@@ -3,16 +3,13 @@
 angular.module('services')
     .factory('dataService', function($http, $q, $timeout, Item){
         var that = {
-            authorized: undefined,
             token: null,
             userInfo: null
         };
 
-        var clientid = '97071318931-0pqadkdeov03b36bhthnri1n3h64eg7d.apps.googleusercontent.com';
-
-        var scopes = [
-            'https://www.googleapis.com/auth/drive.readonly'
-        ];
+        var clientid = '97071318931-0pqadkdeov03b36bhthnri1n3h64eg7d.apps.googleusercontent.com',
+            scopes = ['https://www.googleapis.com/auth/drive.readonly'],
+            authorized;
 
         /**
          * Child items cached by parent item's id.
@@ -94,7 +91,7 @@ angular.module('services')
                             console.log(error);
                         }
                         else {
-                            that.authorized = true;
+                            authorized = true;
                             that.token = gapi.auth.getToken();
                             that.userInfo = resp;
                             deferred.resolve();
@@ -106,11 +103,11 @@ angular.module('services')
                     });
                 }
                 else {
-                    that.authorized = false;
+                    authorized = false;
 
                     var error = authResult && authResult.error;
                     deferred.reject(error);
-                    console.log(error);
+//                    console.log(error);
                 }
             });
 
@@ -129,7 +126,7 @@ angular.module('services')
             return $http.jsonp(url)
                 .catch(function() {})
                 .finally(function() {
-                    that.authorized = false;
+                    authorized = false;
                 });
         };
 
@@ -172,6 +169,10 @@ angular.module('services')
             });
 
             return deferred.promise;
+        };
+
+        that.isAuthorized = function() {
+            return authorized;
         };
 
         return that;

@@ -9,7 +9,9 @@ angular.module('app')
         $scope.login = function() {
             session.login()
                 .then(function() {
-                    $location.path('/');
+                    var search = $location.search();
+                    var url = search.ret ? decodeURIComponent(search.ret) : '/';
+                    $location.url(url);
                 });
         };
 
@@ -21,8 +23,7 @@ angular.module('app')
                 });
         };
     })
-    .controller('PlayerController', function($scope, $location, helper, session) {
-
+    .controller('PlayerController', function() {
     })
     .controller('LoginController', function($scope, session) {
         $scope.session = session;

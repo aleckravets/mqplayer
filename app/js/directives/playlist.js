@@ -57,7 +57,10 @@ angular.module('directives')
                 };
 
                 $scope.dblclick = function(e, record) {
-                    player.playRecord(record);
+                    player.playRecord(record)
+                        .then(function() {
+                            $timeout(angular.noop);
+                        });
                 };
 
                 $scope.mousedown = function(e, record) {
@@ -108,30 +111,55 @@ angular.module('directives')
                     e.stopPropagation();
                 };
 
-                $document.on('keydown', function(e) {
+                function shortcut(e) {
                     switch (e.keyCode) {
+//                        case 13:
+//                            if (playlist.selectedRecords.length > 0) {
+//                                var record;
+//
+//                                if (playlist.selectedRecords.length > 0) {
+//                                    record = playlist.selectedRecords[playlist.selectedRecords.length - 1];
+//                                }
+//                                else if (playlist.records.length > 0) {
+//                                    record = playlist.records[0];
+//                                }
+//
+//                                if (record) {
+//                                    player.playRecord(record)
+//                                        .then(function() {
+//                                            $timeout(angular.noop);
+//                                        });
+//                                }
+//                            }
+//                            break;
                         case 46: // delete
                             deleteSelected();
-                            $scope.$apply();
                             break;
                         case 65: // A
                             if (e.ctrlKey) {
-                                e.preventDefault();
                                 selectAll();
-                                $scope.$apply();
                             }
                             break;
                         case 38: // up arrow
                             moveUp(e);
-                            $scope.$apply();
                             break;
                         case 40: // down arrow
                             moveDown(e);
-                            $scope.$apply();
                             break;
                         default:
-                            break;
+                            return;
                     }
+
+                    $timeout(angular.noop);
+
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
+                $document.on('keydown', shortcut);
+
+                $scope.$on('$destroy', function() {
+                    $document.off('keydown', shortcut);
                 });
             },
             templateUrl: 'tmpl/playlist.html',

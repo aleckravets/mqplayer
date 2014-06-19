@@ -1,16 +1,23 @@
 'use strict';
 
 angular.module('services')
-    .factory('session', function(Player, Playlist, Tree, dataService, page, helper) {
+    .factory('session', function($q, Player, Playlist, Tree, dataService, page, helper) {
         var that = {
             active: false,
             userInfo: undefined
         };
 
+        var autoLoginPromise;
+
         function start() {
             that.playlist = new Playlist();
             that.tree = new Tree();
             that.player = new Player();
+
+            that.active = true;
+            that.userInfo = dataService.userInfo;
+
+            checkState();
         }
 
         function end() {
@@ -19,6 +26,20 @@ angular.module('services')
             that.tree = undefined;
             that.playlist = undefined;
             page.setTitle('Music Queue');
+            that.active = false;
+
+            // do not try to auto relogin on implicit logout
+            var d = $q.defer();
+            d.reject();
+            autoLoginPromise = d.promise;
+        }
+
+        function getLoginPromise(auto) {
+            return dataService.authorize(auto)
+                .then(function () {
+                    start();
+                    return that;
+                });
         }
 
         /**
@@ -56,20 +77,25 @@ angular.module('services')
         }
 
         /**
-         * Logs in and starts the session on success.
+         * Lunches the dataService authorization in and starts the session on success.
          * @param {boolean} auto If set to "true" will try to sign in quietly by using cookies.
          * @returns {Promise<session>} A promise of started session.
          */
         that.login = function (auto) {
-            return dataService.authorize(auto)
-                .then(function () {
-                    start();
-                    that.active = true;
-                    that.userInfo = dataService.userInfo;
+            var promise;
 
-                    checkState();
-                    return that;
-                });
+            if (!auto) {
+                promise = getLoginPromise();
+            }
+            else {
+                if (!autoLoginPromise) {
+                    autoLoginPromise = getLoginPromise(true);
+                }
+
+                promise = autoLoginPromise;
+            }
+
+            return promise;
         };
 
         /**
@@ -80,8 +106,11 @@ angular.module('services')
             return dataService.signOut()
                 .then(function () {
                     end();
-                    that.active = false;
                 });
+        };
+
+        that.isLoggedIn = function() {
+            return dataService.isAuthorized();
         };
 
         return that;

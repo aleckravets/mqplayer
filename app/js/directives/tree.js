@@ -5,7 +5,7 @@ angular.module('directives')
         return {
             restrict: 'E',
             scope: { },
-            controller: function($scope, $element) {
+            controller: function($scope, $element, $timeout) {
                 var tree = session.tree,
                     player = session.player,
                     playlist = session.playlist;
@@ -33,7 +33,10 @@ angular.module('directives')
 
                     playlist.set(helper.getItemRecords(node.item)).then(function(records) {
                         if (records.length > 0) {
-                            player.playRecord(records[0]);
+                            player.playRecord(records[0])
+                                .then(function(){
+                                    $timeout(angular.noop);
+                                });
                         }
                     });
                 };

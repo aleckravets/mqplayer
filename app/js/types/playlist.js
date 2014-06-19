@@ -89,18 +89,22 @@ angular.module('types')
              */
             next: function(record, random, repeat) {
                 var i;
+
                 if (random === undefined ? this.random : random) {
                     i = Math.floor(Math.random() * this.records.length);
                     return this.records[i];
-                } else {
-                    i = this.records.indexOf(record);
-                    if (i <= this.records.length - 2) {
-                        return this.records[i + 1];
-                    }
-                    else if (i === this.records.length - 1 && (repeat === undefined ? this.repeat : repeat)) {
-                        return this.records[0];
-                    }
                 }
+
+                i = this.records.indexOf(record);
+
+                if (i <= this.records.length - 2) {
+                    return this.records[i + 1];
+                }
+
+                if (i === this.records.length - 1 && (repeat === undefined ? this.repeat : repeat)) {
+                    return this.records[0];
+                }
+
                 return false;
             },
 

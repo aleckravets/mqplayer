@@ -368,20 +368,28 @@ ul.tree li {
     z-index: 1;
     text-align: center;
 }
+
 .loading-label div {
     /*border: 1px solid green;*/
     position: relative;
     left: -50%;
 }
+
 .loading-label div i,
 .loading-label div span {
     /*vertical-align: middle;*/
     margin-right: 5px;
 }
+
 .loading-label div i {
     font-size: 25px;
     vertical-align: top;
 }
+
+#splash div i {
+    font-size: 50px;
+}
+
 
 #text {
     padding: 0 20px;
