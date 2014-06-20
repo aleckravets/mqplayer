@@ -11,3 +11,5 @@ The client side web player for your music stored in Google Drive account. Powere
 * No flash required - pure HTML and Javascript
 
 Visit <a href="http://mqplayer.com">http://mqplayer.com</a> to see it in action.
+
+<img src="http://mqplayer.com/img/screenshot-1280x800.png" />
