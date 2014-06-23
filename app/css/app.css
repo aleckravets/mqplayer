@@ -61,6 +61,11 @@ a.navbar-brand,
     color: #285e8e;
 }
 
+.tree .shared .glyphicon {
+    opacity: 0.7;
+    /*color: #777;*/
+}
+
 #login-box {
     margin: 30px auto;
     padding: 30px;

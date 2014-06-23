@@ -19,11 +19,23 @@ angular.module('services')
 
         /**
          * Instantiates the Item based on data received from drive api.
-         * @param data raw data object received from drive.files.list method.
+         * @param data Raw data object received from drive.files.list method.
          * @returns {Item}
          */
         function getItem(data) {
-            return new Item(data.id, data.title, data.mimeType === 'application/vnd.google-apps.folder', data.webContentLink, data.parents[0].id);
+            var item = new Item(data.id, data.title, data.mimeType === 'application/vnd.google-apps.folder');
+
+            item.shared = data.sharedWithMeDate ? true : false;
+
+            if (!item.isDir) {
+                item.url = data.webContentLink;
+            }
+
+            if (!item.shared) {
+                item.parentid = data.parents && data.parents[0].id;
+            }
+
+            return item;
         }
 
         /**
@@ -138,7 +150,18 @@ angular.module('services')
         that.getItemsByParent = function(parentid) {
             if (!cache[parentid]) {
 
-                var query = "'" + (parentid || 'root') + "' in parents and trashed = false";
+                if (!parentid) {
+                    parentid = 'root';
+                }
+
+                var query = "'" + parentid + "' in parents";
+
+                if (parentid === 'root') {
+                    query = "(sharedWithMe or " + query + ")";
+                }
+
+                query = query + " and trashed = false";
+
                 cache[parentid] = getItems(query);
             }
 
