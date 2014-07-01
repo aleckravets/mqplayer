@@ -58,36 +58,46 @@ angular.module('directives')
 //                        if (nodes[0].collapsed)
 //                            $scope.toggleDir(nodes[0]);
 //                    });
+
+
+                $scope.$on('dragstart', function(e) {
+                    var scope = e.targetScope; // the node's scope - where the event was emitted
+                    tree.draggedNode = scope.node;
+                });
+
+                $scope.$on('dragend', function(e) {
+                    tree.draggedNode = undefined;
+                });
             },
             link: function(scope, element, attrs) {
 
             },
             templateUrl: 'tmpl/tree.html'
         };
-    })
-    .directive('draggable', function(session) {
-        return {
-            link: function(scope, element, attrs) {
-                var tree = session.tree,
-                    player = session.player,
-                    playlist = session.playlist;
-
-                var node = scope.node;
-
-                element.attr('draggable', true);
-
-                element[0].addEventListener('dragstart', function(e) {
-                    tree.draggedNode = node;
-
-                    // needed for FF.
-                    if (window.isFF) {
-                        e.dataTransfer.setData('test', 'adfa');
-                    }
-                });
-
-                element[0].addEventListener('dragend', function() {
-                    tree.draggedNode = undefined;
-                });
-            }
-        };
     });
+//    .directive('draggable', function(session) {
+//        return {
+//            link: function(scope, element, attrs) {
+//                var tree = session.tree,
+//                    player = session.player,
+//                    playlist = session.playlist;
+//
+//                var node = scope.node;
+//
+//                element.attr('draggable', true);
+//
+//                element[0].addEventListener('dragstart', function(e) {
+//                    tree.draggedNode = node;
+//
+//                    // needed for FF.
+//                    if (window.isFF) {
+//                        e.dataTransfer.setData('test', 'adfa');
+//                    }
+//                });
+//
+//                element[0].addEventListener('dragend', function() {
+//                    tree.draggedNode = undefined;
+//                });
+//            }
+//        };
+//    });

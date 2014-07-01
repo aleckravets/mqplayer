@@ -313,6 +313,14 @@ ul.tree li {
     margin: 0 0 0 20px;
     border-top: 2px solid transparent;
     pointer-events: all;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+
+    /*padding: 10px;*/
+}
+
+#playlist li span {
+    /*border: 1px solid red;*/
 }
 
 #playlist li i {

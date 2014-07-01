@@ -12,6 +12,10 @@ Array.prototype.pushArray = function(items) {
     Array.prototype.push.apply(this, items);
 };
 
+Array.prototype.spliceArray = function(start, deleteCount, insertItems) {
+    Array.prototype.splice.apply(this, [start, deleteCount].concat(insertItems));
+};
+
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),

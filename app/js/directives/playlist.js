@@ -7,7 +7,8 @@ angular.module('directives')
             scope: {},
             controller: function($scope, $element) {
                 var player = session.player,
-                    playlist = session.playlist;
+                    playlist = session.playlist,
+                    tree = session.tree;
 
                 $scope.player = player;
                 $scope.playlist = playlist;
@@ -63,6 +64,8 @@ angular.module('directives')
                         });
                 };
 
+                var handleSelection;
+
                 $scope.mousedown = function(e, record) {
                     if (e.shiftKey) {
                         if (lastClickedRecord && lastClickedRecord.selected != record.selected) {
@@ -88,25 +91,47 @@ angular.module('directives')
                         record.selected = !record.selected;
                     }
                     else {
-                        playlist.selectedRecords.forEach(function(record) {
-                            record.selected = false;
-                        });
-                        playlist.selectedRecords.empty();
+                        // reset unhandeld selection when dragging (no mouseup is fired in this case)
+                        handleSelection = undefined;
 
-                        record.selected = !record.selected;
-
-                        if (record.selected)
-                            playlist.selectedRecords.push(record);
+                        // if this is one the selected records - put off the handling untill mouseup to alow dragging
+                        // otherwise - hanlde immediately
+                        if (playlist.selectedRecords.indexOf(record) === -1) {
+                            selectRecord(record);
+                        }
+                        else {
+                            handleSelection = record;
+                        }
                     }
 
                     lastClickedRecord = record;
 
-                    e.preventDefault(); // no selection on double click
+//                    e.preventDefault(); // no selection on double click
+                };
+
+                function selectRecord(record) {
+                    playlist.selectedRecords.forEach(function(record) {
+                        record.selected = false;
+                    });
+                    playlist.selectedRecords.empty();
+
+                    record.selected = !record.selected;
+
+                    if (record.selected)
+                        playlist.selectedRecords.push(record);
+                }
+
+                $scope.mouseup = function(e, record) {
+                    if (handleSelection) {
+                        selectRecord(handleSelection);
+                        handleSelection =  undefined;
+                    }
                 };
 
                 $scope.playlistClick = function(e, record) {
-                    if (!record)
+                    if (!record) {
                         selectNone();
+                    }
 
                     e.stopPropagation();
                 };
@@ -161,81 +186,81 @@ angular.module('directives')
                 $scope.$on('$destroy', function() {
                     $document.off('keydown', shortcut);
                 });
+
+                // drag and drop events of records and playlist
+
+                // drag selected records
+                $scope.$on('dragstart', function(e) {
+                    $scope.dragging = true;
+                });
+
+                $scope.$on('dragend', function(e) {
+                    $scope.dragging = false;
+                });
+
+                $scope.$on('dragenter', function(e) {
+                    var scope = e.targetScope; // record's or playlist's scope
+
+                    $scope.$apply(function() {
+                        if (scope == $scope) { // dragging over the playlist
+                            scope.dragover = true;
+                        }
+                        else { // draggin over the record
+                            scope.record.dragover = true;
+                        }
+                    });
+
+
+                });
+
+                $scope.$on('dragleave', function(e) {
+                    var scope = e.targetScope; // record's or playlist's scope
+
+                    $scope.$apply(function() {
+                        if (scope == $scope) { // dragging over the playlist
+                            scope.dragover = false;
+                        }
+                        else { // draggin over the record
+                            scope.record.dragover = false;
+                        }
+                    });
+                });
+
+                $scope.$on('drop', function(e) {
+                    var scope = e.targetScope;
+
+                    $scope.$apply(function() {
+                        var insertBefore;
+
+                        if ($scope != scope) { // dropped over the record
+                            insertBefore = scope.record;
+                        }
+
+                        if ($scope.dragging) { // dragging the records around the playlist
+                            var records = playlist.records,
+                                dragged = playlist.selectedRecords;
+
+                            if (!insertBefore || dragged.indexOf(insertBefore) === -1) { // if target is not among the dragged records
+                                dragged.forEach(function(record) {
+                                    records.splice(records.indexOf(record), 1);
+                                });
+
+                                records.spliceArray(insertBefore ? records.indexOf(insertBefore) : records.length, 0, dragged);
+                            }
+                        }
+                        else { // dragging the node from the tree
+                            playlist.enqueue(helper.getItemRecords(tree.draggedNode.item), insertBefore);
+                        }
+
+                        if (insertBefore) {
+                            insertBefore.dragover = false;
+                        }
+                        else { // dropped onto the playlist
+                            scope.dragover = false;
+                        }
+                    });
+                });
             },
-            templateUrl: 'tmpl/playlist.html',
-            link: function(scope, element, attrs) {
-                var tree = session.tree,
-                    playlist = session.playlist;
-
-                element[0].addEventListener('dragover', function(e) {
-                    e.preventDefault(); // allow drop
-                });
-
-                element[0].addEventListener('dragenter', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    scope.$apply(function() {
-                        scope.dragover = true;
-                    });
-                });
-
-                element[0].addEventListener('dragleave', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    $timeout(function() {
-                        scope.dragover = false;
-                    });
-                });
-
-                element[0].addEventListener('drop', function(e) {
-                    scope.$apply(function() {
-                        scope.dragover = false;
-                        playlist.enqueue(helper.getItemRecords(tree.draggedNode.item));
-                    });
-                });
-            }
+            templateUrl: 'tmpl/playlist.html'
         };
-    })
-    .directive('droppableItem', function($timeout, session, helper) {
-        return {
-            link: function(scope, element, attrs) {
-                var tree = session.tree,
-                    playlist = session.playlist;
-
-                element[0].addEventListener('dragover', function(e) {
-                    e.preventDefault(); // allow drop
-                });
-
-                element[0].addEventListener('dragenter', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    scope.$apply(function() {
-                        scope.record.dragover = true;
-                    });
-                });
-
-                element[0].addEventListener('dragleave', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    $timeout(function() {
-                        scope.record.dragover = false;
-                    });
-                });
-
-                element[0].addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-
-                    playlist.enqueue(helper.getItemRecords(tree.draggedNode.item), scope.record);
-
-                    $timeout(function() {
-                        scope.record.dragover = false;
-                    });
-                });
-            }
-        }
     });

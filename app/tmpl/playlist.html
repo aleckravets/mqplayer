@@ -1,10 +1,11 @@
-<div id="playlist" ng-click="playlistClick($event)">
+<div id="playlist" ng-click="playlistClick($event)" droppable>
     <div ng-if="playlist.loading" class="loading-label"><div><i class="glyphicon glyphicon-time"></i><span>Loading...</span></div></div>
     <div ng-if="!playlist.loading && playlist.records.length == 0" class="loading-label"><div><i class="glyphicon glyphicon-list"></i><span>Playlist is empty</span></div></div>
     <ul ng-class="{dragover: dragover}">
-        <li droppable-item
+        <li draggable droppable
             ng-repeat="record in playlist.records"
             ng-mousedown="mousedown($event, record)"
+            ng-mouseup="mouseup($event, record)"
             ng-click="playlistClick($event, record)"
             ng-dblclick="dblclick($event, record)"
             ng-class="{current: record == player.currentRecord, selected: record.selected, dragover: record.dragover}">
