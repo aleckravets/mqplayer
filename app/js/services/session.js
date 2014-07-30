@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('services')
-    .factory('session', function($q, Player, Playlist, Tree, dataService, page, helper) {
+    .factory('session', function($q, Player, Playlist, Tree, page, helper, storage, clients) {
         var that = {
             active: false,
             userInfo: undefined
@@ -96,6 +96,25 @@ angular.module('services')
             }
 
             return promise;
+        };
+
+        that.autoLogin = function () {
+            var services = storage.getServices();
+
+            var promises = [];
+
+            for (var serviceName in services) {
+                var promise = clients.load(serviceName)
+                    .then(function() {
+                        return clients[serviceName].login(true);
+                    });
+
+                promises.push(promise);
+            }
+
+            return $q.allSettled(promises).then(function(results) {
+
+            });
         };
 
         /**

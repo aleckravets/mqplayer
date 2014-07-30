@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('services')
-    .factory('dataService', function($http, $q, $timeout, Item){
+angular.module('types')
+    .factory('driveClient', function($http, $q, $timeout, Item){
         var that = {
             token: null,
             userInfo: null
