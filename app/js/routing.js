@@ -2,7 +2,7 @@
     var auth = ['$q', '$location', 'session', '$timeout', function($q, $location, session, $timeout) {
         if (!session.isLoggedIn()) {
             session.isLogginIn = true;
-            return session.login(true)
+            return session.autoLogin()
                 .catch(function () {
                     if ($location.path() !== '/login') {
                         $location.url('/login?ret=' + encodeURIComponent($location.url()));

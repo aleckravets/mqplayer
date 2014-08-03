@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('services')
-    .factory('helper', function($q, Record, dataService) {
+    .factory('helper', function($q, Record) {
         var that = { };
 
         /**
@@ -11,39 +11,6 @@ angular.module('services')
          */
         function recordFromItem(item) {
             return new Record(item.name, item.url);
-        }
-
-        /**
-         * Recursively loads the children items and returns them as a flat array.
-         * @param {string} parentid
-         * @returns {Promise<Item[]>}
-         */
-        function getAllItems(parentid) {
-            return dataService.getItemsByParent(parentid).then(function(items) {
-                var children = [];
-                var dirs = [];
-
-                items.forEach(function(item) {
-                    children.push(item);
-                    if (item.isDir) {
-                        dirs.push(item);
-                    }
-                });
-
-                var result = $q.when(children);
-
-                dirs.forEach(function(item) {
-                    result = result.then(function() {
-                        return getAllItems(item.id).then(function(items) {
-                            // apply is used since then number of arguments for splice is dynamic
-                            Array.prototype.splice.apply(children, [children.indexOf(item), 1].concat(items));
-                            return children;
-                        });
-                    });
-                });
-
-                return result;
-            });
         }
 
         /**
@@ -62,7 +29,7 @@ angular.module('services')
          * @returns {Promise<Record[]>}
          */
         that.getItemRecords = function(item) {
-            return (item.isDir ? getAllItems(item.id) : $q.when([item])).then(function(items) {
+            return (item.isDir ? item.getAllChildren() : $q.when([item])).then(function(items) {
                 var records = [];
                 items.forEach(function(item) {
                     if (!item.isDir && that.isSupportedType(item.name)) {
@@ -79,13 +46,13 @@ angular.module('services')
          * @param {string[]} ids Item ids to get the records for.
          * @returns {Promise<Record[]>}
          */
-        that.getRecordsByItemIds = function(ids) {
-            return dataService.getItemById(ids[0]).then(function(item) {
+        that.getRecordsByItemIds = function(client, ids) {
+            return client.getItemById(ids[0]).then(function(item) {
                 if (ids.length === 1) {
                     return that.getItemRecords(item);
                 }
 
-                return dataService.getItemsByParent(item.parentid).then(function(siblings) {
+                return client.getItemsByParent(item.parentid).then(function(siblings) {
                     var items = [];
 
                     siblings.forEach(function(item) {

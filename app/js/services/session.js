@@ -1,10 +1,12 @@
 'use strict';
 
 angular.module('services')
-    .factory('session', function($q, Player, Playlist, Tree, page, helper, storage, clients) {
+    .factory('session', function($q, Player, Playlist, Tree, page, helper, storage, clients, TreeNode, Item) {
         var that = {
             active: false,
-            userInfo: undefined
+            isLoggedIn: false,
+            userInfo: undefined,
+            activeServices: []
         };
 
         var autoLoginPromise;
@@ -12,10 +14,15 @@ angular.module('services')
         function start() {
             that.playlist = new Playlist();
             that.tree = new Tree();
+
+            clients.get(true).forEach(function(client) {
+                that.tree.roots.push(new TreeNode(new Item(client, '', client.name, true)));
+            });
+
             that.player = new Player();
 
             that.active = true;
-            that.userInfo = dataService.userInfo;
+//            that.userInfo = dataService.userInfo;
 
             checkState();
         }
@@ -98,39 +105,66 @@ angular.module('services')
             return promise;
         };
 
+        /**
+         * Try to login using all service found in storage
+         * @returns {*}
+         */
         that.autoLogin = function () {
-            var services = storage.getServices();
+            var services = ['drive'];
 
             var promises = [];
 
-            for (var serviceName in services) {
+            services.forEach(function(serviceName) {
                 var promise = clients.load(serviceName)
-                    .then(function() {
-                        return clients[serviceName].login(true);
+                    .then(function(client) {
+                        return client.login(true);
                     });
 
                 promises.push(promise);
-            }
+            });
 
             return $q.allSettled(promises).then(function(results) {
-
+                start();
             });
         };
 
         /**
          * Logs out and stops the session.
-         * @returns {Promise} A promised resolved when done.
+         * @returns {Promise} A promise resolved when done.
          */
-        that.logout = function () {
-            return dataService.signOut()
-                .then(function () {
-                    end();
-                });
-        };
+//        that.logout = function (serviceName) {
+//            var promise;
+//
+//            if (serviceName) {
+//                promise = dataServices[serviceName].logout();
+//            }
+//            else {
+//                var promises = [];
+//                that.activeServices.forEach(function (service) {
+//                    promises.push(service.logout())
+//                        .finally(function() {
+//                            delete that.activeServices[serviceN]
+//                        });
+//                });
+//                promise = $q.allSettled(promises).then(function() {
+//                    that.activeServices = [];
+//                });
+//            }
+//
+//            return promise.then(function() {
+//                if ()
+//                    });
+//
+//                that.activeServices.
+//                    return dataService.signOut()
+//                    .then(function () {
+//                        end();
+//                    });
+//            };
 
-        that.isLoggedIn = function() {
-            return dataService.isAuthorized();
-        };
+            that.isLoggedIn = function() {
+                return clients.get(true).length > 0;
+            };
 
-        return that;
-    });
+            return that;
+        });

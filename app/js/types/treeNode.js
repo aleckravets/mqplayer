@@ -1,14 +1,14 @@
 'use strict';
 
 angular.module('types')
-    .factory('TreeNode', function(dataService) {
+    .factory('TreeNode', function() {
         /**
          * Creates a new TreeNode
-         * @param {Item} [item={}] data item, considered root if omitted
+         * @param {Item} data item
          * @constructor TreeNode
          */
         function Ctor(item) {
-            this.item = item || {};
+            this.item = item;
 
             this.collapsed = true;
             this.selected = false;
@@ -27,7 +27,7 @@ angular.module('types')
 
                     this.loading = true;
 
-                    this.childrenPromise = dataService.getItemsByParent(this.item.id)
+                    this.childrenPromise = this.item.getChildren()
                         .then(function(items) {
                             self.children = items.map(function(item){
                                 var node = new Ctor(item);
