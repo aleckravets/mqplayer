@@ -16,7 +16,7 @@ angular.module('services')
             that.tree = new Tree();
 
             clients.get(true).forEach(function(client) {
-                that.tree.roots.push(new TreeNode(new Item(client, '', client.name, true)));
+                that.tree.roots.push(new TreeNode(new Item(client, '', client.title, 'root')));
             });
 
             that.player = new Player();
@@ -106,7 +106,7 @@ angular.module('services')
         };
 
         /**
-         * Try to login using all service found in storage
+         * Try to login using all services found in storage
          * @returns {*}
          */
         that.autoLogin = function () {

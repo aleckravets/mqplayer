@@ -2,30 +2,28 @@
 
 angular.module('types')
     .factory('Item', function($q) {
-        var _client;
-
         /**
          * Instantiates an Item
          * @param {string} id unique identifier
          * @param {string} name
-         * @param {boolean} isDir
+         * @param {string} type (root, dir, file)
          * @param {string} url absolute url
          * @param {integer} parentid
          * @constructor
          */
-        function Ctor(client, id, name, isDir, url, parentid) {
-            _client = client;
-
+        function Ctor(client, id, name, type, url, parentid) {
+            this.client = client;
             this.id = id;
             this.name = name;
-            this.isDir = isDir;
+            this.type = type;
+//            this.expandable = type === 'dir' || type == 'root';
             this.url = url;
             this.parentid = parentid;
         }
 
         Ctor.prototype = {
             getChildren: function() {
-                return _client.getItemsByParent(this.id);
+                return this.client.getItemsByParent(this.id);
             },
 
             /**
@@ -40,7 +38,7 @@ angular.module('types')
 
                     items.forEach(function(item) {
                         children.push(item);
-                        if (item.isDir) {
+                        if (item.type == 'dir') {
                             dirs.push(item);
                         }
                     });

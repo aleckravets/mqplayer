@@ -6,7 +6,7 @@ angular.module('types')
             scopes = ['https://www.googleapis.com/auth/drive.readonly'],
             authorized,
             token,
-            userInfo;
+            userInfoPromise;
 
         /**
          * Child items cached by parent item's id.
@@ -15,7 +15,9 @@ angular.module('types')
         var cache = {};
 
         function Drive() {
-            this.name = 'Google Drive';
+            this.name = 'drive';
+            this.title = 'Google Drive';
+            this.user = {};
         }
 
         Drive.prototype = {
@@ -25,11 +27,12 @@ angular.module('types')
              * @returns {Item}
              */
             _getItem: function(data){
-                var item = new Item(this, data.id, data.title, data.mimeType === 'application/vnd.google-apps.folder');
+                var type = data.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file';
+                var item = new Item(this, data.id, data.title, type);
 
                 item.shared = data.sharedWithMeDate ? true : false;
 
-                if (!item.isDir) {
+                if (item.type == 'file') {
                     item.url = data.webContentLink;
                 }
 
@@ -82,11 +85,11 @@ angular.module('types')
                     });
 
                     items.sort(function (a, b) {
-                        if (a.isDir === b.isDir) {
+                        if (a.type === b.type) {
                             return a.name < b.name ? -1 : 1;
                         }
                         else {
-                            return a.isDir ? -1 : 1;
+                            return a.type === 'dir' ? -1 : 1;
                         }
                     });
 
@@ -95,13 +98,22 @@ angular.module('types')
             },
 
             login: function(immediate) {
-                var deferred = $q.defer();
+                var deferred = $q.defer(),
+                    self = this;
 
                 gapi.auth.authorize({'client_id': clientid, 'scope': scopes.join(' '), 'immediate': immediate || false}, function(resp) {
                     if (resp && !resp.error) {
                         authorized = true;
                         token = gapi.auth.getToken();
-                        deferred.resolve();
+
+                        self.getUserInfo()
+                            .then(function(userInfo) {
+                                self.user.name = userInfo.name;
+                                deferred.resolve();
+                            })
+                            .catch(function(error) {
+                                deferred.reject(error);
+                            });
                     }
                     else {
                         authorized = false;
@@ -130,18 +142,22 @@ angular.module('types')
             },
 
             getUserInfo: function() {
-                var deferred = $q.defer();
+                if (!userInfoPromise) {
+                    var deferred = $q.defer();
 
-                gapi.client.drive.about.get().execute(function(resp) {
-                    if (resp.error) {
-                        deferred.reject(resp.error.code + " " + resp.error.message);
-                    }
-                    else {
-                        deferred.resolve(resp);
-                    }
-                });
+                    gapi.client.drive.about.get().execute(function (resp) {
+                        if (resp.error) {
+                            deferred.reject(resp.error.code + " " + resp.error.message);
+                        }
+                        else {
+                            deferred.resolve(resp);
+                        }
+                    });
 
-                return deferred.promise;
+                    userInfoPromise = deferred.promise;
+                }
+
+                return userInfoPromise;
             },
 
             /**

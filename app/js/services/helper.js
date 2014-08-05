@@ -29,10 +29,10 @@ angular.module('services')
          * @returns {Promise<Record[]>}
          */
         that.getItemRecords = function(item) {
-            return (item.isDir ? item.getAllChildren() : $q.when([item])).then(function(items) {
+            return (item.type == 'file' ? $q.when([item]) : item.getAllChildren()).then(function(items) {
                 var records = [];
                 items.forEach(function(item) {
-                    if (!item.isDir && that.isSupportedType(item.name)) {
+                    if (item.type == 'file' && that.isSupportedType(item.name)) {
                         records.push(recordFromItem(item));
                     }
                 });

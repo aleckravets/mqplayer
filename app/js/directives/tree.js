@@ -55,10 +55,9 @@ angular.module('directives')
                         .finally(function () {
                             $scope.loading = false;
                         });
-//                    .then(function(nodes) {
-//                        if (nodes[0].collapsed)
-//                            $scope.toggleDir(nodes[0]);
-//                    });
+
+                    if (root.collapsed)
+                        $scope.toggleDir(root);
                 });
 
 

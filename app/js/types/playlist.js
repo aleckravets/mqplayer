@@ -27,7 +27,6 @@ angular.module('types')
                 return recordsPromise
                     .then(function(records) {
                         records.forEach(function (record) {
-                            //if (!record.node.item.isDir && !self.isSupportedRecord(record)) return;
                             self.records.splice(index++, 0, record);
                         });
 
