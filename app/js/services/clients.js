@@ -6,25 +6,31 @@ angular.module('services')
 
         var clients = [];
 
+        var loadPromises = {};
+
         that.load = function(name) {
             // todo: verify name...
             // todo: check if loaded already
-            var deferred = $q.defer();
-            var client;
+            if (!loadPromises[name]) {
+                var deferred = $q.defer();
+                var client;
 
-            if (name === 'drive') {
-                // a bit ugly
-                window.gapi_loaded_deferred = deferred;
-                $script("https://apis.google.com/js/client.js?onload=gapi_loaded");
-                client = Drive;
+                if (name === 'drive') {
+                    // a bit ugly
+                    window.gapi_loaded_deferred = deferred;
+                    $script("https://apis.google.com/js/client.js?onload=gapi_loaded");
+                    client = Drive;
+                }
+
+                loadPromises[name] = deferred.promise
+                    .then(function() {
+                        that[name] = new client();
+                        clients.push(that[name]);
+                        return that[name];
+                    });
             }
 
-            return deferred.promise
-                .then(function() {
-                    that[name] = new client();
-                    clients.push(that[name]);
-                    return that[name];
-                });
+            return loadPromises[name];
         };
 
         that.get = function(activeOnly) {
@@ -35,6 +41,10 @@ angular.module('services')
                 return clients;
             }
         };
+
+        that.isLoaded = function (name) {
+            return that[name] !== undefined;
+        }
 
         return that;
     });

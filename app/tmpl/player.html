@@ -6,7 +6,7 @@
     <a class="next" title="next" ng-click="next()"><i class="glyphicon glyphicon-step-forward"></i></a>
 </p>
 <div id="track" ui-slider="{range: 'min'}" min="0" max="{{session.player.audio.duration}}" step="1" ng-model="state.currentTime"></div>
-<p id="controls2" class="navbar-text navbar-left" ng-if="session.active" ng-cloak>
+<p id="controls2" class="navbar-text navbar-left" ng-if="session.isLoggedIn()" ng-cloak>
     <a title="mute" ng-click="session.player.mute()"><i class="glyphicon" ng-class="{'glyphicon-volume-up': !session.player.audio.muted, 'glyphicon-volume-off': session.player.audio.muted}"></i></a>
 </p>
 <div id="volume" ui-slider="{range: 'min'}" use-decimals min="0" max="1.0" step="{{session.player.volumeStep}}" ng-model="session.player.audio.volume"></div>

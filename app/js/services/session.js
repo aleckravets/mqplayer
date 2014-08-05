@@ -3,13 +3,13 @@
 angular.module('services')
     .factory('session', function($q, Player, Playlist, Tree, page, helper, storage, clients, TreeNode, Item) {
         var that = {
-            active: false,
+//            active: false,
             isLoggedIn: false,
             userInfo: undefined,
-            activeServices: []
+//            activeServices: []
         };
 
-        var autoLoginPromise;
+        var autoLoginPromises = {};
 
         function start() {
             that.playlist = new Playlist();
@@ -21,7 +21,7 @@ angular.module('services')
 
             that.player = new Player();
 
-            that.active = true;
+//            that.active = true;
 //            that.userInfo = dataService.userInfo;
 
             checkState();
@@ -33,20 +33,12 @@ angular.module('services')
             that.tree = undefined;
             that.playlist = undefined;
             page.setTitle('Music Queue');
-            that.active = false;
+//            that.active = false;
 
             // do not try to auto relogin on implicit logout
             var d = $q.defer();
             d.reject();
-            autoLoginPromise = d.promise;
-        }
-
-        function getLoginPromise(auto) {
-            return dataService.authorize(auto)
-                .then(function () {
-                    start();
-                    return that;
-                });
+//            autoLoginPromise = d.promise;
         }
 
         /**
@@ -83,26 +75,19 @@ angular.module('services')
             }
         }
 
-        /**
+        /** todo: update comment
          * Lunches the dataService authorization in and starts the session on success.
          * @param {boolean} auto If set to "true" will try to sign in quietly by using cookies.
          * @returns {Promise<session>} A promise of started session.
          */
-        that.login = function (auto) {
-            var promise;
-
-            if (!auto) {
-                promise = getLoginPromise();
-            }
-            else {
-                if (!autoLoginPromise) {
-                    autoLoginPromise = getLoginPromise(true);
-                }
-
-                promise = autoLoginPromise;
-            }
-
-            return promise;
+        that.login = function (serviceName) {
+            return clients.load(serviceName)
+                .then(function(client) {
+                    return client.login();
+                })
+                .then(function() {
+                    start();
+                });
         };
 
         /**
@@ -112,16 +97,19 @@ angular.module('services')
         that.autoLogin = function () {
             var services = ['drive'];
 
-            var promises = [];
-
             services.forEach(function(serviceName) {
-                var promise = clients.load(serviceName)
-                    .then(function(client) {
-                        return client.login(true);
-                    });
+                if (!autoLoginPromises[serviceName]) {
+                    var promise = clients.load(serviceName)
+                        .then(function(client) {
+                            return client.login(true);
+                        });
 
-                promises.push(promise);
+                    autoLoginPromises[serviceName] = promise;
+                }
             });
+
+            // make an array
+            var promises = Object.keys(autoLoginPromises).map(function(key) { return autoLoginPromises[key]; });
 
             return $q.allSettled(promises).then(function(results) {
                 start();
@@ -132,39 +120,31 @@ angular.module('services')
          * Logs out and stops the session.
          * @returns {Promise} A promise resolved when done.
          */
-//        that.logout = function (serviceName) {
-//            var promise;
-//
-//            if (serviceName) {
-//                promise = dataServices[serviceName].logout();
-//            }
-//            else {
-//                var promises = [];
-//                that.activeServices.forEach(function (service) {
-//                    promises.push(service.logout())
-//                        .finally(function() {
-//                            delete that.activeServices[serviceN]
-//                        });
-//                });
-//                promise = $q.allSettled(promises).then(function() {
-//                    that.activeServices = [];
-//                });
-//            }
-//
-//            return promise.then(function() {
-//                if ()
-//                    });
-//
-//                that.activeServices.
-//                    return dataService.signOut()
-//                    .then(function () {
-//                        end();
-//                    });
-//            };
+        that.logout = function (serviceName) {
+            var promise;
 
-            that.isLoggedIn = function() {
-                return clients.get(true).length > 0;
-            };
+            if (serviceName) {
+                promise = clients[serviceName].logout();
+            }
+            else {
+                var promises = [];
 
-            return that;
-        });
+                clients.get(true).forEach(function (client) {
+                    promises.push(client.logout());
+                });
+
+                promise = $q.allSettled(promises);
+            }
+
+            return promise
+                .then(function () {
+                    end();
+                });
+        };
+
+        that.isLoggedIn = function() {
+            return clients.get(true).length > 0;
+        };
+
+        return that;
+    });

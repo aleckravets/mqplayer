@@ -6,8 +6,8 @@ angular.module('app')
 
         $scope.session = session;
 
-        $scope.login = function() {
-            session.login()
+        $scope.login = function(service) {
+            session.login(service)
                 .then(function() {
                     var search = $location.search();
                     var url = search.ret ? decodeURIComponent(search.ret) : '/';
@@ -18,7 +18,7 @@ angular.module('app')
         $scope.logout = function() {
             session.logout()
                 .then(function() {
-                    $scope.loggedin = false;
+//                    $scope.loggedin = false;
                     $location.path('/login');
                 });
         };
