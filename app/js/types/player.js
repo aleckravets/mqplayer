@@ -44,7 +44,7 @@ angular.module('types')
                 this.audio.src = record.url;
                 self.currentRecord = record;
 
-                this.audio.addEventListener('loadeddata', function() {
+                this.audio.addEventListener('loadedmetadata', function() {
                     self.audio.play();
                     self.state = 'playing';
                     deferred.resolve();
