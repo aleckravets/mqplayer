@@ -22,6 +22,22 @@ angular.module('types')
         }
 
         Ctor.prototype = {
+            // todo: cache result
+            getUrl: function() {
+                var deferred = $q.defer();
+
+                if (typeof this.url === 'function') {
+                    this.url().then(function(url) {
+                         deferred.resolve(url);
+                    });
+                }
+                else {
+                    deferred.resolve(this.url);
+                }
+
+                return deferred.promise;
+            },
+
             getChildren: function() {
                 return this.client.getItemsByParent(this.id);
             },

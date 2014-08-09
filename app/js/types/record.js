@@ -8,9 +8,10 @@ angular.module('types')
          * @param {string} url
          * @constructor
          */
-        function Ctor(name, url) {
-            this.name = name;
-            this.url = url;
+        function Ctor(item) {
+            this.item = item;
+//            this.name = name;
+//            this.url = url;
             this.selected = false;
         }
 

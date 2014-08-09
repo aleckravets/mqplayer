@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('services')
-    .factory('clients', function($q, Drive){
+    .factory('clients', function($q, Drive, DropboxClient){
         var that = {};
 
         var clients = [];
@@ -15,11 +15,19 @@ angular.module('services')
                 var deferred = $q.defer();
                 var client;
 
-                if (name === 'drive') {
-                    // a bit ugly
-                    window.gapi_loaded_deferred = deferred;
-                    $script("https://apis.google.com/js/client.js?onload=gapi_loaded");
-                    client = Drive;
+                switch (name) {
+                    case 'drive':
+                        // a bit ugly
+                        window.gapi_loaded_deferred = deferred;
+                        $script("//apis.google.com/js/client.js?onload=gapi_loaded");
+                        client = Drive;
+                        break;
+                    case 'dropbox':
+                        $script("//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js", function() {
+                            deferred.resolve();
+                        });
+                        client = DropboxClient;
+                        break;
                 }
 
                 loadPromises[name] = deferred.promise

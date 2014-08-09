@@ -95,7 +95,7 @@ angular.module('services')
          * @returns {*}
          */
         that.autoLogin = function () {
-            var services = ['drive'];
+            var services = ['drive','dropbox'];
 
             services.forEach(function(serviceName) {
                 if (!autoLoginPromises[serviceName]) {

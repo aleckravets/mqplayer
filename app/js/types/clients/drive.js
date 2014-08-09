@@ -32,7 +32,7 @@ angular.module('types')
 
                 item.shared = data.sharedWithMeDate ? true : false;
 
-                if (item.type == 'file') {
+                if (item.type === 'file') {
                     item.url = data.webContentLink;
                 }
 

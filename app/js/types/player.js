@@ -41,16 +41,18 @@ angular.module('types')
 
                 $rootScope.$broadcast('player.timeupdate', 0);
 
-                this.audio.src = record.url;
-                self.currentRecord = record;
+                record.item.getUrl().then(function(url) {
+                    this.audio.src = url;
+                    self.currentRecord = record;
 
-                this.audio.addEventListener('loadedmetadata', function() {
-                    self.audio.play();
-                    self.state = 'playing';
-                    deferred.resolve();
+                    this.audio.addEventListener('loadedmetadata', function() {
+                        self.audio.play();
+                        self.state = 'playing';
+                        deferred.resolve();
+                    });
                 });
 
-                page.setTitle(record.name);
+                page.setTitle(record.item.name);
 
                 return deferred.promise;
             },
