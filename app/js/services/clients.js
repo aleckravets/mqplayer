@@ -19,14 +19,14 @@ angular.module('services')
                     case 'drive':
                         // a bit ugly
                         window.gapi_loaded_deferred = deferred;
-                        $script("//apis.google.com/js/client.js?onload=gapi_loaded");
                         client = Drive;
+                        $script("//apis.google.com/js/client.js?onload=gapi_loaded");
                         break;
                     case 'dropbox':
-                        $script("//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.2/dropbox.min.js", function() {
+                        client = DropboxClient;
+                        $script("//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.3/dropbox.min.js", function() {
                             deferred.resolve();
                         });
-                        client = DropboxClient;
                         break;
                 }
 

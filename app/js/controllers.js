@@ -27,4 +27,8 @@ angular.module('app')
     })
     .controller('LoginController', function($scope, session) {
         $scope.session = session;
-    });
+    })
+    .controller('OAuthController', function($scope) {
+        console.log('oauth controller');
+    })
+;

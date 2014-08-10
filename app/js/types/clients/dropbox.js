@@ -1,11 +1,9 @@
 'use strict';
 
 angular.module('types')
-    .factory('DropboxClient', function($http, $q, $timeout, Item){
+    .factory('DropboxClient', function($http, $q, $timeout, Item, $location){
         var app_key = "qfd1sjynxut1kkw",
             dropbox,
-            authorized,
-            token,
             userInfoPromise;
 
         /**
@@ -16,8 +14,7 @@ angular.module('types')
 
         function DropboxCtor() {
             dropbox = new Dropbox.Client({ key: app_key });
-//            dropbox.authDriver(new Dropbox.Drivers.Redirect({rememberUser: true}));
-            dropbox.reset();
+            dropbox.authDriver(new Dropbox.AuthDriver.Popup({receiverUrl: "http://localhost/app/dropbox_oauth.html"}));
             this.name = 'dropbox';
             this.title = 'Dropbox';
             this.user = {};
@@ -34,10 +31,11 @@ angular.module('types')
                 var item = new Item(this, entry.path, entry.name, type);
 
                 item.shared = false;
+                var self = this;
 
                 if (item.type === 'file') {
                     item.url = function () {
-                        return this._getFileUrl(entry.path);
+                        return self._getFileUrl(entry.path);
                     };
                 }
 
@@ -54,10 +52,6 @@ angular.module('types')
 
                 dropbox.authenticate({interactive: !immediate}, function(error, client) {
                     if (client.isAuthenticated()) {
-                        // Cached credentials are available, make Dropbox API calls.
-                        // todo: get user info
-                        authorized = true;
-                        self.user.name = 'user';
                         deferred.resolve();
                     }
                     else {
@@ -65,23 +59,43 @@ angular.module('types')
                     }
                 });
 
-                return deferred.promise;
+                return deferred.promise
+                    .then(function() {
+                        return self._getUserInfo();
+                    });
             },
 
             logout: function() {
-//                // reset cache
-//                cache = {};
-//
-//                var url = 'https://accounts.google.com/o/oauth2/revoke?token=' + token.access_token + "&callback=JSON_CALLBACK";
-//
-//                // always rejected because the the callback is called without arguments
-//                // whereas $http expects something to be returned
-//                // that's why we suppress the rejection and call finally
-//                return $http.jsonp(url)
-//                    .catch(function() {})
-//                    .finally(function() {
-//                        authorized = false;
-//                    });
+                var deferred = $q.defer();
+
+                cache = {};
+
+                dropbox.signOut(function() {
+                    deferred.resolve();
+                });
+
+                return deferred.promise;
+            },
+
+            _getUserInfo: function() {
+                if (!userInfoPromise) {
+                    var deferred = $q.defer(),
+                        self = this;
+
+                    dropbox.getAccountInfo(function(error, userInfo) {
+                        if (error) {
+                            deferred.reject(error);
+                        }
+                        else {
+                            self.user.name = userInfo.name;
+                            deferred.resolve();
+                        }
+                    });
+
+                    userInfoPromise = deferred.promise;
+                }
+
+                return userInfoPromise;
             },
 
             /** // todo: update comment
@@ -96,7 +110,8 @@ angular.module('types')
                         path = '';
                     }
 
-                    var deferred = $q.defer();
+                    var self = this,
+                        deferred = $q.defer();
 
                     dropbox.readdir(path, function(error, entries, stat, entry_stats) {
                         if (error) {
@@ -106,6 +121,8 @@ angular.module('types')
                         var items = entry_stats.map(function(entry) {
                             return self._getItem(entry);
                         });
+
+                        items.sort(Item.sort);
 
                         deferred.resolve(items);
                     });
@@ -133,7 +150,7 @@ angular.module('types')
             },
 
             isLoggedIn: function() {
-                return authorized;
+                return dropbox.isAuthenticated();
             }
         };
 

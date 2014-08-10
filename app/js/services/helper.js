@@ -10,7 +10,7 @@ angular.module('services')
          * @returns {Record}
          */
         function recordFromItem(item) {
-            return new Record(item.name, item.url);
+            return new Record(item);
         }
 
         /**

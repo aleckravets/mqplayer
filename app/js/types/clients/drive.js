@@ -32,7 +32,7 @@ angular.module('types')
 
                 item.shared = data.sharedWithMeDate ? true : false;
 
-                if (item.type === 'file') {
+                if (item.type == 'file') {
                     item.url = data.webContentLink;
                 }
 
@@ -84,14 +84,7 @@ angular.module('types')
                         return self._getItem(rawItem);
                     });
 
-                    items.sort(function (a, b) {
-                        if (a.type === b.type) {
-                            return a.name < b.name ? -1 : 1;
-                        }
-                        else {
-                            return a.type === 'dir' ? -1 : 1;
-                        }
-                    });
+                    items.sort(Item.sort);
 
                     return items;
                 });
@@ -105,15 +98,7 @@ angular.module('types')
                     if (resp && !resp.error) {
                         authorized = true;
                         token = gapi.auth.getToken();
-
-                        self.getUserInfo()
-                            .then(function(userInfo) {
-                                self.user.name = userInfo.name;
-                                deferred.resolve();
-                            })
-                            .catch(function(error) {
-                                deferred.reject(error);
-                            });
+                        deferred.resolve();
                     }
                     else {
                         authorized = false;
@@ -122,7 +107,10 @@ angular.module('types')
                     }
                 });
 
-                return deferred.promise;
+                return deferred.promise
+                    .then(function() {
+                        return self._getUserInfo();
+                    });
             },
 
             logout: function() {
@@ -141,16 +129,18 @@ angular.module('types')
                     });
             },
 
-            getUserInfo: function() {
+            _getUserInfo: function() {
                 if (!userInfoPromise) {
-                    var deferred = $q.defer();
+                    var deferred = $q.defer(),
+                        self = this;
 
                     gapi.client.drive.about.get().execute(function (resp) {
                         if (resp.error) {
                             deferred.reject(resp.error.code + " " + resp.error.message);
                         }
                         else {
-                            deferred.resolve(resp);
+                            self.user.name = resp.name;
+                            deferred.resolve(self.user);
                         }
                     });
 

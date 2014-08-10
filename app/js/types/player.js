@@ -42,10 +42,10 @@ angular.module('types')
                 $rootScope.$broadcast('player.timeupdate', 0);
 
                 record.item.getUrl().then(function(url) {
-                    this.audio.src = url;
+                    self.audio.src = url;
                     self.currentRecord = record;
 
-                    this.audio.addEventListener('loadedmetadata', function() {
+                    self.audio.addEventListener('loadedmetadata', function() {
                         self.audio.play();
                         self.state = 'playing';
                         deferred.resolve();

@@ -9,7 +9,7 @@ angular.module('services')
 //            activeServices: []
         };
 
-        var autoLoginPromises = {};
+        var autoLoginPromise;
 
         function start() {
             that.playlist = new Playlist();
@@ -21,9 +21,6 @@ angular.module('services')
 
             that.player = new Player();
 
-//            that.active = true;
-//            that.userInfo = dataService.userInfo;
-
             checkState();
         }
 
@@ -33,12 +30,11 @@ angular.module('services')
             that.tree = undefined;
             that.playlist = undefined;
             page.setTitle('Music Queue');
-//            that.active = false;
 
             // do not try to auto relogin on implicit logout
             var d = $q.defer();
             d.reject();
-//            autoLoginPromise = d.promise;
+            autoLoginPromise = d.promise;
         }
 
         /**
@@ -95,25 +91,27 @@ angular.module('services')
          * @returns {*}
          */
         that.autoLogin = function () {
-            var services = ['drive','dropbox'];
+            if (!autoLoginPromise) {
+                var services = ['drive', 'dropbox'];
 
-            services.forEach(function(serviceName) {
-                if (!autoLoginPromises[serviceName]) {
-                    var promise = clients.load(serviceName)
-                        .then(function(client) {
-                            return client.login(true);
-                        });
+                var promises = [];
 
-                    autoLoginPromises[serviceName] = promise;
-                }
-            });
+                services.forEach(function(serviceName) {
+                    promises.push(
+                        clients.load(serviceName)
+                            .then(function(client) {
+                                return client.login(true);
+                            })
+                    );
+                });
 
-            // make an array
-            var promises = Object.keys(autoLoginPromises).map(function(key) { return autoLoginPromises[key]; });
+                autoLoginPromise = $q.one(promises)
+                    .then(function(results) {
+                        start();
+                    });
+            }
 
-            return $q.allSettled(promises).then(function(results) {
-                start();
-            });
+            return autoLoginPromise;
         };
 
         /**

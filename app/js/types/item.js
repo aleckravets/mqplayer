@@ -21,6 +21,15 @@ angular.module('types')
             this.parentid = parentid;
         }
 
+        Ctor.sort = function (a, b) {
+            if (a.type === b.type) {
+                return a.name < b.name ? -1 : 1;
+            }
+            else {
+                return a.type === 'dir' ? -1 : 1;
+            }
+        };
+
         Ctor.prototype = {
             // todo: cache result
             getUrl: function() {

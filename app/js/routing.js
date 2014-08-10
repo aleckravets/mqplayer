@@ -25,5 +25,6 @@
             $routeProvider.when('/about', {templateUrl: 'partials/about.html'});
             $routeProvider.when('/help', {templateUrl: 'partials/help.html'});
             $routeProvider.otherwise({redirectTo: '/'});
+//            $routeProvider.otherwise({ resolve: { test: auth}});
         });
 }());
