@@ -3,10 +3,8 @@
 angular.module('services')
     .factory('session', function($q, Player, Playlist, Tree, page, helper, storage, clients, TreeNode, Item) {
         var that = {
-//            active: false,
-            isLoggedIn: false,
-            userInfo: undefined,
-//            activeServices: []
+            active: false, // indicates whether the session has started and all it's components are initialized
+            userInfo: undefined
         };
 
         var autoLoginPromise;
@@ -21,10 +19,14 @@ angular.module('services')
 
             that.player = new Player();
 
+            that.active = true;
+
             checkState();
         }
 
         function end() {
+            that.active = false;
+
             that.player.stop();
             that.player = undefined;
             that.tree = undefined;

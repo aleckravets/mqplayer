@@ -23,7 +23,7 @@
         <li><a href="#/about">about</a></li>
         <li><a href="#/help">help</a></li>
         </ul>
-        <player ng-if="session.isLoggedIn()" ng-cloak></player>
+        <player ng-if="session.active" ng-cloak></player>
         <p class="navbar-text navbar-right" ng-if="session.isLoggedIn()" ng-cloak><i class="glyphicon glyphicon-user"></i> {{session.userInfo.name}} <a ng-click="logout()">Sign out</a></p>
         <p class="navbar-text navbar-right" ng-if="!session.isLoggedIn()" ng-cloak><a href="#/login">Sign in</a></p>
     </div>
