@@ -11,14 +11,23 @@ angular.module('types')
 
             this.currentRecord = undefined; // Record
 
+            var self = this;
+
             this.audio.addEventListener('ended', function() {
                 $rootScope.$broadcast('player.trackended');
             });
 
-            var self = this;
+            this.audio.addEventListener('loadedmetadata', function() {
+                if (self.loadedmetadata) {
+                    self.loadedmetadata();
+                }
+            });
 
             // emit timeupdate event once a second
             // todo: replace with setInterval?
+
+            // FF does not seek properly on variable bitrate files
+            // https://bugzilla.mozilla.org/show_bug.cgi?id=994561
             this.audio.addEventListener('timeupdate', function(e) {
                 $rootScope.$broadcast('player.timeupdate', self.audio.currentTime);
 //                if (self.currentTime && Math.abs(self.audio.currentTime - self.currentTime) <= 1)
@@ -41,15 +50,18 @@ angular.module('types')
 
                 $rootScope.$broadcast('player.timeupdate', 0);
 
-                record.item.getUrl().then(function(url) {
-                    self.audio.src = url;
-                    self.currentRecord = record;
+                this.audio.pause();
+                this.audio.src = ''; // todo: set to undefined for IE
 
-                    self.audio.addEventListener('loadedmetadata', function() {
+                record.item.getUrl().then(function(url) {
+                    self.loadedmetadata = function() {
                         self.audio.play();
                         self.state = 'playing';
                         deferred.resolve();
-                    });
+                    };
+
+                    self.audio.src = url;
+                    self.currentRecord = record;
                 });
 
                 page.setTitle(record.item.name);
