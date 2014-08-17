@@ -14,7 +14,12 @@ angular.module('services')
             that.tree = new Tree();
 
             clients.get(true).forEach(function(client) {
-                that.tree.roots.push(new TreeNode(new Item(client, '', client.title, 'root')));
+                var root = new TreeNode(new Item(client, '', client.title, 'root'));
+
+                root.getChildren();
+                root.collapsed = false; // expand roots on start
+
+                that.tree.roots.push(root);
             });
 
             that.player = new Player();

@@ -34,6 +34,8 @@ angular.module('types')
                                 return node;
                             });
 
+                            self.empty = items.length === 0;
+
                             return self.children;
                         })
                         .catch(function() {

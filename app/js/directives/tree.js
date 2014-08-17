@@ -41,26 +41,6 @@ angular.module('directives')
                     });
                 };
 
-                $scope.loading = true;
-
-                tree.roots.forEach(function(root) {
-                    root.getChildren()
-                        .then(function (nodes) {
-                            if (nodes.length === 0) {
-                                $scope.empty = true;
-                            }
-
-                            return nodes;
-                        })
-                        .finally(function () {
-                            $scope.loading = false;
-                        });
-
-                    if (root.collapsed)
-                        $scope.toggleDir(root);
-                });
-
-
                 $scope.$on('dragstart', function(e) {
                     var scope = e.targetScope; // the node's scope - where the event was emitted
                     tree.draggedNode = scope.node;
