@@ -51,7 +51,7 @@ angular.module('services')
 
         that.isLoaded = function (name) {
             return that[name] !== undefined;
-        }
+        };
 
         return that;
     });
