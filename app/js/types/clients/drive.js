@@ -94,6 +94,8 @@ angular.module('types')
                 var deferred = $q.defer(),
                     self = this;
 
+                // todo: getToken? to check the state of session
+
                 gapi.auth.authorize({'client_id': clientid, 'scope': scopes.join(' '), 'immediate': immediate || false}, function(resp) {
                     if (resp && !resp.error) {
                         authorized = true;

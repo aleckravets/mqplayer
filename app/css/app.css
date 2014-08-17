@@ -35,9 +35,25 @@ a {
     background: #285e8e;
     border: none;
 }
-.navbar a,
-.navbar p{
+
+.navbar-nav > li > a {
+    background: transparent !important;
+}
+
+a.navbar-brand, .navbar-nav li a, player a {
+    text-decoration: none;
+}
+
+a.navbar-brand, .navbar-nav > li > a, player a {
+    text-decoration: none;
     color: #fff !important;
+}
+
+.dropdown-menu i {
+    font-size: 13px;
+    margin-left: -10px;
+    margin-right: 5px;
+    line-height: 1em !important;
 }
 
 .navbar-brand span * {
@@ -47,10 +63,6 @@ a {
     margin-right: 5px;
 }
 
-a.navbar-brand,
-.navbar-nav a{
-    text-decoration: none;
-}
 .navbar .glyphicon-music {
     margin-right: 5px;
     font-size: 14px;
@@ -73,13 +85,13 @@ a.navbar-brand,
     text-align: center;
     font-size: 150%;
 }
+
 #login-box button {
     margin-bottom: 20px;
     font-weight: bold;
 }
 
-#login-box button .glyphicon,
-.navbar .glyphicon{
+#login-box button .glyphicon{
     color: #fff;
 }
 
@@ -120,6 +132,10 @@ ul.tree li {
     cursor: default;
 }
 
+.tree-root {
+    margin-bottom: 4px;
+}
+
 .tree-label {
     padding: 1px 4px;
     border: 1px solid transparent;
@@ -141,6 +157,20 @@ ul.tree li {
 
 .tree .glyphicon {
     font-size: 12px;
+}
+.glyphicon-root {
+    width: 16px;
+    height: 16px;
+}
+
+.tree-root-drive .glyphicon-root {
+    background: url('../img/drive-14x12.png') no-repeat 50% 50%;
+    margin-bottom: -2px;
+}
+
+.tree-root-dropbox .glyphicon-root {
+    background: url('../img/dropbox-15x14.png') no-repeat 50% 50%;
+    margin-bottom: -2px;
 }
 
 .tree .glyphicon-plus {

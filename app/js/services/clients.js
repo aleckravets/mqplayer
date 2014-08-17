@@ -10,7 +10,6 @@ angular.module('services')
 
         that.load = function(name) {
             // todo: verify name...
-            // todo: check if loaded already
             if (!loadPromises[name]) {
                 var deferred = $q.defer();
                 var client;

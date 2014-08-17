@@ -16,16 +16,26 @@
     <!-- endbuild -->
 </head>
 <body ng-class="session.player.state">
-<div class="navbar navbar-default navbar-fixed-top">
+<div class="navbar navbar-fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="#/"><i class="glyphicon glyphicon-headphones"></i><span>Music Queue</span></a>
         <ul class="nav navbar-nav">
-        <li><a href="#/about">about</a></li>
-        <li><a href="#/help">help</a></li>
+            <li><a href="#/about">about</a></li>
+            <li><a href="#/help">help</a></li>
         </ul>
         <player ng-if="session.active" ng-cloak></player>
-        <p class="navbar-text navbar-right" ng-if="session.isLoggedIn()" ng-cloak><i class="glyphicon glyphicon-user"></i> {{session.userInfo.name}} <a ng-click="logout()">Sign out</a></p>
-        <p class="navbar-text navbar-right" ng-if="!session.isLoggedIn()" ng-cloak><a href="#/login">Sign in</a></p>
+        <ul class="nav navbar-nav navbar-right" ng-if="session.isLoggedIn()">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#">Action</a></li>
+                    <li><a href="#">Another action</a></li>
+                    <li><a href="#">Something else here</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#/settings"><i class="glyphicon glyphicon-cog"></i>Settings</a></li>
+                </ul>
+            </li>
+        </ul>
     </div>
 </div>
 
@@ -40,6 +50,7 @@
 <script src="bower_components/angular-route/angular-route.js"></script>
 <script src="bower_components/slider/src/slider.js"></script>
 <script src="bower_components/script.js/dist/script.js"></script>
+<script src="bower_components/bootstrap/js/dropdown.js"></script>
 <!-- endbuild -->
 
 <!-- build:js js/app.js -->
