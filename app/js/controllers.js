@@ -20,8 +20,7 @@ angular.module('app')
         $scope.logout = function() {
             session.logout()
                 .then(function() {
-//                    $scope.loggedin = false;
-                    $location.path('/login');
+                    $scope.$apply(angular.noop);
                 });
         };
     })

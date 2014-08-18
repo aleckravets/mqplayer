@@ -13,20 +13,20 @@ angular.module('services')
             that.playlist = new Playlist();
             that.tree = new Tree();
 
-            clients.get(true).forEach(function(client) {
-                var root = new TreeNode(new Item(client, '', client.title, 'root'));
-
-                root.getChildren();
-                root.collapsed = false; // expand roots on start
-
-                that.tree.roots.push(root);
-            });
-
             that.player = new Player();
 
             that.active = true;
 
             checkState();
+        }
+
+        function getRoot(client) {
+            var root = new TreeNode(new Item(client, '', client.title, 'root'));
+
+            root.getChildren();
+            root.collapsed = false; // expand roots on start
+
+            return root;
         }
 
         function end() {
@@ -86,10 +86,13 @@ angular.module('services')
         that.login = function (serviceName) {
             return clients.load(serviceName)
                 .then(function(client) {
-                    return client.login();
-                })
-                .then(function() {
-                    start();
+                    return client.login()
+                        .then(function() {
+                            if (!that.active) {
+                                start();
+                            }
+                            that.tree.roots.push(getRoot(client));
+                        });
                 });
         };
 
@@ -115,6 +118,11 @@ angular.module('services')
                 autoLoginPromise = $q.one(promises)
                     .then(function(results) {
                         start();
+
+                        // todo: iterate over results rather than clients.get(true)
+                        clients.get(true).forEach(function(client) {
+                            that.tree.roots.push(getRoot(client));
+                        });
                     });
             }
 
