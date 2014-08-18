@@ -1,10 +1,12 @@
 'use strict';
 
 angular.module('app')
-    .controller('AppController', function($scope, $location, session, page, helper) {
+    .controller('AppController', function($scope, $location, $timeout, session, page, helper, clients) {
         $scope.page = page;
 
         $scope.session = session;
+
+        $scope.clients = clients.available();
 
         $scope.login = function(service) {
             session.login(service)

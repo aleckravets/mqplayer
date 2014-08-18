@@ -56,10 +56,26 @@ a.navbar-brand, .navbar-nav > li > a, player a {
     line-height: 1em !important;
 }
 
+.dropdown-menu .client-drive i {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-bottom: -2px;
+    background: url('../img/drive-14x12.png') no-repeat 50% 50%;
+}
+
+.dropdown-menu .client-dropbox i {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin-bottom: -2px;
+    background: url('../img/dropbox-15x14.png') no-repeat 50% 50%;
+}
+
 .navbar-brand span * {
     vertical-align: middle;
 }
-.navbar-brand i{
+.navbar-brand i {
     margin-right: 5px;
 }
 

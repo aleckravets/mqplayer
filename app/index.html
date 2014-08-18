@@ -28,11 +28,10 @@
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
+                    <li ng-repeat="client in clients" class="client-{{client.name}}"><a ng-click="session.login(client.name)"><i></i>{{client.title}}</a></li>
                     <li class="divider"></li>
                     <li><a href="#/settings"><i class="glyphicon glyphicon-cog"></i>Settings</a></li>
+                    <li><a ng-click="logout()"><i class="glyphicon glyphicon-log-out"></i>Logout</a></li>
                 </ul>
             </li>
         </ul>
