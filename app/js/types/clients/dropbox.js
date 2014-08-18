@@ -14,9 +14,8 @@ angular.module('types')
 
         function DropboxCtor() {
             dropbox = new Dropbox.Client({ key: app_key });
+            // todo: localhost?
             dropbox.authDriver(new Dropbox.AuthDriver.Popup({receiverUrl: "http://localhost/app/dropbox_oauth.html"}));
-            this.name = 'dropbox';
-            this.title = 'Dropbox';
             this.user = {};
         }
 

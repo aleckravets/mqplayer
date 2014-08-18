@@ -15,8 +15,6 @@ angular.module('types')
         var cache = {};
 
         function Drive() {
-            this.name = 'drive';
-            this.title = 'Google Drive';
             this.user = {};
         }
 

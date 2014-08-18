@@ -4,26 +4,29 @@ angular.module('services')
     .factory('clients', function($q, Drive, DropboxClient){
         var that = {};
 
-        var clients = [];
+        var clients = {
+            drive: {title: 'Google Drive', class: Drive},
+            dropbox: {title: 'Dropbox', class: DropboxClient, api: "//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.3/dropbox.min.js"}
+        };
+
+        var instances = [];
 
         var loadPromises = {};
 
         that.load = function(name) {
             // todo: verify name...
             if (!loadPromises[name]) {
-                var deferred = $q.defer();
-                var client;
+                var deferred = $q.defer(),
+                    client = clients[name];
 
                 switch (name) {
                     case 'drive':
                         // a bit ugly
                         window.gapi_loaded_deferred = deferred;
-                        client = Drive;
                         $script("//apis.google.com/js/client.js?onload=gapi_loaded");
                         break;
-                    case 'dropbox':
-                        client = DropboxClient;
-                        $script("//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.3/dropbox.min.js", function() {
+                    default:
+                        $script(client.api, function() {
                             deferred.resolve();
                         });
                         break;
@@ -31,8 +34,15 @@ angular.module('services')
 
                 loadPromises[name] = deferred.promise
                     .then(function() {
-                        that[name] = new client();
-                        clients.push(that[name]);
+                        var instance = new client.class();
+
+                        instance.name = name;
+                        instance.title = client.title;
+
+                        that[name] = instance;
+
+                        instances.push(instance);
+
                         return that[name];
                     });
             }
@@ -42,11 +52,22 @@ angular.module('services')
 
         that.get = function(activeOnly) {
             if (activeOnly) {
-                return clients.filter(function(client) { return client.isLoggedIn(); });
+                return instances.filter(function(client) { return client.isLoggedIn(); });
             }
             else {
-                return clients;
+                return instances;
             }
+        };
+
+        that.available = function() {
+            var available = [],
+                name;
+
+            for (name in clients) {
+                available.push({name: name, title: clients[name].title});
+            }
+
+            return available;
         };
 
         that.isLoaded = function (name) {
