@@ -67,6 +67,13 @@ angular.module('directives')
                 var handleSelection;
 
                 $scope.mousedown = function(e, record) {
+                    if (!record) { // clear selection on playlist mousedown
+                        if (e.target.tagName.toUpperCase() !== 'LI') {
+                            selectNone();
+                        }
+                        return;
+                    }
+
                     if (e.shiftKey) {
                         if (lastClickedRecord && lastClickedRecord.selected != record.selected) {
                             var i1 = playlist.records.indexOf(lastClickedRecord);
@@ -105,7 +112,6 @@ angular.module('directives')
                     }
 
                     lastClickedRecord = record;
-
 //                    e.preventDefault(); // no selection on double click
                 };
 
@@ -126,14 +132,6 @@ angular.module('directives')
                         selectRecord(handleSelection);
                         handleSelection =  undefined;
                     }
-                };
-
-                $scope.playlistClick = function(e, record) {
-                    if (!record) {
-                        selectNone();
-                    }
-
-                    e.stopPropagation();
                 };
 
                 function shortcut(e) {
