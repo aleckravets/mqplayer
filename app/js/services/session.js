@@ -129,7 +129,7 @@ angular.module('services')
             return autoLoginPromise;
         };
 
-        /**
+        /** // todo: update comment
          * Logs out and stops the session.
          * @returns {Promise} A promise resolved when done.
          */
@@ -137,7 +137,21 @@ angular.module('services')
             var promise;
 
             if (serviceName) {
-                promise = clients[serviceName].logout();
+                promise =
+                    clients[serviceName].logout()
+                        .finally(function() {
+                            if (that.isLoggedIn()) {
+                                for (var i = 0; i < that.tree.roots.length; i++) {
+                                    if (that.tree.roots[i].item.client === clients[serviceName]) {
+                                        that.tree.roots.splice(i, 1);
+                                        break;
+                                    }
+                                }
+                            }
+                            else {
+                                end();
+                            }
+                        });
             }
             else {
                 var promises = [];
@@ -146,13 +160,14 @@ angular.module('services')
                     promises.push(client.logout());
                 });
 
-                promise = $q.allSettled(promises);
+                promise =
+                    $q.allSettled(promises)
+                        .then(function() {
+                            end();
+                        });
             }
 
-            return promise
-                .then(function () {
-                    end();
-                });
+            return promise;
         };
 
         that.isLoggedIn = function() {

@@ -49,29 +49,6 @@ a.navbar-brand, .navbar-nav > li > a, player a {
     color: #fff !important;
 }
 
-.dropdown-menu i {
-    font-size: 13px;
-    margin-left: -10px;
-    margin-right: 5px;
-    line-height: 1em !important;
-}
-
-.dropdown-menu .client-drive i {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    margin-bottom: -2px;
-    background: url('../img/drive-14x12.png') no-repeat 50% 50%;
-}
-
-.dropdown-menu .client-dropbox i {
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    margin-bottom: -2px;
-    background: url('../img/dropbox-15x14.png') no-repeat 50% 50%;
-}
-
 .navbar-brand span * {
     vertical-align: middle;
 }
@@ -476,3 +453,57 @@ ul.tree li {
 #features li {
     margin-top: 5px;
 }
+
+/* use menu */
+.dropdown-menu .glyphicon {
+    font-size: 13px;
+    margin-left: -10px;
+    margin-right: 10px;
+}
+
+.dropdown-menu li {
+    width: 200px;
+}
+
+.dropdown-menu li.client:hover {
+    background: #F5F5F5;
+}
+
+.dropdown-menu .client {
+    cursor: pointer;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.dropdown-menu .client div {
+    margin: 0 10px 0 33px;
+}
+
+.dropdown-menu .client i {
+    display: block;
+    float: left;
+    width: 14px;
+    height: 14px;
+    margin-left: -23px;
+}
+
+.dropdown-menu .client h4 {
+    font-size: 1.2em;
+    margin: 0;
+}
+
+.dropdown-menu .client a {
+    font-size: 0.8em;
+}
+
+
+.dropdown-menu .client-drive i {
+    margin-top: 3px;
+    background: url('../img/drive-14x12.png') no-repeat 50% 50%;
+}
+
+.dropdown-menu .client-dropbox i {
+    margin-top: 4px;
+    background: url('../img/dropbox-15x14.png') no-repeat 50% 50%;
+}
+/* end of user menu */

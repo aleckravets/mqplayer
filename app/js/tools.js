@@ -18,3 +18,10 @@ function getParameterByName(name) {
 }
 
 var isFF = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+
+// hide bootstrap dropdown menu by mousedown, not on click
+$('body').on('mousedown', function(e) {
+    if ($(e.target).parents('.dropdown').length === 0) {
+        $('.dropdown').removeClass('open');
+    }
+});

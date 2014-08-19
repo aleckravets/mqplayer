@@ -61,10 +61,18 @@ angular.module('services')
 
         that.available = function() {
             var available = [],
-                name;
+                name,
+                c;
 
             for (name in clients) {
-                available.push({name: name, title: clients[name].title});
+                c = {name: name, title: clients[name].title};
+
+                if (that[name]) {
+                    alert(that[name].user);
+                    c.user = that[name].user.name;
+                }
+
+                available.push(c);
             }
 
             return available;
@@ -72,6 +80,10 @@ angular.module('services')
 
         that.isLoaded = function (name) {
             return that[name] !== undefined;
+        };
+
+        that.isLoggedIn = function(name) {
+            return that[name] !== undefined && that[name].isLoggedIn();
         };
 
         return that;

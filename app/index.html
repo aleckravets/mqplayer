@@ -20,15 +20,21 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="#/"><i class="glyphicon glyphicon-headphones"></i><span>Music Queue</span></a>
         <player ng-if="session.active" ng-cloak></player>
-        <ul class="nav navbar-nav navbar-right" ng-if="session.isLoggedIn()">
+        <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
                 <ul class="dropdown-menu" role="menu">
-                    <li ng-repeat="client in clients" class="client-{{client.name}}"><a ng-click="session.login(client.name)"><i></i>{{client.title}}</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#/settings"><i class="glyphicon glyphicon-cog"></i>Settings</a></li>
-                    <li><a ng-click="logout()"><i class="glyphicon glyphicon-log-out"></i>Logout</a></li>
+                    <li ng-repeat="client in available" class="client client-{{client.name}}">
+                        <div ng-click="toggleLogin(client.name)">
+                            <i></i>
+                            <h4>{{client.title}}</h4>
+                            <a ng-if="!clients.isLoggedIn(client.name)" ng-cloak>Login to {{client.title}}</a>
+                            <a ng-if="clients.isLoggedIn(client.name)" ng-cloak>Logout {{clients[client.name].user.name}}</a>
+                        </div>
+                    </li>
+                    <!--<li><a href="#/settings"><i class="glyphicon glyphicon-cog"></i>Settings</a></li>-->
                     <li><a href="#/about"><i class="glyphicon glyphicon-question-sign"></i>About</a></li>
+                    <li ng-class="{hidden: !session.isLoggedIn()}"><a ng-click="logout()"><i class="glyphicon glyphicon-log-out"></i>Quit</a></li>
                 </ul>
             </li>
         </ul>
