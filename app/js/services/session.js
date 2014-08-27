@@ -4,7 +4,8 @@ angular.module('services')
     .factory('session', function($q, Player, Playlist, Tree, page, helper, storage, clients, TreeNode, Item) {
         var that = {
             active: false, // indicates whether the session has started and all it's components are initialized
-            userInfo: undefined
+            userInfo: undefined,
+            state: {}
         };
 
         var autoLoginPromise;

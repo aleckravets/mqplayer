@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('directives')
-    .directive('resizeBar', function($document) {
+    .directive('resizeBar', function($document, session) {
         var startWidth, handleWidth, startX, min;
 
         var mousedown = function(e) {
@@ -23,13 +23,19 @@ angular.module('directives')
             if (startWidth + x < min)
                 return;
 
-            $("#left").css('width', startWidth + x + 'px');
-            $("#right").css('margin-left', startWidth + handleWidth + x + 'px');
+            resize(x);
+
+            session.state.sidebarWidth = x;
         };
 
         var mouseup = function () {
             $document.off('mousemove', mousemove);
             $document.off('mouseup', mouseup);
+        };
+
+        var resize = function(x) {
+            $("#left").css('width', startWidth + x + 'px');
+            $("#right").css('margin-left', startWidth + handleWidth + x + 'px');
         };
 
         return {
@@ -40,6 +46,11 @@ angular.module('directives')
             },
             link: function(scope, element, attrs) {
                 element.on('mousedown', mousedown);
+
+                // restore width
+                if (session.state.sidebarWidth) {
+                    resize(session.state.sidebarWidth);
+                }
             },
             template: '<div id="resize-bar"></div>'
         };
