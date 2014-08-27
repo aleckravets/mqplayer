@@ -23,8 +23,6 @@
             $routeProvider.when('/', {templateUrl: 'partials/player.html', controller: 'PlayerController', resolve: { auth: auth }});
             $routeProvider.when('/login', {templateUrl: 'partials/login.html', controller: 'LoginController', resolve: { auth: auth }});
             $routeProvider.when('/about', {templateUrl: 'partials/about.html'});
-            $routeProvider.when('/help', {templateUrl: 'partials/help.html'});
             $routeProvider.otherwise({redirectTo: '/'});
-//            $routeProvider.otherwise({ resolve: { test: auth}});
         });
 }());
