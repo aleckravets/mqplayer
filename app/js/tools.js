@@ -19,12 +19,12 @@ function getParameterByName(name) {
 
 var isFF = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
 
-// hide bootstrap dropdown menu on mousedown, not on click
-$(document).on('mousedown', function(e) {
-    if ($(e.target).parents('.dropdown').length === 0) {
-        $('.dropdown').removeClass('open');
-    }
-});
-
-$(document).on('click.bs.dropdown.data-api', '.accounts li', function (e) { e.stopPropagation(); })
-$(document).on('click.bs.dropdown.data-api', '.accounts button', function (e) { $('.accounts').removeClass('open'); })
+//// hide bootstrap dropdown menu on mousedown, not on click
+//$(document).on('mousedown', function(e) {
+//    if ($(e.target).parents('.dropdown').length === 0) {
+//        $('.dropdown').removeClass('open');
+//    }
+//});
+//
+//$(document).on('click.bs.dropdown.data-api', '.accounts li', function (e) { e.stopPropagation(); })
+//$(document).on('click.bs.dropdown.data-api', '.accounts button', function (e) { $('.accounts').removeClass('open'); })

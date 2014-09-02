@@ -143,7 +143,7 @@ angular.module('types')
                             self.user.name = resp.name;
                             self.user.email = resp.user.emailAddress;
                             self.user.quota = resp.quotaBytesTotal;
-                            self.user.used = resp.quotaBytesUsed;
+                            self.user.used = resp.quotaBytesUsedAggregate;
                             deferred.resolve(self.user);
                         }
                     });

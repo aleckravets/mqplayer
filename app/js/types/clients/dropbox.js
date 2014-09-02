@@ -102,6 +102,9 @@ angular.module('types')
                         }
                         else {
                             self.user.name = userInfo.name;
+                            self.user.email = userInfo.email;
+                            self.user.quota = userInfo.quota;
+                            self.user.used = userInfo.usedQuota;
                             deferred.resolve();
                         }
                     });
