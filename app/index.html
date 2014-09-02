@@ -20,28 +20,32 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="#/"><i class="glyphicon glyphicon-headphones"></i><span>Music Queue</span></a>
         <player ng-if="session.active" ng-cloak></player>
-        <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i></a>
+        <ul class="nav navbar-nav navbar-right" ng-if="session.loggedIn()">
+            <li class="accounts dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-cloud"></i> Accounts <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                    <li ng-repeat="client in available" class="client client-{{client.name}}">
-                        <div ng-click="toggleLogin(client.name)">
-                            <i></i>
+                    <li ng-repeat="client in available" class="{{client.name}}">
+                        <i></i>
+                        <div>
+                            <div class="button">
+                                <button ng-if="!clients.isLoggedIn(client.name)" ng-click="login(client.name)">Login</button>
+                                <button ng-if="clients.isLoggedIn(client.name)" ng-click="logout(client.name)">Logout</button>
+                            </div>
                             <h4>{{client.title}}</h4>
-                            <a ng-if="!clients.isLoggedIn(client.name)" ng-cloak>Login to {{client.title}}</a>
-                            <a ng-if="clients.isLoggedIn(client.name)" ng-cloak>Logout {{clients[client.name].user.name}}</a>
+                            <div ng-if="clients.isLoggedIn(client.name)">
+                                <p class="username">{{clients[client.name].user.email || clients[client.name].user.name}} </p>
+                                <p class="stats">5.82 GB (38%) of 15 GB used</p>
+                            </div>
                         </div>
                     </li>
-                    <!--<li><a href="#/settings"><i class="glyphicon glyphicon-cog"></i>Settings</a></li>-->
-                    <li><a href="#/about"><i class="glyphicon glyphicon-question-sign"></i>About</a></li>
-                    <li ng-class="{hidden: !session.isLoggedIn()}"><a ng-click="logout()"><i class="glyphicon glyphicon-log-out"></i>Quit</a></li>
                 </ul>
             </li>
+            <!--<li><a href="#/about"><i class="glyphicon glyphicon-cog"></i>Settings</a></li>-->
+            <li><a href="#/help"><i class="glyphicon glyphicon-question-sign"></i> Help</a></li>
+            <li><a ng-click="logout()"><i class="glyphicon glyphicon-log-out"></i> Quit</a></li>
         </ul>
     </div>
 </div>
-
-<div ng-if="session.isLogginIn" id="splash" class="loading-label"><div><i class="glyphicon glyphicon-headphones"></i><span></span></div></div>
 
 <div ng-view></div>
 
@@ -72,7 +76,7 @@
 <script src="js/services/page.js"></script>
 <script src="js/services/session.js"></script>
 <script src="js/services/clients.js"></script>
-<script src="js/services/storage.js"></script>
+<script src="js/services/settings.js"></script>
 <script src="js/directives/tree.js"></script>
 <script src="js/directives/player.js"></script>
 <script src="js/directives/playlist.js"></script>

@@ -71,23 +71,6 @@ a.navbar-brand, .navbar-nav > li > a, player a {
     /*color: #777;*/
 }
 
-#login-box {
-    margin: 30px auto;
-    padding: 30px;
-    width: 500px;
-    text-align: center;
-    font-size: 150%;
-}
-
-#login-box button {
-    margin-bottom: 20px;
-    font-weight: bold;
-}
-
-#login-box button .glyphicon{
-    color: #fff;
-}
-
 #left {
     float: left;
     width: 400px;
@@ -423,7 +406,7 @@ ul.tree li {
 }
 
 #splash div i {
-    font-size: 50px;
+    /*font-size: 50px;*/
 }
 
 
@@ -454,56 +437,142 @@ ul.tree li {
     margin-top: 5px;
 }
 
-/* use menu */
-.dropdown-menu .glyphicon {
-    font-size: 13px;
-    margin-left: -10px;
-    margin-right: 10px;
+
+/* end of user menu */
+
+#login {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    padding-top: 50px;
+    background-color: #4478ad;
+    text-align: center;
+}
+#login h1 {
+    font-size: 3.5em;
+    text-shadow: 0px 3px 3px #333;
+    letter-spacing: 2px;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    display: inline-block;
+    border-bottom: 1px solid #fff;
+    padding-bottom: 20px;
 }
 
-.dropdown-menu li {
-    width: 200px;
+#login-box {
+    margin: 10px auto;
+    width: 500px;
+    text-align: center;
 }
 
-.dropdown-menu li.client:hover {
+#login-box p {
+    color: #fff;
+    font-family: Arial,sans-serif;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+#login-box a {
+    display: inline-block;
+    height: 80px;
+    color: #fff;
+    vertical-align: bottom;
+    font-size: 1.5em;
+    padding: 0 15px;
+}
+
+#login-box a i {
+    background-color: #eee;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    margin: 0 auto 10px auto;
+    width: 80px;
+    height: 80px;
+    display: block;
+    border-radius: 50%;
+}
+
+#login-box a:hover i {
+    background-color: #fff;
+}
+
+#login-box a.drive i {
+    background-image: url("../img/drive-57x49.png")
+}
+
+#login-box a.dropbox i {
+    background-image: url("../img/dropbox-50x47.png")
+}
+
+/* accounts */
+
+.navbar-nav > li > .dropdown-menu {
+    margin-top: 3px;
+}
+
+.navbar-nav .glyphicon-cloud,
+.navbar-nav .glyphicon-help {
+     top: 3px;
+}
+
+.accounts ul {
+    padding: 0;
+}
+
+.accounts li {
+    width: 300px;
+    cursor: default;
+    padding: 10px 10px 10px 30px;
+    margin: 0;
+    border-bottom: 1px solid #eee;
+    overflow: hidden;
+}
+
+.accounts li:last-child {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom: none;
+}
+
+.accounts li:hover {
     background: #F5F5F5;
 }
 
-.dropdown-menu .client {
-    cursor: pointer;
-    padding: 5px 0;
-    border-bottom: 1px solid #eee;
+.accounts h4 {
+    margin: 0;
 }
 
-.dropdown-menu .client div {
-    margin: 0 10px 0 33px;
+.accounts .button {
+    float: right;
 }
 
-.dropdown-menu .client i {
+.accounts p {
+    margin: 4px 0 0 0;
+}
+.accounts .username {
+    font-size: 0.9em;
+}
+
+.accounts .stats {
+    font-size: 0.8em;
+}
+
+.accounts .dropdown-menu i {
     display: block;
     float: left;
     width: 14px;
     height: 14px;
-    margin-left: -23px;
+    margin-left: -21px;
 }
 
-.dropdown-menu .client h4 {
-    font-size: 1.2em;
-    margin: 0;
-}
-
-.dropdown-menu .client a {
-    font-size: 0.8em;
-}
-
-
-.dropdown-menu .client-drive i {
-    margin-top: 3px;
+.accounts .drive i {
+    margin-top: 2px;
     background: url('../img/drive-14x12.png') no-repeat 50% 50%;
 }
 
-.dropdown-menu .client-dropbox i {
-    margin-top: 4px;
+.accounts .dropbox i {
+    margin-top: 2px;
     background: url('../img/dropbox-15x14.png') no-repeat 50% 50%;
 }
-/* end of user menu */

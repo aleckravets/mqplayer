@@ -12,6 +12,11 @@ angular.module('types')
          */
         var cache = {};
 
+        // dropbox popup auth driver bug workaround
+        // open the auth popup, close it, open again - and do login - you'll get two callback fired
+        var loginDeferred;
+        var loginCallback;
+
         function DropboxCtor() {
             dropbox = new Dropbox.Client({ key: app_key });
             // todo: localhost?
@@ -46,19 +51,29 @@ angular.module('types')
             },
 
             login: function(immediate) {
-                var deferred = $q.defer(),
-                    self = this;
+                var self = this;
+
+                loginDeferred = $q.defer();
+
+                if (!loginCallback) {
+                    loginCallback = function (error, client) {
+                        if (client.isAuthenticated()) {
+                            loginDeferred.resolve();
+                        }
+                        else {
+                            loginDeferred.reject(error);
+                        }
+                    };
+                }
 
                 dropbox.authenticate({interactive: !immediate}, function(error, client) {
-                    if (client.isAuthenticated()) {
-                        deferred.resolve();
-                    }
-                    else {
-                        deferred.reject(error);
+                    if (loginCallback) {
+                        loginCallback(error, client);
+                        loginCallback = undefined;
                     }
                 });
 
-                return deferred.promise
+                return loginDeferred.promise
                     .then(function() {
                         return self._getUserInfo();
                     });

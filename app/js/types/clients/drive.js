@@ -99,6 +99,7 @@ angular.module('types')
                         authorized = true;
                         token = gapi.auth.getToken();
                         deferred.resolve();
+                        console.log('logged in');
                     }
                     else {
                         authorized = false;
@@ -140,6 +141,9 @@ angular.module('types')
                         }
                         else {
                             self.user.name = resp.name;
+                            self.user.email = resp.user.emailAddress;
+                            self.user.quota = resp.quotaBytesTotal;
+                            self.user.used = resp.quotaBytesUsed;
                             deferred.resolve(self.user);
                         }
                     });
@@ -182,7 +186,8 @@ angular.module('types')
              * @returns {Promise<Item>}
              */
             getItemById: function(id) {
-                var deferred = $q.defer();
+                var deferred = $q.defer(),
+                    self = this;
 
                 var request = gapi.client.drive.files.get({
                     'fileId': id
@@ -195,7 +200,7 @@ angular.module('types')
                         console.log(error);
                     }
                     else {
-                        deferred.resolve(this._getItem(resp));
+                        deferred.resolve(self._getItem(resp));
                     }
                 });
 

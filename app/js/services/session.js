@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('services')
-    .factory('session', function($q, Player, Playlist, Tree, page, helper, storage, clients, TreeNode, Item) {
+    .factory('session', function($q, Player, Playlist, Tree, page, helper, clients, TreeNode, Item, settings) {
         var that = {
-            active: false, // indicates whether the session has started and all it's components are initialized
-            userInfo: undefined,
-            state: {}
+            // todo: make private
+            active: undefined, // indicates whether the session has started and all it's components are initialized
+            state: {},
+            loading: false
         };
 
         var autoLoginPromise;
@@ -17,8 +18,6 @@ angular.module('services')
             that.player = new Player();
 
             that.active = true;
-
-            checkState();
         }
 
         function getRoot(client) {
@@ -48,34 +47,49 @@ angular.module('services')
         /**
          * Parses the "state" query parameter passed by Google Drive on "Open with..." and plays the specified files.
          */
-        function checkState() {
-            var st = getParameterByName('state');
+        function driveOpenWith() {
+            function checkState() {
+                var st = getParameterByName('state');
 
 //        st = "%7B%22ids%22%3A%5B%220B9OzzXRNwUnXVnRxU2kzQTdsUm8%22%2C%220B9OzzXRNwUnXdEpyOVJNUkxwcDg%22%5D%2C%22action%22%3A%22open%22%2C%22userId%22%3A%22103354693083460731603%22%7D";
 
-            if (st) {
-                var state = angular.fromJson(decodeURI(st));
+                if (st) {
+                    var state = angular.fromJson(decodeURI(st));
 
-//            // debug
-//            state = {
-//                "ids": [
-//                    "0B9OzzXRNwUnXVnRxU2kzQTdsUm8",
-//                    "0B9OzzXRNwUnXdEpyOVJNUkxwcDg"
-//                ],
-//                "action": "open",
-//                "userId": "103354693083460731603"
-//            };
+//                // debug
+//                state = {
+//                    "ids": [
+//                        "0B9OzzXRNwUnXVnRxU2kzQTdsUm8",
+//                        "0B9OzzXRNwUnXdEpyOVJNUkxwcDg"
+//                    ],
+//                    "action": "open",
+//                    "userId": "103354693083460731603"
+//                };
 
-                if (state.ids && state.ids.length > 0) {
-                    that.playlist.set(helper.getRecordsByItemIds(state.ids))
-                        .then(function(records) {
-                            if (records.length > 0) {
-                                that.player.playRecord(records[0]);
-                            }
-                        })
-                        .catch(function(reason) {
-                        });
+                    if (state.ids && state.ids.length > 0) {
+                        that.playlist.set(helper.getRecordsByItemIds(clients.drive, state.ids))
+                            .then(function (records) {
+                                if (records.length > 0) {
+                                    that.player.playRecord(records[0]);
+                                }
+                            })
+                            .catch(function (reason) {
+                            });
+                    }
                 }
+            }
+
+
+            // check parameters passed by drive's "Open with..."
+            // login to drive if necessary
+            if (clients.drive.isLoggedIn()) {
+                checkState();
+            }
+            else {
+                that.login('drive', true)
+                    .then(function() {
+                        checkState();
+                    });
             }
         }
 
@@ -84,16 +98,21 @@ angular.module('services')
          * @param {boolean} auto If set to "true" will try to sign in quietly by using cookies.
          * @returns {Promise<session>} A promise of started session.
          */
-        that.login = function (serviceName) {
+        that.login = function (serviceName, immediate) {
             return clients.load(serviceName)
                 .then(function(client) {
-                    return client.login()
+                    return client.login(immediate)
                         .then(function() {
                             if (!that.active) {
                                 start();
                             }
                             that.tree.roots.push(getRoot(client));
+
+                            settings.rememberService(serviceName);
                         });
+                })
+                .then(function() {
+                    driveOpenWith();
                 });
         };
 
@@ -103,28 +122,38 @@ angular.module('services')
          */
         that.autoLogin = function () {
             if (!autoLoginPromise) {
-                var services = ['drive', 'dropbox'];
+                var services = settings.get('services');
 
                 var promises = [];
 
-                services.forEach(function(serviceName) {
-                    promises.push(
-                        clients.load(serviceName)
-                            .then(function(client) {
-                                return client.login(true);
-                            })
-                    );
-                });
-
-                autoLoginPromise = $q.one(promises)
-                    .then(function(results) {
-                        start();
-
-                        // todo: iterate over results rather than clients.get(true)
-                        clients.get(true).forEach(function(client) {
-                            that.tree.roots.push(getRoot(client));
-                        });
+                if (services.length > 0) {
+                    services.forEach(function (serviceName) {
+                        promises.push(
+                            clients.load(serviceName)
+                                .then(function (client) {
+                                    return client.login(true);
+                                })
+                        );
                     });
+
+                    autoLoginPromise = $q.one(promises)
+                        .then(function (results) {
+                            start();
+
+                            // todo: iterate over results rather than clients.get(true)
+                            clients.get(true).forEach(function (client) {
+                                that.tree.roots.push(getRoot(client));
+                            });
+                        })
+                        .catch(function (reason) {
+                            that.active = false;
+                            return $q.reject(reason);
+                        });
+                }
+                else {
+                    that.active = false;
+                    autoLoginPromise = $q.reject();
+                }
             }
 
             return autoLoginPromise;
@@ -141,7 +170,9 @@ angular.module('services')
                 promise =
                     clients[serviceName].logout()
                         .finally(function() {
-                            if (that.isLoggedIn()) {
+                            settings.forgetService(serviceName);
+                            // active clients left?
+                            if (clients.get(true).length > 0) {
                                 for (var i = 0; i < that.tree.roots.length; i++) {
                                     if (that.tree.roots[i].item.client === clients[serviceName]) {
                                         that.tree.roots.splice(i, 1);
@@ -165,14 +196,15 @@ angular.module('services')
                     $q.allSettled(promises)
                         .then(function() {
                             end();
+                            settings.forgetAllServices();
                         });
             }
 
             return promise;
         };
 
-        that.isLoggedIn = function() {
-            return clients.get(true).length > 0;
+        that.loggedIn = function() {
+            return that.active;
         };
 
         return that;

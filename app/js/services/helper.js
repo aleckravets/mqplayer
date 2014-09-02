@@ -79,5 +79,9 @@ angular.module('services')
             });
         };
 
+        that.formatBytes = function(bytes) {
+            return bytes;
+        };
+
         return that;
     });

@@ -1,8 +1,7 @@
+<h1>Ultimate cloud music player</h1>
+
 <div id="login-box">
-    <p>
-        <button class="btn btn-danger" ng-click="login('drive')"><i class="glyphicon glyphicon-log-in"></i> Sign in with Google</button>
-        <br />
-        <button class="btn btn-info" ng-click="login('dropbox')"><i class="glyphicon glyphicon-log-in"></i> Sign in with Dropbox</button>
-    </p>
-    <p ng-if="session.active" ng-cloak><a ng-click="logout()">Log out</a></p>
+    <p>Choose the cloud storage to play your music from:</p>
+    <a ng-click="login('drive')" class="drive"><div><i></i>Google Drive</div></a>
+    <a ng-click="login('dropbox')" class="dropbox"><div><i></i>Dropbox</div></a>
 </div>

@@ -5,7 +5,8 @@
     <title></title>
 </head>
 <body>
-<script src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.3/dropbox.js"></script>
+<!--<script src="//cdnjs.cloudflare.com/ajax/libs/dropbox.js/0.10.3/dropbox.js"></script>-->
+<script src="bower_components"></script>
 <script>
     var dropbox = new Dropbox.Client({ key: "qfd1sjynxut1kkw"});
 
@@ -13,23 +14,25 @@
 
     function login() {
         dropbox.authenticate({interactive: true}, function(error, client) {
-//        if (client.isAuthenticated()) {
-//            console.log('authed');
-//            console.log(client);
-//        }
-//        else {
-//            console.log(error);
-//        }
+            if (client.isAuthenticated()) {
+                console.log('logged in');
+                console.log(client);
+            }
+            else {
+                console.log(error);
+            }
             console.log('done');
         });
     }
 
     function logout() {
-        dropbox.signOut();
+        dropbox.signOut(function() {
+            console.log('logged out');
+        });
     }
 </script>
-<a onclick="login()">Log in</a>
+<button onclick="login()">Log in</button>
 <br>
-<a onclick="logout()">Log out</a>
+<button onclick="logout()">Log out</button>
 </body>
 </html>

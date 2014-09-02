@@ -68,7 +68,7 @@ angular.module('services')
                 c = {name: name, title: clients[name].title};
 
                 if (that[name]) {
-                    alert(that[name].user);
+//                    alert(that[name].user);
                     c.user = that[name].user.name;
                 }
 
