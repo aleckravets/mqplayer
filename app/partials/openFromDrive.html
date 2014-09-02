@@ -1,0 +1,7 @@
+<div ng-if="loading" id="loading" class="loading-label"><div><i class="glyphicon glyphicon-headphones"></i><span>Loading...</span></div></div>
+<div ng-if="!loading" id="text">
+    <p>You are trying to play files from Google Drive. Please log in to continue.
+        <button ng-click="login()">Login with Google</button>
+        <button ng-click="cancel()">Cancel</button>
+    </p>
+</div>

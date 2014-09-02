@@ -99,7 +99,6 @@ angular.module('types')
                         authorized = true;
                         token = gapi.auth.getToken();
                         deferred.resolve();
-                        console.log('logged in');
                     }
                     else {
                         authorized = false;

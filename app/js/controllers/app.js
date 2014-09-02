@@ -11,8 +11,6 @@ angular.module('app')
 
         $scope.session = session;
 
-//        $scope.clients = clients;
-
         $scope.login = function(service) {
             session.login(service);
         };
@@ -23,6 +21,7 @@ angular.module('app')
 
         $scope.accountsOpen = false;
 
+        // ACCOUNTS
         $scope.toggleAccounts = function(show) {
             if (show !== undefined) {
                 $scope.accountsOpen = show;
@@ -46,4 +45,7 @@ angular.module('app')
                 $scope.toggleAccounts(false);
             });
         });
+        // END OF ACCOUNTS
+
+
     });
