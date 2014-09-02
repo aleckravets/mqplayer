@@ -7,9 +7,11 @@
 //    }];
 
     angular.module('app')
-        .config(function($routeProvider) {
-            $routeProvider.when('/', {templateUrl: 'partials/home.html', controller: 'HomeController'});
+        .config(function($routeProvider, $locationProvider) {
+            $routeProvider.when('/', {templateUrl: 'partials/home.html', controller: 'HomeController', resolve: {openWith: openWith}});
             $routeProvider.when('/help', {templateUrl: 'partials/help.html'});
             $routeProvider.otherwise({redirectTo: '/'});
+
+            $locationProvider.html5Mode(true);
         });
 }());
