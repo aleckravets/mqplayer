@@ -2,8 +2,10 @@
 
 angular.module('app')
     .controller('AccountsController', function($scope, clients, helper) {
+        $scope.loading = true;
+
         $scope.services =
-            clients.available().map(function(srv) {
+            clients.available().map(function (srv) {
                 var service = {
                     name: srv.name,
                     title: srv.title,
@@ -23,4 +25,6 @@ angular.module('app')
 
                 return service;
             });
+
+        $scope.loading = false;
     });

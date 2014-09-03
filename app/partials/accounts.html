@@ -1,4 +1,5 @@
 <ul class="dropdown-menu" ng-controller="AccountsController">
+    <li ng-if="loading">Loading...</li>
     <li ng-repeat="service in services" class="{{service.name}}">
         <i></i>
         <div>
