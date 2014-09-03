@@ -20,7 +20,9 @@ angular.module('types')
         function DropboxCtor() {
             dropbox = new Dropbox.Client({ key: app_key });
             // todo: localhost?
-            dropbox.authDriver(new Dropbox.AuthDriver.Popup({receiverUrl: "http://localhost/app/dropbox_oauth.html"}));
+            var protocol = $location.host() == 'localhost' ? 'http' : 'https';
+            var url = protocol + '://' + $location.host() + '/dropbox_oauth.html';
+            dropbox.authDriver(new Dropbox.AuthDriver.Popup({receiverUrl: url}));
             this.user = {};
         }
 
