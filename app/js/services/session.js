@@ -36,7 +36,7 @@ angular.module('services')
             that.player = undefined;
             that.tree = undefined;
             that.playlist = undefined;
-            page.setTitle('Music Queue');
+            page.setTitle();
 
             // do not try to auto relogin on implicit logout
             var d = $q.defer();

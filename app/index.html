@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="description" content="Music Player for Google Drive" />
-    <title ng-bind="page.title()">Music Queue</title>
+    <title ng-bind="page.title()">MQ Player</title>
     <link href="favicon.ico" rel="shortcut icon" type="image/ico" />
 
     <!-- build:css css/lib.css -->
@@ -20,7 +20,7 @@
 <body ng-class="session.player.state">
 <div class="navbar navbar-fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/"><i class="glyphicon glyphicon-headphones"></i><span>Music Queue</span></a>
+        <a class="navbar-brand" href="/"><i class="glyphicon glyphicon-headphones"></i><span>MQ Player</span></a>
         <player ng-if="session.active" ng-cloak></player>
         <ul class="nav navbar-nav navbar-right" ng-if="session.loggedIn()">
             <li class="accounts dropdown" ng-class="{open: accountsOpen}">
