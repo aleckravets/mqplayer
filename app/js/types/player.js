@@ -53,18 +53,23 @@ angular.module('types')
                 this.audio.pause();
                 this.audio.src = ''; // todo: set to undefined for IE
 
-                record.item.getUrl().then(function(url) {
-                    self.loadedmetadata = function() {
-                        self.audio.play();
-                        self.state = 'playing';
-                        deferred.resolve();
-                    };
+                record.item.getUrl()
+                    .then(function(url) {
+                        self.loadedmetadata = function() {
+                            self.audio.play();
+                            self.state = 'playing';
+                            deferred.resolve();
+                        };
 
-                    self.audio.src = url;
-                    self.currentRecord = record;
-                });
+                        self.audio.src = url;
+                        self.currentRecord = record;
 
-                page.setTitle(record.item.name);
+                        page.setTitle(record.item.name);
+                    })
+                    .catch(function(error) {
+                        console.log('Failed to get file url: ' + error);
+                        self.stop();
+                    });
 
                 return deferred.promise;
             },
@@ -73,6 +78,8 @@ angular.module('types')
                 this.audio.src = '';
                 this.currentRecord = undefined;
                 this.state = 'stopped';
+
+                page.setTitle();
             },
             isPaused: function() {
                 return this.audio.paused;

@@ -31,20 +31,24 @@ angular.module('types')
         };
 
         Ctor.prototype = {
-            // todo: cache result
             getUrl: function() {
-                var deferred = $q.defer();
+                var self = this;
 
                 if (typeof this.url === 'function') {
-                    this.url().then(function(url) {
-                         deferred.resolve(url);
-                    });
+                    if (this._url) {
+                        return $q.when(this._url);
+                    }
+                    else {
+                        return this.url()
+                            .then(function (url) {
+                                self._url = url; // cache result on success to prevent calling it again next time
+                                return url;
+                            });
+                    }
                 }
                 else {
-                    deferred.resolve(this.url);
+                    return $q.when(this.url);
                 }
-
-                return deferred.promise;
             },
 
             getChildren: function() {
