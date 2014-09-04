@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('directives')
-    .directive('playlist', function($document, $timeout, session, Record, helper) {
+    .directive('playlist', function($document, $timeout, session, Record, helper, $rootScope) {
         return {
             restrict: 'E',
             scope: {},
@@ -58,10 +58,8 @@ angular.module('directives')
                 };
 
                 $scope.dblclick = function(e, record) {
-                    player.playRecord(record)
-                        .then(function() {
-                            $timeout(angular.noop);
-                        });
+                    $rootScope.$broadcast('player.timeupdate', 0);
+                    $timeout(function() {player.playRecord(record); }, 0); // this is odd - gotta investigate
                 };
 
                 var handleSelection;
