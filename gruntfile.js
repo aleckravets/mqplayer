@@ -9,7 +9,6 @@ module.exports = function(grunt) {
             build: {
                 files: [
                     {expand: true, dot: true, dest: 'dist', cwd: 'app', src: ['img/*', 'partials/*', 'tmpl/*', '*.*']},
-                    {expand: true, dest: 'dist', cwd: 'app/bower_components/bootstrap/dist', src: ['fonts/*']},
                 ]
             },
             debug: {
