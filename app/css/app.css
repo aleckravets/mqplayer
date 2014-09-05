@@ -335,15 +335,15 @@ ul.tree li {
 }
 
 .buffering #playlist li.current .glyphicon-time {
-    display: inline;
+    display: inline-block;
 }
 
 .playing #playlist li.current i.glyphicon-play {
-    display: inline;
+    display: inline-block;
 }
 
 .paused #playlist li.current i.glyphicon-pause {
-    display: inline;
+    display: inline-block;
 }
 
 #playlist li:nth-child(2n+1) {
