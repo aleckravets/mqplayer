@@ -66,7 +66,7 @@ angular.module('directives')
 
                 $scope.mousedown = function(e, record) {
                     if (!record) { // clear selection on playlist mousedown
-                        if (e.target.tagName.toUpperCase() !== 'LI') {
+                        if(e.target.id === 'playlist') {
                             selectNone();
                         }
                         return;
