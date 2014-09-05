@@ -53,6 +53,8 @@ angular.module('types')
                 this.audio.pause();
                 this.audio.src = ''; // todo: set to undefined for IE
 
+                this.currentRecord = record;
+
                 record.item.getUrl()
                     .then(function(url) {
                         self.loadedmetadata = function() {
@@ -62,7 +64,6 @@ angular.module('types')
                         };
 
                         self.audio.src = url;
-                        self.currentRecord = record;
 
                         page.setTitle(record.item.name);
                     })
