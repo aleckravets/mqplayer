@@ -24,7 +24,7 @@
     <div class="container-fluid">
         <a class="navbar-brand" href="/"><i class="glyphicon glyphicon-headphones"></i><span>MQ Player</span></a>
         <player ng-if="session.active" ng-cloak></player>
-        <ul class="nav navbar-nav navbar-right" ng-if="session.loggedIn()">
+        <ul class="nav navbar-nav navbar-right" ng-if="session.loggedIn()" ng-cloak>
             <li class="accounts dropdown" ng-class="{open: accountsOpen}">
                 <a ng-click="toggleAccounts()"><i class="glyphicon glyphicon-cloud"></i> Accounts <span class="caret"></span></a>
                 <div ng-include="'partials/accounts.html'" ng-if="accountsOpen" include-replace></div>
