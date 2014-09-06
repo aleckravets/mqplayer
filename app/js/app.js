@@ -128,4 +128,6 @@ angular.module('app').config(function ($provide) {
             el.replaceWith(el.children());
         }
     };
-});
+}).run(function ($templateCache, $http) {
+        $http.get('partials/accounts.html', { cache: $templateCache });
+    });
