@@ -18,7 +18,7 @@ angular.module('app')
                     _goHome();
                 }
             })
-            .catch(function() {
+            .finally(function() {
                 $scope.loading = false;
             });
 
