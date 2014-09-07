@@ -1,12 +1,13 @@
 'use strict';
 
 angular.module('types')
-    .factory('Drive', function($http, $q, $timeout, Item){
+    .factory('Drive', function($http, $q, $timeout, Item, $interval){
         var clientid = '97071318931-0pqadkdeov03b36bhthnri1n3h64eg7d.apps.googleusercontent.com',
             scopes = ['https://www.googleapis.com/auth/drive.readonly'],
             authorized,
             token,
-            userInfoPromise;
+            userInfoPromise,
+            refreshToken;
 
         /**
          * Child items cached by parent item's id.
@@ -92,8 +93,6 @@ angular.module('types')
                 var deferred = $q.defer(),
                     self = this;
 
-                // todo: getToken? to check the state of session
-
                 gapi.auth.authorize({'client_id': clientid, 'scope': scopes.join(' '), 'immediate': immediate || false}, function(resp) {
                     if (resp && !resp.error) {
                         authorized = true;
@@ -109,11 +108,21 @@ angular.module('types')
 
                 return deferred.promise
                     .then(function() {
+                        // refresh token every 45 mins
+                        // https://developers.google.com/api-client-library/javascript/help/faq#refresh
+                        refreshToken = $interval(function() {
+                            console.log(new Date(), 'refreshing the token...');
+                            gapi.auth.authorize({'client_id': clientid, 'scope': scopes.join(' '), 'immediate': true});
+                        }, 45 * 60 * 1000);
+
                         return self._getUserInfo();
                     });
             },
 
             logout: function() {
+                $interval.cancel(refreshToken);
+                refreshToken = undefined;
+
                 // reset cache
                 cache = {};
 
