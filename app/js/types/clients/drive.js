@@ -50,16 +50,12 @@ angular.module('types')
              */
             _getItems: function(query) {
                 var self = this,
-                    deferred = $q.defer();
+                    deferred = $q.defer(),
+                    attempts = 0;
 
                 var retrievePageOfFiles = function (request, result) {
                     request.execute(function (resp) {
-                        if (resp.error) {
-                            var error = resp.error.code + " " + resp.error.message;
-                            deferred.reject(error);
-                            console.log(error);
-                        }
-                        else {
+                        if (!resp.error) {
                             if (resp.items) {
                                 result = result.concat(resp.items);
                             }
@@ -70,6 +66,28 @@ angular.module('types')
                             }
                             else {
                                 deferred.resolve(result);
+                            }
+                        }
+                        else {
+                            if (resp.error.code == 401 && attempts < 1) {
+                                // trying to refresh token and execute the same request again
+                                console.log(new Date(), 'Refreshing the token...');
+                                self._refreshToken()
+                                    .then(function() {
+                                        retrievePageOfFiles(request, result);
+                                    })
+                                    .catch(function() {
+                                        var error = resp.error.code + " " + resp.error.message;
+                                        deferred.reject('Failed to refresh token:' + error);
+                                        console.log(error);
+                                    });
+
+                                attempts++;
+                            }
+                            else {
+                                var error = resp.error.code + " " + resp.error.message;
+                                deferred.reject(error);
+                                console.log(error);
                             }
                         }
                     });
@@ -108,21 +126,26 @@ angular.module('types')
 
                 return deferred.promise
                     .then(function() {
-                        // refresh token every 45 mins
-                        // https://developers.google.com/api-client-library/javascript/help/faq#refresh
-                        refreshToken = $interval(function() {
-                            console.log(new Date(), 'refreshing the token...');
-                            gapi.auth.authorize({'client_id': clientid, 'scope': scopes.join(' '), 'immediate': true});
-                        }, 45 * 60 * 1000);
-
                         return self._getUserInfo();
                     });
             },
 
-            logout: function() {
-                $interval.cancel(refreshToken);
-                refreshToken = undefined;
+            _refreshToken: function() {
+                var deferred = $q.defer();
 
+                gapi.auth.authorize({'client_id': clientid, 'scope': scopes.join(' '), 'immediate': true}, function(resp) {
+                    if (!resp.error) {
+                        deferred.resolve();
+                    }
+                    else {
+                        deferred.reject(resp.error.code + " " + resp.error.message);
+                    }
+                });
+
+                return deferred.promise;
+            },
+
+            logout: function() {
                 // reset cache
                 cache = {};
 
