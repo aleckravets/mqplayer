@@ -14,12 +14,12 @@
     height: 100%;
 }
 
-#controls {
+#controls-1 {
     margin: 12px 0 12px 40px;
     white-space: nowrap;
 }
 
-#controls a {
+#controls-1 a {
     margin-right: 10px;
     font-size: 21px;
     line-height: 21px;
@@ -97,6 +97,7 @@ a.navbar-brand, .navbar-nav > li > a, player a {
     /*border: 1px solid red;*/
     height: 100%;
     margin-left: 405px;
+    position: relative;
 }
 
 /*********************************** TREE ***********************************/
@@ -185,26 +186,39 @@ ul.tree li {
     padding: 11px;
 }
 
-#controls a {
+.controls {
+
+}
+
+#controls-1 a {
     display: block;
     float: left;
     height: 100%;
     width: 34px;
 }
 
-#controls2 {
+#controls-2 {
     margin: 13px 10px 0 0;
 }
-#controls3 {
+
+#controls-3 {
     margin: 14px 0; /* reduce the original margin of nav-text so the bottom border fits */
 }
 
-#controls2 a {
+#controls-4 {
+    margin: 14px 0 0 50px; /* reduce the original margin of nav-text so the bottom border fits */
+}
+#controls-4 .glyphicon-trash {
+    font-size: 13px;
+}
+
+#controls-2 a {
     font-size: 18px;
 }
 
-#controls2 a,
-#controls3 a{
+#controls-2 a,
+#controls-3 a,
+#controls-4 a {
     width: 16px;
     display: block;
     float: left;
@@ -212,27 +226,27 @@ ul.tree li {
     margin-left: 20px;
 }
 
-#controls3 a.pressed{
+#controls-3 a.pressed{
     border-bottom: 2px solid #fff;
 }
 
 
-#controls a.pause {
+#controls-1 a.pause {
     display: none;
 }
 
-.playing #controls a.play,
-.buffering #controls a.play {
+.playing #controls-1 a.play,
+.buffering #controls-1 a.play {
     display: none;
 }
 
-.playing #controls a.pause,
-.buffering #controls a.pause{
+.playing #controls-1 a.pause,
+.buffering #controls-1 a.pause{
     display: block;
 }
 
-.paused #controls a.play,
-.stopped #controls a.play {
+.paused #controls-1 a.play,
+.stopped #controls-1 a.play {
     display: block;
 }
 
@@ -307,6 +321,11 @@ ul.tree li {
     background: white;
 }
 
+#playlist-inner {
+    border: 1px solid red;
+    position: relative;
+}
+
 #playlist ul {
     list-style-type: none;
     padding-left: 0;
@@ -369,17 +388,42 @@ ul.tree li {
     border-top: 2px dotted #000;
 }
 
-#playlist-buttons {
-        position: absolute;
-        right: -30px;
-        padding: 0 5px;
-    font-size: 18px;
-
+#playlist-menu-wrapper {
+    position: absolute;
+    right: 0;
+    top: 10%;
+    /*float: right;*/
+    /*margin-top: 10px;*/
+    /*margin-right: -5px;*/
+    width: 40px;
 }
 
-#playlist-buttons a {
-    cursor: pointer;
+#playlist-menu {
+    position: fixed;
+    width: 40px;
+    background:  #285e8e;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
 }
+
+#playlist-menu a {
+    color: #fff;
+    display: block;
+    text-decoration: none;
+    line-height: 0px;
+    padding: 8px 0 8px 12px;
+    border-bottom: 1px solid #fff;
+}
+
+#playlist-menu a:last-child {
+    border-bottom: none;
+}
+
+#playlist-menu .glyphicon {
+    font-size: 16px;
+}
+
+/****** PLAYLIST END **********/
 
 .loading-label {
     position: absolute;

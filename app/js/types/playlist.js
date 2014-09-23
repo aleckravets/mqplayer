@@ -119,6 +119,19 @@ angular.module('types')
              */
             toggleRepeat: function() {
                 this.repeat = !this.repeat;
+            },
+
+            selectAll: function() {
+                var self = this;
+                this.selectedRecords.empty();
+                this.records.forEach(function(record) {
+                    record.selected = true;
+                    self.selectedRecords.push(record);
+                });
+            },
+
+            removeSelected: function() {
+
             }
         };
 

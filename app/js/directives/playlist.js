@@ -15,7 +15,7 @@ angular.module('directives')
 
                 var lastClickedRecord;
 
-                var deleteSelected = function() {
+                $scope.deleteSelected = function() {
                     if (playlist.selectedRecords.length == playlist.records.length) {
                         playlist.records.empty();
                     }
@@ -28,12 +28,16 @@ angular.module('directives')
                     playlist.selectedRecords.empty();
                 };
 
-                var selectAll = function() {
+                $scope.selectAll = function() {
                     playlist.selectedRecords.empty();
                     playlist.records.forEach(function(record) {
                         record.selected = true;
                         playlist.selectedRecords.push(record);
                     });
+                };
+
+                $scope.clear = function() {
+                    playlist.clear();
                 };
 
                 var selectNone = function() {
@@ -154,11 +158,11 @@ angular.module('directives')
 //                            }
 //                            break;
                         case 46: // delete
-                            deleteSelected();
+                            $scope.deleteSelected();
                             break;
                         case 65: // A
                             if (e.ctrlKey) {
-                                selectAll();
+                                $scope.selectAll();
                             }
                             break;
                         case 38: // up arrow

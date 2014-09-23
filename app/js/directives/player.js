@@ -95,6 +95,10 @@ angular.module('directives')
                     $scope.state.currentTime = 0;
                 };
 
+                $scope.selectAll = function() {
+
+                };
+
                 $scope.$on('player.trackended', function(event, data) {
                     $timeout(function(){
                         $scope.next(true);
