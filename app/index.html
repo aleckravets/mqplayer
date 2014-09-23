@@ -76,34 +76,8 @@
 <script src="js/directives/droppable.js"></script>
 <!-- endbuild -->
 
-<!--[if lt IE 9]>
-
-<![endif]-->
-
-<!-- fix drag and drop missing for elements other than <a></a> in IE 9 -->
 <!--[if IE 9]>
-<script>
-    var draggable;
-
-    $(document).on("mousedown", "[draggable]", function (e) {
-        draggable = e.target;
-    });
-
-    $(document).on("mouseup", function (e) {
-        draggable = undefined;
-    });
-
-    $(document).on("mousemove", function (e) {
-        if (draggable) {
-            draggable.dragDrop();
-            draggable = undefined;
-        }
-    });
-
-    $(document).on("selectstart", "[draggable]", function (e) {
-        return false;
-    });
-</script>
+<script src="js/ie9.js"></script>
 <![endif]-->
 </body>
 </html>
