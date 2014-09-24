@@ -27,19 +27,11 @@ angular.module('types')
              */
             _getItem: function(data){
                 var type = data.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file';
-                var item = new Item(this, data.id, data.title, type);
+                var shared = data.sharedWithMeDate ? true : false;
+                var url = type === 'file' ? data.webContentLink : undefined;
+                var parentid = !shared ? data.parents && data.parents[0].id : undefined;
 
-                item.shared = data.sharedWithMeDate ? true : false;
-
-                if (item.type == 'file') {
-                    item.url = data.webContentLink;
-                }
-
-                if (!item.shared) {
-                    item.parentid = data.parents && data.parents[0].id;
-                }
-
-                return item;
+                return new Item(this, data.id, data.title, type, url, parentid, shared);
             },
 
             /**

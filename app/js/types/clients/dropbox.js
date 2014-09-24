@@ -33,22 +33,8 @@ angular.module('types')
              */
             _getItem: function(entry) {
                 var type = entry.isFolder ? 'dir' : 'file';
-                var item = new Item(this, entry.path, entry.name, type);
 
-                item.shared = false;
-                var self = this;
-
-                if (item.type === 'file') {
-                    item.url = function () {
-                        return self._getFileUrl(entry.path);
-                    };
-                }
-
-//                if (!item.shared) {
-//                    item.parentid = data.parents && data.parents[0].id;
-//                }
-
-                return item;
+                return new Item(this, entry.path, entry.name, type, undefined, undefined, false);
             },
 
             login: function(immediate) {
@@ -151,7 +137,7 @@ angular.module('types')
                 return cache[path];
             },
 
-            _getFileUrl: function(path) {
+            getFileUrl: function(path) {
 //                return url + '?getfile=' + encodeURIComponent(path);
                 var deferred = $q.defer();
 

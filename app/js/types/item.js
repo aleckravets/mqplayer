@@ -11,7 +11,7 @@ angular.module('types')
          * @param {integer} parentid
          * @constructor
          */
-        function Ctor(client, id, name, type, url, parentid) {
+        function Ctor(client, id, name, type, url, parentid, shared) {
             this.client = client;
             this.id = id;
             this.name = name;
@@ -19,6 +19,7 @@ angular.module('types')
 //            this.expandable = type === 'dir' || type == 'root';
             this.url = url;
             this.parentid = parentid;
+            this.shared = shared;
         }
 
         Ctor.sort = function (a, b) {
@@ -31,15 +32,19 @@ angular.module('types')
         };
 
         Ctor.prototype = {
-            getUrl: function() {
+            getUrl: function(immediate) {
+                if (immediate) {
+                    return typeof this.client.getFileUrl === 'function' ? this._url : this.url;
+                }
+
                 var self = this;
 
-                if (typeof this.url === 'function') {
+                if (typeof this.client.getFileUrl === 'function') {
                     if (this._url) {
                         return $q.when(this._url);
                     }
                     else {
-                        return this.url()
+                        return this.client.getFileUrl()
                             .then(function (url) {
                                 self._url = url; // cache result on success to prevent calling it again next time
                                 return url;

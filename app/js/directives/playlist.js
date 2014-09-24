@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('directives')
-    .directive('playlist', function($document, $timeout, session, Record, helper, $rootScope) {
+    .directive('playlist', function($document, $timeout, session, Record, helper, $rootScope, appData) {
         return {
             restrict: 'E',
             scope: {},
@@ -38,6 +38,24 @@ angular.module('directives')
 
                 $scope.clear = function() {
                     playlist.clear();
+                };
+
+                $scope.showSave = function() {
+                    $scope.saveVisible = true;
+                };
+
+                $scope.hideSave = function() {
+                    $scope.saveVisible = false;
+                };
+
+                $scope.save = function(name) {
+                    if (!name) {
+                        return false;
+                    }
+
+                    helper.savePlaylist(name, session.playlist);
+
+                    return true;
                 };
 
                 var selectNone = function() {

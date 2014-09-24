@@ -413,15 +413,25 @@ ul.tree li {
     line-height: 0px;
     padding: 8px 0 8px 12px;
     border-bottom: 1px solid #fff;
+    font-size: 16px;
 }
 
 #playlist-menu a:last-child {
     border-bottom: none;
 }
 
-#playlist-menu .glyphicon {
-    font-size: 16px;
+#playlist-save {
+    background: #fff;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    padding: 5px;
+    position: absolute;
+    right: 45px;
+    width: 250px;
+    margin-top: -5px;
 }
+
 
 /****** PLAYLIST END **********/
 

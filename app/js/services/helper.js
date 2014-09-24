@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('services')
-    .factory('helper', function($q, Record) {
+    .factory('helper', function($q, Record, appData, Item) {
         var that = { };
 
         /**
@@ -76,6 +76,32 @@ angular.module('services')
 
                     return result;
                 });
+            });
+        };
+
+        that.savePlaylist = function(name, playlist) {
+            appData.playlists[name] = playlist.records.map(function(record) {
+                return {
+                    service: record.item.client.name,
+                    id: record.item.id,
+                    name: record.item.name,
+                    type: record.item.type,
+                    url: record.item.getUrl(true)
+                };
+            });
+
+            appData.save();
+        };
+
+        that.restorePlaylist = function(name, playlist) {
+            playlist.clear();
+
+            var data = appData.playlists[name];
+
+            playlist.records = data.map(function(_item) {
+                var client;
+                var item = new Item(client, _item.id, _item.name, _item.type, _item.url);
+                return new Record(item);
             });
         };
 

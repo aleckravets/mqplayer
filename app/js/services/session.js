@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('services')
-    .factory('session', function($q, Player, Playlist, Tree, page, helper, clients, TreeNode, Item, settings) {
+    .factory('session', function($q, Player, Playlist, Tree, page, helper, clients, TreeNode, Item, appData) {
         var that = {
             // todo: make private
             active: undefined, // indicates whether the session has started and all it's components are initialized
@@ -108,7 +108,8 @@ angular.module('services')
                             }
                             that.tree.roots.push(getRoot(client));
 
-                            settings.rememberService(serviceName);
+                            appData.services.add(serviceName);
+                            appData.save();
                         });
                 })
                 .then(function() {
@@ -122,7 +123,7 @@ angular.module('services')
          */
         that.autoLogin = function () {
             if (!autoLoginPromise) {
-                var services = settings.get('services');
+                var services = appData.services;
 
                 var promises = [];
 
@@ -170,7 +171,8 @@ angular.module('services')
                 promise =
                     clients[serviceName].logout()
                         .finally(function() {
-                            settings.forgetService(serviceName);
+                            appData.services.remove(serviceName);
+                            appData.save();
                             // active clients left?
                             if (clients.get(true).length > 0) {
                                 for (var i = 0; i < that.tree.roots.length; i++) {
@@ -196,7 +198,8 @@ angular.module('services')
                     $q.allSettled(promises)
                         .then(function() {
                             end();
-                            settings.forgetAllServices();
+                            appData.services = [];
+                            appData.save();
                         });
             }
 

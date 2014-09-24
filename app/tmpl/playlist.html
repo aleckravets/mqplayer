@@ -1,12 +1,4 @@
 <div id="playlist" ng-mousedown="mousedown($event)" droppable>
-    <div id="playlist-menu-wrapper">
-        <div id="playlist-menu">
-            <a title="clear playlist (Ctrl+a, Del)" ng-click="clear()"><i class="glyphicon glyphicon-remove"></i></a>
-            <a title="remove selected from playlist (Del)" ng-click="deleteSelected()"><i class="glyphicon glyphicon-trash"></i></a>
-            <a title="save current playlist..."><i class="glyphicon glyphicon-floppy-disk"></i></a>
-            <a title="open playlist..."><i class="glyphicon glyphicon-folder-open"></i></a>
-        </div>
-    </div>
     <div ng-if="playlist.loading" class="loading-label"><div><i class="glyphicon glyphicon-time"></i><span>Loading...</span></div></div>
     <div ng-if="!playlist.loading && playlist.records.length == 0" class="loading-label"><div><i class="glyphicon glyphicon-list"></i><span>Playlist is empty</span></div></div>
     <ul ng-class="{dragover: dragover}">
@@ -19,4 +11,20 @@
             <span><i class="glyphicon glyphicon-time"></i><i class="glyphicon glyphicon-play"></i><i class="glyphicon glyphicon-pause"></i>&nbsp;{{record.item.name}}</span>
         </li>
     </ul>
+    <div id="playlist-menu-wrapper">
+        <div id="playlist-menu">
+            <a title="clear playlist (Ctrl+a, Del)" ng-click="clear()"><i class="glyphicon glyphicon-remove"></i></a>
+            <a title="remove selected from playlist (Del)" ng-click="deleteSelected()"><i class="glyphicon glyphicon-trash"></i></a>
+            <div id="playlist-save">
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" placeholder="playlist name..." ng-model="saveName"/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" ng-click="save(saveName)">Save</button>
+                    </span>
+                </div>
+            </div>
+            <a title="save current playlist..." ng-click="showSave()"><i class="glyphicon glyphicon-floppy-disk"></i></a>
+            <a title="open playlist..."><i class="glyphicon glyphicon-folder-open"></i></a>
+        </div>
+    </div>
 </div>

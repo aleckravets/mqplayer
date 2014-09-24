@@ -10,6 +10,20 @@ Array.prototype.spliceArray = function(start, deleteCount, insertItems) {
     Array.prototype.splice.apply(this, [start, deleteCount].concat(insertItems));
 };
 
+Array.prototype.remove = function(item) {
+    var index = this.indexOf(item);
+
+    if (index !== -1) {
+        this.splice(index, 1);
+    }
+};
+
+Array.prototype.add = function(item) {
+    if (this.indexOf(item) === -1) {
+        this.push(item);
+    }
+};
+
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
