@@ -47,5 +47,11 @@ angular.module('app')
         });
         // END OF ACCOUNTS
 
+        $scope.mousedown = function() {
+            $scope.$emit('mousedown');
+        };
 
+        $scope.keydown = function(e) {
+            $scope.$emit('keydown', e.keyCode);
+        };
     });

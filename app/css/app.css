@@ -1,6 +1,15 @@
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
 }
+.checkbox {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.form-control[disabled] {
+    cursor: default;
+}
+
 #content-wrapper {
     position: absolute;
     top: 0;
@@ -351,7 +360,7 @@ ul.tree li {
     /*border: 1px solid red;*/
 }
 
-#playlist li i {
+#playlist > ul li i {
     display: none;
     margin-left: -14px;
 }
@@ -420,19 +429,61 @@ ul.tree li {
     border-bottom: none;
 }
 
-#playlist-save {
+#playlist-manager {
     background: #fff;
     border-radius: 3px;
     border: 1px solid #ccc;
     box-shadow: 0 6px 12px rgba(0,0,0,.175);
-    padding: 5px;
+    padding: 10px;
     position: absolute;
     right: 45px;
+    top: 0;
     width: 250px;
-    margin-top: -5px;
 }
 
+#playlist-manager h4 {
+    margin-top: 0;
+}
 
+#playlist-manager li {
+    margin: 0;
+    padding: 2px 5px;
+}
+
+#playlist-manager li > div {
+    clear: both;
+    overflow: hidden;
+}
+
+#playlist-manager li .name {
+    display: block;
+    float: left;
+    width: 200px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+#playlist-manager li:hover {
+    background: #eee;
+}
+
+#playlist-manager li a.remove {
+    display: block;
+    float: right;
+    width: 15px;
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+#playlist-manager .playlists {
+    height: 240px;
+    overflow: auto;
+}
+
+#playlist-manager .buttons {
+    margin-top: 10px;
+    text-align: center;
+}
 /****** PLAYLIST END **********/
 
 .loading-label {
@@ -571,7 +622,7 @@ ul.tree li {
 
 .navbar-nav .glyphicon-cloud,
 .navbar-nav .glyphicon-help {
-     top: 3px;
+    top: 3px;
 }
 
 .accounts ul {

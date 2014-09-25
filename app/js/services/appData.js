@@ -34,8 +34,8 @@ angular.module('services')
 
         appData.restore();
 
-        console.log('appData', appData);
-        console.log('storage', storage);
+//        console.log('appData', appData);
+//        console.log('storage', storage);
 
         return appData;
     });

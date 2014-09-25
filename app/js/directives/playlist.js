@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('directives')
-    .directive('playlist', function($document, $timeout, session, Record, helper, $rootScope, appData) {
+    .directive('playlist', function($document, $timeout, session, Record, helper, $rootScope) {
         return {
             restrict: 'E',
             scope: {},
@@ -12,6 +12,10 @@ angular.module('directives')
 
                 $scope.player = player;
                 $scope.playlist = playlist;
+
+                this.getScope = function() {
+                    return $scope;
+                };
 
                 var lastClickedRecord;
 
@@ -40,23 +44,23 @@ angular.module('directives')
                     playlist.clear();
                 };
 
-                $scope.showSave = function() {
-                    $scope.saveVisible = true;
+                 $scope.openManager = function(e) {
+                    $scope.managerVisible = true;
                 };
 
-                $scope.hideSave = function() {
-                    $scope.saveVisible = false;
+                $scope.closeManager = function() {
+                    $scope.managerVisible = false;
                 };
 
-                $scope.save = function(name) {
-                    if (!name) {
-                        return false;
+                $scope.openManagerMousedown = function(e) {
+                    if ($scope.managerVisible) {
+                        e.stopPropagation(); // no blinking
                     }
-
-                    helper.savePlaylist(name, session.playlist);
-
-                    return true;
                 };
+
+                $rootScope.$on('mousedown', function() {
+                    $scope.closeManager();
+                });
 
                 var selectNone = function() {
                     playlist.selectedRecords.forEach(function(record) {

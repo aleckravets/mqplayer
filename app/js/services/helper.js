@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('services')
-    .factory('helper', function($q, Record, appData, Item) {
+    .factory('helper', function($q, Record, appData, Item, clients) {
         var that = { };
 
         /**
@@ -99,8 +99,7 @@ angular.module('services')
             var data = appData.playlists[name];
 
             playlist.records = data.map(function(_item) {
-                var client;
-                var item = new Item(client, _item.id, _item.name, _item.type, _item.url);
+                var item = new Item(clients[_item.service], _item.id, _item.name, _item.type, _item.url);
                 return new Record(item);
             });
         };

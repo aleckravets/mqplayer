@@ -15,16 +15,8 @@
         <div id="playlist-menu">
             <a title="clear playlist (Ctrl+a, Del)" ng-click="clear()"><i class="glyphicon glyphicon-remove"></i></a>
             <a title="remove selected from playlist (Del)" ng-click="deleteSelected()"><i class="glyphicon glyphicon-trash"></i></a>
-            <div id="playlist-save">
-                <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" placeholder="playlist name..." ng-model="saveName"/>
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" ng-click="save(saveName)">Save</button>
-                    </span>
-                </div>
-            </div>
-            <a title="save current playlist..." ng-click="showSave()"><i class="glyphicon glyphicon-floppy-disk"></i></a>
-            <a title="open playlist..."><i class="glyphicon glyphicon-folder-open"></i></a>
+            <a title="saved playlists" ng-click="openManager()" ng-mousedown="openManagerMousedown($event)"><i class="glyphicon glyphicon-star"></i></a>
         </div>
+        <playlist-manager ng-if="managerVisible"></playlist-manager>
     </div>
 </div>
