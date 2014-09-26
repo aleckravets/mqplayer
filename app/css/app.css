@@ -429,6 +429,8 @@ ul.tree li {
     border-bottom: none;
 }
 
+/* PLAYLIST MANAGER */
+
 #playlist-manager {
     background: #fff;
     border-radius: 3px;
@@ -483,6 +485,15 @@ ul.tree li {
 #playlist-manager .buttons {
     margin-top: 10px;
     text-align: center;
+}
+
+#playlist-manager .empty {
+    text-align: center;
+    margin-top: -140px;
+    margin-left: -10px;
+    width: 100%;
+    position: absolute;
+    color: #aaa;
 }
 /****** PLAYLIST END **********/
 

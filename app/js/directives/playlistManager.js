@@ -63,6 +63,10 @@ angular.module('directives')
                     return true;
                 };
 
+                $scope.isEmpty = function() {
+                    return isEmpty(playlists);
+                };
+
                 $scope.close = function() {
                     playlistScope.closeManager();
                 };

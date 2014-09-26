@@ -1,5 +1,5 @@
 <div id="playlist-manager" ng-mousedown="mousedown($event)">
-    <h4>Playlists</h4>
+    <!--<h4>Playlists</h4>-->
     <div class="playlists">
         <ul>
             <li ng-repeat="(name, playlist) in playlists">
@@ -10,7 +10,7 @@
             </li>
         </ul>
     </div>
-    <div class="empty" ng-if="isEmpty(playlists)">No saved playlists</div>
+    <div class="empty" ng-show="isEmpty()">No saved playlists</div>
     <div class="save input-group input-group-sm">
         <input type="text" class="form-control" ng-keydown="keydown($event)" ng-disabled="saveDisabled()" placeholder="save current playlist as..." maxlength="50" ng-model="saveName"/>
         <span class="input-group-btn">
