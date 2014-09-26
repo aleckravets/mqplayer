@@ -5,8 +5,8 @@
             <li ng-repeat="(name, playlist) in playlists">
                 <div>
                     <a class="name" ng-click="loadPlaylist(name)">{{name}}</a>
-                    <a class="remove" ng-click="remove(name)" title="delete"><i class="glyphicon glyphicon-remove"></i></a>
                 </div>
+                <a class="remove" ng-click="remove(name)" title="delete"><i class="glyphicon glyphicon-remove"></i></a>
             </li>
         </ul>
     </div>

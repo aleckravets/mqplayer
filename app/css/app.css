@@ -450,19 +450,18 @@ ul.tree li {
 #playlist-manager li {
     margin: 0;
     padding: 2px 5px;
+    overflow: hidden;
 }
 
 #playlist-manager li > div {
-    clear: both;
-    overflow: hidden;
+    float: left;
+    width: 100%;
 }
 
 #playlist-manager li .name {
     display: block;
-    float: left;
-    width: 200px;
-    cursor: pointer;
     text-decoration: none;
+    margin-right: 15px;
 }
 
 #playlist-manager li:hover {
@@ -473,6 +472,7 @@ ul.tree li {
     display: block;
     float: right;
     width: 15px;
+    margin-left: -15px;
     font-size: 10px;
     margin-top: 5px;
 }
