@@ -44,7 +44,7 @@ angular.module('types')
                         return $q.when(this._url);
                     }
                     else {
-                        return this.client.getFileUrl()
+                        return this.client.getFileUrl(self.id)
                             .then(function (url) {
                                 self._url = url; // cache result on success to prevent calling it again next time
                                 return url;
