@@ -4,7 +4,7 @@ angular.module('directives')
     .directive('playlistManager', function(appData, $rootScope, helper, session) {
         return {
             restrict: 'E',
-            require: '^playlist',
+            require: 'playlist',
             scope: {},
             replace: true,
             link: function($scope, element, attrs, playlistController) {

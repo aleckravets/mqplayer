@@ -73,6 +73,10 @@ a.navbar-brand, .navbar-nav > li > a, player a {
     font-size: 14px;
 }
 
+.navbar-right i {
+    font-size: 12px;
+}
+
 .tree .glyphicon,
 #playlist li .glyphicon {
     color: #285e8e;
@@ -432,15 +436,12 @@ ul.tree li {
 /* PLAYLIST MANAGER */
 
 #playlist-manager {
-    background: #fff;
-    border-radius: 3px;
-    border: 1px solid #ccc;
-    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    width: 450px;
     padding: 10px;
-    position: fixed;
-    margin-left: -254px;
-    /*top: 0;*/
-    width: 250px;
+}
+
+#playlist-manager ul {
+    padding: 0;
 }
 
 #playlist-manager h4 {
@@ -478,7 +479,7 @@ ul.tree li {
 }
 
 #playlist-manager .playlists {
-    height: 240px;
+    height: 340px;
     overflow: auto;
 }
 
@@ -489,7 +490,7 @@ ul.tree li {
 
 #playlist-manager .empty {
     text-align: center;
-    margin-top: -140px;
+    margin-top: -170px;
     margin-left: -10px;
     width: 100%;
     position: absolute;

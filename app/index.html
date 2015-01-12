@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="css/app.css"/>
     <!-- endbuild -->
 
-    <base href="/">
+    <!--<base href="/">-->
 </head>
 <body ng-class="session.player.state">
 <div class="navbar navbar-fixed-top">
@@ -25,9 +25,13 @@
         <a class="navbar-brand" href="/"><i class="glyphicon glyphicon-headphones"></i><span>MQ Player</span></a>
         <player ng-if="session.active" ng-cloak></player>
         <ul class="nav navbar-nav navbar-right" ng-if="session.loggedIn()" ng-cloak>
-            <li class="accounts dropdown" ng-class="{open: accountsOpen}">
-                <a ng-click="toggleAccounts()"><i class="glyphicon glyphicon-cloud"></i> Accounts <span class="caret"></span></a>
-                <div ng-include="'partials/accounts.html'" ng-if="accountsOpen" include-replace></div>
+            <li class="playlists dropdown" ng-class="{open: isMenuWidgetOpen('playlistManager')}">
+                <a ng-click="toggleMenuWidget('playlistManager')"><i class="glyphicon glyphicon-align-justify"></i> Playlists <span class="caret"></span></a>
+                <div ng-include="'tmpl/playlistManager.html'" ng-if="isMenuWidgetOpen('playlistManager')" include-replace></div>
+            </li>
+            <li class="accounts dropdown" ng-class="{open: isMenuWidgetOpen('accounts')}">
+                <a ng-click="toggleMenuWidget('accounts')"><i class="glyphicon glyphicon-cloud"></i> Accounts <span class="caret"></span></a>
+                <div ng-include="'partials/accounts.html'" ng-if="isMenuWidgetOpen('accounts')" include-replace></div>
             </li>
             <li><a href="/help"><i class="glyphicon glyphicon-question-sign"></i> Help</a></li>
             <li><a ng-click="logout()"><i class="glyphicon glyphicon-log-out"></i> Quit</a></li>
@@ -53,6 +57,7 @@
 <script src="js/q.js"></script>
 <script src="js/controllers/app.js"></script>
 <script src="js/controllers/accounts.js"></script>
+<script src="js/controllers/playlistManager.js"></script>
 <script src="js/controllers/home.js"></script>
 <script src="js/controllers/openFromDrive.js"></script>
 <script src="js/routing.js"></script>

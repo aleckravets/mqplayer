@@ -1,4 +1,4 @@
-<div id="playlist-manager" ng-mousedown="mousedown($event)">
+<div id="playlist-manager" class="dropdown-menu" ng-controller="PlaylistManagerController" ng-mousedown="mousedown($event)">
     <!--<h4>Playlists</h4>-->
     <div class="playlists">
         <ul>
@@ -11,10 +11,27 @@
         </ul>
     </div>
     <div class="empty" ng-show="isEmpty()">No saved playlists</div>
-    <div class="save input-group input-group-sm">
-        <input type="text" class="form-control" ng-keydown="keydown($event)" ng-disabled="saveDisabled()" placeholder="save current playlist as..." maxlength="50" ng-model="saveName"/>
-        <span class="input-group-btn">
-            <button class="btn btn-primary" ng-click="save(saveName)" ng-disabled="saveDisabled()">Save</button>
+    <div class="controls">
+        <span class="input-group">
+            <input type="text" class="form-control" placeholder="Search for...">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Go!</button>
+      </span>
+        </span><!-- /input-group -->
+        <span class="btn-group">
+        <button class="btn btn-primary" ng-click="save(saveName)" ng-disabled="saveDisabled()">Save</button>
         </span>
+
+
+        <!--<span class="input-group input-group-sm">-->
+            <!--<input type="text" class="form-control" ng-keydown="keydown($event)" ng-disabled="saveDisabled()" placeholder="save current playlist as..." maxlength="50" ng-model="saveName"/>-->
+            <!--<span class="input-group-btn">-->
+                <!--<button class="btn btn-primary" ng-click="save(saveName)" ng-disabled="saveDisabled()">Save</button>-->
+            <!--</span>-->
+        <!--</span>-->
+            <!--<span class="btn-group">-->
+                <!--<button class="btn btn-primary" ng-click="save(saveName)" ng-disabled="saveDisabled()">Save</button>-->
+            <!--</span>-->
+
     </div>
 </div>

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app')
-    .controller('AppController', function($scope, $location, $timeout, session, page, helper, clients, $document, $route) {
+    .controller('AppController', function($scope, $location, $timeout, session, page, helper, clients, $document, $route, $rootScope) {
         // preload clients
         clients.available().forEach(function(client) {
             clients.load(client.name);
@@ -19,7 +19,32 @@ angular.module('app')
             session.logout(service);
         };
 
-        $scope.accountsOpen = false;
+        // MENU WIDGETS
+
+        $scope.currentMenuWidget = null;
+
+        $scope.isMenuWidgetOpen = function(widget) {
+            return $scope.currentMenuWidget == widget;
+        };
+
+        $scope.toggleMenuWidget = function(widget) {
+            if ($scope.currentMenuWidget == widget) {
+                $scope.currentMenuWidget = null;
+            }
+            else {
+                $scope.currentMenuWidget = widget;
+            }
+        };
+
+        $scope.closeMenuWidget = function() {
+            $scope.toggleMenuWidget(null);
+        };
+
+        $rootScope.$on('keydown', function(e, keyCode) {
+            if (keyCode == 27) {
+                $scope.closeMenuWidget();
+            }
+        });
 
         // ACCOUNTS
         $scope.toggleAccounts = function(show) {
@@ -31,11 +56,21 @@ angular.module('app')
             }
         };
 
+        // PLAYLISTS
+        $scope.togglePlaylistManager = function(show) {
+            if (show !== undefined) {
+                $scope.playlistManagerOpen = show;
+            }
+            else {
+                $scope.playlistManagerOpen = !$scope.playlistManagerOpen;
+            }
+        };
+
         // hm...
         $(document).on('mousedown', function(e) {
             if ($(e.target).parents('.dropdown').length === 0) {
                 $scope.$apply(function() {
-                    $scope.toggleAccounts(false);
+                    $scope.closeMenuWidget();
                 });
             }
         });
