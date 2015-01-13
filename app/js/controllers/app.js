@@ -24,6 +24,7 @@ angular.module('app')
         $scope.currentMenuWidget = null;
 
         $scope.isMenuWidgetOpen = function(widget) {
+//            return widget == 'playlistManager';
             return $scope.currentMenuWidget == widget;
         };
 

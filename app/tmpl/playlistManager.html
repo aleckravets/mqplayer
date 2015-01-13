@@ -1,37 +1,30 @@
 <div id="playlist-manager" class="dropdown-menu" ng-controller="PlaylistManagerController" ng-mousedown="mousedown($event)">
-    <!--<h4>Playlists</h4>-->
     <div class="playlists">
+        <div class="row header">
+            <div class="col col-md-1 chk">
+                <input type="checkbox" ng-model="allSelected" ng-change="selectAll(allSelected)">
+            </div>
+            <div class="col col-md-8">Playlist name</div>
+            <div class="col col-md-2">Records</div>
+            <div class="col col-md-1"></div>
+        </div>
         <ul>
             <li ng-repeat="(name, playlist) in playlists">
-                <div>
-                    <a class="name" ng-click="loadPlaylist(name)">{{name}}</a>
+                <div class="row">
+                    <div class="col col-md-1 chk" ng-click="playlist.selected = !playlist.selected">
+                        <input type="checkbox" ng-checked="playlist.selected">
+                    </div>
+                    <div class="col col-md-8" ng-click="playlist.selected = !playlist.selected; $event.stopPropagation();"><a class="name" ng-click="loadPlaylist(name); $event.stopPropagation()">{{name}}</a></div>
+                    <div class="col col-md-2 records">{{playlist.length}}</div>
+                    <div class="col col-md-1"><a class="remove" ng-click="delete(name)" title="delete"><i class="glyphicon glyphicon-remove"></i></a></div>
                 </div>
-                <a class="remove" ng-click="remove(name)" title="delete"><i class="glyphicon glyphicon-remove"></i></a>
             </li>
         </ul>
     </div>
     <div class="empty" ng-show="isEmpty()">No saved playlists</div>
-    <div class="controls">
-        <span class="input-group">
-            <input type="text" class="form-control" placeholder="Search for...">
-      <span class="input-group-btn">
-        <button class="btn btn-default" type="button">Go!</button>
-      </span>
-        </span><!-- /input-group -->
-        <span class="btn-group">
-        <button class="btn btn-primary" ng-click="save(saveName)" ng-disabled="saveDisabled()">Save</button>
-        </span>
-
-
-        <!--<span class="input-group input-group-sm">-->
-            <!--<input type="text" class="form-control" ng-keydown="keydown($event)" ng-disabled="saveDisabled()" placeholder="save current playlist as..." maxlength="50" ng-model="saveName"/>-->
-            <!--<span class="input-group-btn">-->
-                <!--<button class="btn btn-primary" ng-click="save(saveName)" ng-disabled="saveDisabled()">Save</button>-->
-            <!--</span>-->
-        <!--</span>-->
-            <!--<span class="btn-group">-->
-                <!--<button class="btn btn-primary" ng-click="save(saveName)" ng-disabled="saveDisabled()">Save</button>-->
-            <!--</span>-->
-
+    <div class="controls form-inline">
+        <input type="text" class="form-control input-sm" ng-keydown="keydown($event)" ng-disabled="saveDisabled()" placeholder="save current playlist as..." maxlength="50" ng-model="saveName"/>
+        <a class="btn btn-primary btn-sm" ng-click="save(saveName)" ng-disabled="saveDisabled()">Save</a>
+        <a class="btn btn-default btn-sm" ng-click="delete()" ng-disabled="isEmpty(playlists)">Delete</a>
     </div>
 </div>

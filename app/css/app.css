@@ -436,22 +436,52 @@ ul.tree li {
 /* PLAYLIST MANAGER */
 
 #playlist-manager {
-    width: 450px;
+    width: 400px;
     padding: 10px;
+}
+
+#playlist-manager .controls {
+    white-space: nowrap;
+}
+
+#playlist-manager .controls input {
+    width: 270px;
 }
 
 #playlist-manager ul {
     padding: 0;
 }
 
-#playlist-manager h4 {
-    margin-top: 0;
+#playlist-manager .header {
+    background-color: #eee;
+    border-bottom: 1px solid #ccc;
+    padding: 2px;
 }
 
 #playlist-manager li {
     margin: 0;
-    padding: 2px 5px;
+    padding: 2px;
     overflow: hidden;
+}
+
+#playlist-manager .chk {
+    width: 25px;
+}
+
+#playlist-manager .row {
+    margin: 0;
+}
+
+#playlist-manager li .row .remove {
+    color: darkred;
+}
+
+#playlist-manager li .row .records {
+    text-align: center;
+}
+
+#playlist-manager .col {
+    padding: 0;
 }
 
 #playlist-manager li > div {
@@ -460,13 +490,13 @@ ul.tree li {
 }
 
 #playlist-manager li .name {
-    display: block;
+    /*display: block;*/
     text-decoration: none;
     margin-right: 15px;
 }
 
 #playlist-manager li:hover {
-    background: #eee;
+    background: #e5efef;
 }
 
 #playlist-manager li a.remove {
@@ -479,7 +509,11 @@ ul.tree li {
 }
 
 #playlist-manager .playlists {
-    height: 340px;
+}
+#playlist-manager .playlists ul {
+    margin: 5px 0;
+    min-height: 50px;
+    max-height: 250px;
     overflow: auto;
 }
 
@@ -490,10 +524,10 @@ ul.tree li {
 
 #playlist-manager .empty {
     text-align: center;
-    margin-top: -170px;
     margin-left: -10px;
-    width: 100%;
+    margin-top: -40px;
     position: absolute;
+    width: 100%;
     color: #aaa;
 }
 /****** PLAYLIST END **********/

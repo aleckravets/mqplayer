@@ -11,12 +11,30 @@ angular.module('app')
             $scope.close();
         };
 
+        $scope.selectAll = function(selected) {
+            var name;
+            for (name in playlists) {
+                playlists[name].selected = selected;
+            }
+        };
+
         $scope.mousedown = function(e) {
             e.stopPropagation();
         };
 
-        $scope.remove = function(name) {
-            delete appData.playlists[name];
+        $scope.delete = function(name) {
+            if (name) {
+                delete appData.playlists[name];
+            }
+            else {
+                var k;
+                for (k in playlists) {
+                    if (playlists[k].selected) {
+                        delete appData.playlists[k];
+                    }
+                }
+            }
+
             appData.save();
         };
 
