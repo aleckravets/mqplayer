@@ -1,5 +1,6 @@
-package com.mqplayer.web.app;
+package com.mqplayer.web.app.db;
 
+import com.mqplayer.web.app.domain.Playlist;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

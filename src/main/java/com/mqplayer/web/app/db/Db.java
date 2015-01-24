@@ -1,14 +1,11 @@
-package com.mqplayer.web.app;
+package com.mqplayer.web.app.db;
 
+import com.mqplayer.web.app.domain.Playlist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -26,10 +23,10 @@ public class Db {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    public List<Playlist> getPlaylists(int accountId) {
+    public List<Playlist> getPlaylists(int userId) {
         return jdbcTemplate.query(
-                "select * from playlist where id = ?",
-                new Object[] {accountId},
+                "select * from playlist where userId = ?",
+                new Object[] {userId},
                 new PlaylistRowMapper());
     }
 }

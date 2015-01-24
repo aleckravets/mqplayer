@@ -1,15 +1,26 @@
+CREATE TABLE `user` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `service` (
+  `id` varchar(10) PRIMARY KEY
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `account` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `serviceId` varchar(10) NOT NULL,
   `email` varchar(255) NOT NULL,
   `token` varchar(255),
-  UNIQUE KEY `email` (`email`)
+  `userId` bigint NOT NULL,
+  UNIQUE KEY `accountId_email` (`serviceId`, `email`),
+  CONSTRAINT `FK_account_service_id` FOREIGN KEY (`serviceId`) REFERENCES `service` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `playlist` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `accountId` bigint NOT NULL,
-  CONSTRAINT `FK_playlist_account_id` FOREIGN KEY (`accountId`) REFERENCES `account` (`id`)
+  `userId` bigint NOT NULL,
+  CONSTRAINT `FK_playlist_user_id` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `record` (

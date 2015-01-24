@@ -1,7 +1,9 @@
 package com.mqplayer.web.app;
 
+import com.mqplayer.web.app.clients.DriveClient;
+import com.mqplayer.web.app.db.Db;
+import com.mqplayer.web.app.domain.Playlist;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,18 +19,18 @@ public class AppController {
     @Autowired
     private Db db;
 
-    @Autowired
-    private AuthManager authManager;
-
     @RequestMapping("/playlists")
     public List<Playlist> getPlaylists() {
-        int accountId = 1;
+        // get authenticated user's id
+        int userId = 1;
 
-        return db.getPlaylists(accountId);
+        return db.getPlaylists(userId);
     }
 
     @RequestMapping("/about")
-    public Object about(@RequestParam String token) throws IOException {
-        return authManager.checkToken(token);
+    public Object about(@RequestParam String token) {
+        return "in app";
+//        DriveClient client = new DriveClient();
+//        return client.getEmailByToken(token);
     }
 }
