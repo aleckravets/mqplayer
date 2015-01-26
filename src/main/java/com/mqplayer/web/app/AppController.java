@@ -39,5 +39,8 @@ public class AppController {
 
     @RequestMapping("/token")
     public void registerToken(@RequestParam String service) {
+        // get email by token
+        // update account's token by email
+        // merge users
     }
 }
