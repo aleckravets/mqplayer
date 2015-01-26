@@ -8,12 +8,12 @@ CREATE TABLE `service` (
 
 CREATE TABLE `account` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `serviceId` varchar(10) NOT NULL,
+  `service` varchar(10) NOT NULL,
   `email` varchar(255) NOT NULL,
   `token` varchar(255),
   `userId` bigint NOT NULL,
-  UNIQUE KEY `accountId_email` (`serviceId`, `email`),
-  CONSTRAINT `FK_account_service_id` FOREIGN KEY (`serviceId`) REFERENCES `service` (`id`)
+  UNIQUE KEY `accountId_email` (`service`, `email`),
+  CONSTRAINT `FK_account_service_id` FOREIGN KEY (`service`) REFERENCES `service` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `playlist` (

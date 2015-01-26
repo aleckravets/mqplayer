@@ -1,14 +1,16 @@
 package com.mqplayer.web.app;
 
-import com.mqplayer.web.app.clients.DriveClient;
 import com.mqplayer.web.app.db.Db;
 import com.mqplayer.web.app.domain.Playlist;
+import com.mqplayer.web.app.domain.User;
+import com.mqplayer.web.app.security.SecurityContext;
+import com.mqplayer.web.app.security.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -19,18 +21,23 @@ public class AppController {
     @Autowired
     private Db db;
 
-    @RequestMapping("/playlists")
-    public List<Playlist> getPlaylists() {
-        // get authenticated user's id
-        int userId = 1;
+    @Autowired
+    private SecurityManager securityManager;
 
-        return db.getPlaylists(userId);
+    @Autowired
+    private HttpServletRequest httpServletRequest;
+
+    private SecurityContext getSecurityContext() {
+        return securityManager.getSecurityContext(httpServletRequest);
     }
 
-    @RequestMapping("/about")
-    public Object about(@RequestParam String token) {
-        return "in app";
-//        DriveClient client = new DriveClient();
-//        return client.getEmailByToken(token);
+    @RequestMapping("/playlists")
+    public List<Playlist> getPlaylists() {
+        User user = getSecurityContext().getUser();
+        return db.getPlaylists(user.getId());
+    }
+
+    @RequestMapping("/token")
+    public void registerToken(@RequestParam String service) {
     }
 }
