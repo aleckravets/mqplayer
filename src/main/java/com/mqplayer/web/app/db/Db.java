@@ -38,8 +38,24 @@ public class Db {
     public User getUserByToken(String service, String token) {
         return queryForObject(
                 "select u.* from user u join account a on u.id = a.userId where a.service = ? and a.token = ?",
-                new Object[]{service, token},
-                User.class
+                User.class,
+                service, token
+        );
+    }
+
+    public Account getAccountByToken(String service, String token) {
+        return this.queryForObject(
+                "select * from account where service = ? and token = ?",
+                Account.class,
+                service, token
+        );
+    }
+
+    public Account getAccountByEmail(String service, String email) {
+        return this.queryForObject(
+                "select * from account where service = ? and email = ?",
+                Account.class,
+                service, email
         );
     }
 
@@ -50,7 +66,7 @@ public class Db {
     }
 
     public User addUser(User user) {
-        Long userId = this.<Long>insert("insert user null", "id", new Object[]{});
+        Long userId = this.<Long>insert("insert user select null", "id", new Object[]{});
         user.setId(userId);
         return user;
     }
@@ -80,7 +96,7 @@ public class Db {
         return jdbcTemplate.query(sql, args, new BeanPropertyRowMapper<T>(clazz));
     }
 
-    private <T> T queryForObject(String sql, Object[] args, Class<T> clazz) {
+    private <T> T queryForObject(String sql, Class<T> clazz, Object... args) {
         return queryForObject(sql, args, new BeanPropertyRowMapper<T>(clazz));
     }
 

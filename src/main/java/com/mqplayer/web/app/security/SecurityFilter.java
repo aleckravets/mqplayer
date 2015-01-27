@@ -44,7 +44,7 @@ public class SecurityFilter implements Filter {
 
         // no authorization for token registration
         String path = httpServletRequest.getRequestURI();
-        if (!path.startsWith("/test")) {
+        if (!path.startsWith("/token")) {
             if (securityContext.getUser() == null) {
                 securityManager.unauthorized(httpServletResponse);
                 return;

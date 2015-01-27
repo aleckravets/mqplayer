@@ -11,8 +11,10 @@ import com.mqplayer.web.app.domain.User;
 import com.mqplayer.web.app.security.SecurityContext;
 import com.mqplayer.web.app.security.SecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +54,7 @@ public class AppController {
     }
 
     @RequestMapping("/token")
+    @ResponseStatus(HttpStatus.OK)
     public void registerToken(@RequestParam String service) {
         Client client = Client.resolve(service);
 
@@ -65,15 +68,28 @@ public class AppController {
         String token = tokens.get(service);
 
         try {
-            String email = client.getEmailByToken(tokens.get(service));
+            User tokenUser = db.getUserByToken(service, token);
+
+            if (tokenUser == null) {
+                String email = client.getEmailByToken(tokens.get(service));
+                Account account = db.getAccountByEmail(service, email);
+
+            }
+
+            if (account != null) {
+                email = account.getEmail();
+            }
+            else {
+
+            }
+
             if (db.updateToken(email, token)) {
                 // re-assign user's account (found by token) to the currently logged in user
                 User tokenUser = db.getUserByToken(service, token);
                 if (!tokenUser.equals(currentUser)) {
                     db.mergeUsers(currentUser, tokenUser);
                 }
-            }
-            else {
+            } else {
                 if (currentUser == null) {
                     currentUser = new User();
                     db.addUser(currentUser);

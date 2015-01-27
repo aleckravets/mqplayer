@@ -10,6 +10,9 @@ public class Account {
     private String token;
     private long userId;
 
+    public Account() {
+    }
+
     public Account(String service, String email, String token, long userId) {
         this.service = service;
         this.email = email;
