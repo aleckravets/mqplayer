@@ -68,9 +68,30 @@ public class AppController {
         String token = tokens.get(service);
 
         try {
+            // get $account from db by token
+            // if $account == null
+                // get email from service
+                // get $account from db by email
+                // update token
+
+            // if $account != null
+                // get user by $account
+                // if there is current user
+                    // if current user <> token's user
+                    // merge accounts
+                // else
+                    // put token's user to security context
+            // else
+                // if there is no current user
+                    // create new user and put it to security context
+                // create new $account
+                // assign new $account to current user
+
+
             User tokenUser = db.getUserByToken(service, token);
 
             if (tokenUser == null) {
+
                 String email = client.getEmailByToken(tokens.get(service));
                 Account account = db.getAccountByEmail(service, email);
 
