@@ -2,6 +2,7 @@ package com.mqplayer.web.app;
 
 import com.mqplayer.web.app.clients.Client;
 import com.mqplayer.web.app.clients.DriveClient;
+import com.mqplayer.web.app.clients.DropboxClient;
 import com.mqplayer.web.app.db.Db;
 import com.mqplayer.web.app.domain.Account;
 import com.mqplayer.web.app.domain.AppException;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -41,6 +43,12 @@ public class AppController {
     public List<Playlist> getPlaylists() {
         User user = getSecurityContext().getUser();
         return db.getPlaylists(user.getId());
+    }
+
+    @RequestMapping("/test")
+    public Object test() throws IOException {
+        DropboxClient client = new DropboxClient();
+        return client.getEmailByToken("mazYxVq5DKQAAAAAAAAK0qEFXjlWyx2CNyYXqx7F76W0B49eKIoPstQhSz-wVQRI");
     }
 
     @RequestMapping("/token")

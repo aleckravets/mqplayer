@@ -44,7 +44,7 @@ public class SecurityFilter implements Filter {
 
         // no authorization for token registration
         String path = httpServletRequest.getRequestURI();
-        if (!path.startsWith("/token")) {
+        if (!path.startsWith("/test")) {
             if (securityContext.getUser() == null) {
                 securityManager.unauthorized(httpServletResponse);
                 return;
@@ -56,6 +56,10 @@ public class SecurityFilter implements Filter {
 
     private Map<String, String> parseTokens(String authorizationString) throws IOException {
         Map<String, String> tokens = null;
+
+        if (authorizationString == null) {
+            return tokens;
+        }
 
         try {
             tokens = objectMapper.readValue(authorizationString, Map.class);
