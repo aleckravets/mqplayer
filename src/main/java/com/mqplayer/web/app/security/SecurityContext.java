@@ -3,6 +3,7 @@ package com.mqplayer.web.app.security;
 import com.mqplayer.web.app.domain.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author akravets
@@ -11,7 +12,7 @@ public class SecurityContext {
     /**
      * Current request tokens
      */
-    private List<Token> tokens;
+    private Map<String, String> tokens;
 
     /**
      * Authorized user of the current request
@@ -26,11 +27,11 @@ public class SecurityContext {
         this.user = user;
     }
 
-    public List<Token> getTokens() {
+    public Map<String, String> getTokens() {
         return tokens;
     }
 
-    public void setTokens(List<Token> tokens) {
+    public void setTokens(Map<String, String> tokens) {
         this.tokens = tokens;
     }
 }

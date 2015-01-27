@@ -17,11 +17,11 @@ import java.io.IOException;
  * @author akravets
  *
  */
-public class DriveClient implements Client{
+public class DriveClient extends Client{
     protected static final HttpTransport TRANSPORT = new NetHttpTransport();
     protected static final JsonFactory JSON_FACTORY = new JacksonFactory();
 
-    public String getEmailByToken(String token) {
+    public String getEmailByToken(String token) throws IOException {
         GoogleCredential credential =
                 new GoogleCredential.Builder()
                 .build()
@@ -35,13 +35,12 @@ public class DriveClient implements Client{
             About about = drive.about().get().execute();
             email = about.getUser().getEmailAddress();
         }
-        catch(IOException exception){
-            if (exception instanceof GoogleJsonResponseException && ((GoogleJsonResponseException) exception).getStatusCode() == 401) {
+        catch(GoogleJsonResponseException exception){
+            if (exception.getStatusCode() == 401) {
                 // unauthorized
+                // log ?
             }
-            else {
-                throw new RuntimeException(exception);
-            }
+            throw exception;
         }
 
         return email;

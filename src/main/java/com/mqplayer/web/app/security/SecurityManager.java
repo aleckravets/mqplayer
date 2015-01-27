@@ -4,16 +4,12 @@ import com.mqplayer.web.app.db.Db;
 import com.mqplayer.web.app.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
-import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 /**
  * @author akravets
@@ -32,19 +28,19 @@ public class SecurityManager {
      * @param tokens
      * @return
      */
-    public boolean tryAuthorize(SecurityContext context, List<Token> tokens) {
-        context.setTokens(tokens);
+    public boolean tryAuthorize(SecurityContext securityContext, Map<String, String> tokens) {
+        securityContext.setTokens(tokens);
 
-        for (Token token : tokens) {
-            User user = db.getUserByToken(token.getService(), token.getToken());
+        for (Map.Entry<String, String> entry : tokens.entrySet()) {
+            User user = db.getUserByToken(entry.getKey(), entry.getValue());
 
             if (user != null) {
-                context.setUser(user);
+                securityContext.setUser(user);
                 break;
             }
         }
 
-        return context.getUser() != null;
+        return securityContext.getUser() != null;
     }
 
     public void setSecurityContext(HttpServletRequest request, SecurityContext context) {

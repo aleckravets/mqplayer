@@ -13,7 +13,8 @@ CREATE TABLE `account` (
   `token` varchar(255),
   `userId` bigint NOT NULL,
   UNIQUE KEY `accountId_email` (`service`, `email`),
-  CONSTRAINT `FK_account_service_id` FOREIGN KEY (`service`) REFERENCES `service` (`id`)
+  CONSTRAINT `FK_account_service_id` FOREIGN KEY (`service`) REFERENCES `service` (`id`),
+  CONSTRAINT `FK_account_user_id` FOREIGN KEY (`userId`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `playlist` (
@@ -30,3 +31,12 @@ CREATE TABLE `record` (
   `playlistId` bigint,
   CONSTRAINT `FK_record_playlist_id` FOREIGN KEY (`playlistId`) REFERENCES `playlist` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+insert service
+  select 'drive' union
+  select 'dropbox';
+
+insert user select 1;
+
+insert account (service, email, token, userid)
+  select 'drive', 'alec.kravets@gmail.com', '123', 1;

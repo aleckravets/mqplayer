@@ -1,6 +1,10 @@
 package com.mqplayer.web.app;
 
+import com.mqplayer.web.app.clients.Client;
+import com.mqplayer.web.app.clients.DriveClient;
 import com.mqplayer.web.app.db.Db;
+import com.mqplayer.web.app.domain.Account;
+import com.mqplayer.web.app.domain.AppException;
 import com.mqplayer.web.app.domain.Playlist;
 import com.mqplayer.web.app.domain.User;
 import com.mqplayer.web.app.security.SecurityContext;
@@ -11,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author akravets
@@ -39,8 +45,37 @@ public class AppController {
 
     @RequestMapping("/token")
     public void registerToken(@RequestParam String service) {
-        // get email by token
-        // update account's token by email
-        // merge users
+        Client client = Client.resolve(service);
+
+        Map<String, String> tokens = getSecurityContext().getTokens();
+        User currentUser = getSecurityContext().getUser();
+
+        if (!tokens.containsKey(service)) {
+            throw new AppException(String.format("Unknown service (%s)", service));
+        }
+
+        String token = tokens.get(service);
+
+        try {
+            String email = client.getEmailByToken(tokens.get(service));
+            if (db.updateToken(email, token)) {
+                // re-assign user's account (found by token) to the currently logged in user
+                User tokenUser = db.getUserByToken(service, token);
+                if (!tokenUser.equals(currentUser)) {
+                    db.mergeUsers(currentUser, tokenUser);
+                }
+            }
+            else {
+                if (currentUser == null) {
+                    currentUser = new User();
+                    db.addUser(currentUser);
+                    getSecurityContext().setUser(currentUser);
+                }
+                db.addAccount(new Account(service, email, token, currentUser.getId()));
+            }
+        }
+        catch (IOException exception) {
+            throw new AppException("Failed to validate token");
+        }
     }
 }

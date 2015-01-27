@@ -37,7 +37,7 @@ public class SecurityFilter implements Filter {
 
         securityManager.setSecurityContext(httpServletRequest, securityContext);
 
-        List<Token> tokens = parseTokens(httpServletRequest.getHeader("authorization"));
+        Map<String, String> tokens = parseTokens(httpServletRequest.getHeader("authorization"));
 
         if (tokens != null)
             securityManager.tryAuthorize(securityContext, tokens);
@@ -54,19 +54,11 @@ public class SecurityFilter implements Filter {
         chain.doFilter(request, response);
     }
 
-    private List<Token> parseTokens(String authorizationString) throws IOException {
-        List<Token> tokens = null;
+    private Map<String, String> parseTokens(String authorizationString) throws IOException {
+        Map<String, String> tokens = null;
 
         try {
-            Map<String, String> tokensMap = objectMapper.readValue(authorizationString, Map.class);
-
-            for (Map.Entry<String, String> entry : tokensMap.entrySet()) {
-                if (tokens == null) {
-                    tokens = new ArrayList<>();
-                }
-
-                tokens.add(new Token(entry.getKey(), entry.getValue()));
-            }
+            tokens = objectMapper.readValue(authorizationString, Map.class);
         }
         catch(JsonParseException exception) {
             // todo: log authorization header
