@@ -19,7 +19,7 @@
         <property name="password" value="${jdbc.password}"/>
     </bean>
 
-    <context:component-scan base-package="com.mqplayer"/>
+    <context:component-scan base-package="com.mqplayer.api"/>
 
     <mvc:annotation-driven>
         <mvc:message-converters register-defaults="false">

@@ -1,22 +1,23 @@
-package com.mqplayer.web.app.security;
+package com.mqplayer.api.security;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.PrintWriter;
 import java.util.Map;
 
 /**
  * @author akravets
  */
 public class SecurityFilter implements Filter {
+    private final String AUTHORIZATION_HEADER = "Authorization";
     private WebApplicationContext springContext;
     private SecurityManager securityManager;
     private ObjectMapper objectMapper;
@@ -37,14 +38,14 @@ public class SecurityFilter implements Filter {
 
         securityManager.setSecurityContext(httpServletRequest, securityContext);
 
-        Map<String, String> tokens = parseTokens(httpServletRequest.getHeader("authorization"));
+        Map<String, String> tokens = parseTokens(httpServletRequest.getHeader(AUTHORIZATION_HEADER));
 
         if (tokens != null)
             securityManager.tryAuthorize(securityContext, tokens);
 
-        // no authorization for token registration
         String path = httpServletRequest.getRequestURI();
         if (!path.startsWith("/token")) {
+            // no authorization for token registration
             if (securityContext.getUser() == null) {
                 securityManager.unauthorized(httpServletResponse);
                 return;

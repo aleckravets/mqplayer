@@ -1,6 +1,7 @@
-package com.mqplayer.web.app.clients;
+package com.mqplayer.api.clients;
 
-import com.mqplayer.web.app.domain.AppException;
+
+import com.mqplayer.api.exceptions.AppException;
 
 import java.io.IOException;
 

@@ -1,8 +1,7 @@
-package com.mqplayer.web.app.security;
+package com.mqplayer.api.security;
 
-import com.mqplayer.web.app.domain.User;
+import com.mqplayer.api.domain.User;
 
-import java.util.List;
 import java.util.Map;
 
 /**

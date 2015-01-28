@@ -1,4 +1,4 @@
-package com.mqplayer.web.app.domain;
+package com.mqplayer.api.exceptions;
 
 /**
  * @author akravets

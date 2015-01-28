@@ -1,4 +1,4 @@
-package com.mqplayer.web.app.clients;
+package com.mqplayer.api.clients;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
+import com.mqplayer.api.exceptions.*;
 
 /**
  * @author akravets
@@ -26,22 +27,22 @@ public class DropboxClient extends Client {
         connection.connect();
 
         int responseCode = connection.getResponseCode();
-        String responseText = readStream(connection.getInputStream());
 
-        if (responseCode != 200) {
-            throw new IOException(String.format("Request to Dropbox failed (status %d). Request url: %s", responseCode, requestUrl));
+        if (responseCode == 401) {
+            throw new AuthenticationException();
         }
+
+        String responseText = readStream(connection.getInputStream());
 
         ObjectMapper objectMapper = new ObjectMapper();
 
         Map<String, Object> userInfo = objectMapper.readValue(responseText, Map.class);
 
         if (!userInfo.containsKey("email")) {
-            throw new IOException("No email received from Dropbox");
+            throw new RuntimeException("Failed to get email from Dropbox");
         }
 
         return (String)userInfo.get("email");
-
     }
 
     private String readStream(InputStream stream) throws IOException {

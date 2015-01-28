@@ -41,7 +41,7 @@
     <!-- simple security filter -->
     <filter>
         <filter-name>securityFilter</filter-name>
-        <filter-class>com.mqplayer.web.app.security.SecurityFilter</filter-class>
+        <filter-class>com.mqplayer.api.security.SecurityFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>securityFilter</filter-name>

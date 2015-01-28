@@ -1,4 +1,4 @@
-package com.mqplayer.web.app.domain;
+package com.mqplayer.api.domain;
 
 /**
  * @author akravets
@@ -8,16 +8,16 @@ public class Account {
     private String service;
     private String email;
     private String token;
-    private long userId;
+    private User user;
 
     public Account() {
     }
 
-    public Account(String service, String email, String token, long userId) {
+    public Account(String service, String email, String token, User user) {
         this.service = service;
         this.email = email;
         this.token = token;
-        this.userId = userId;
+        this.user = user;
     }
 
     public long getId() {
@@ -52,11 +52,11 @@ public class Account {
         this.token = token;
     }
 
-    public long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

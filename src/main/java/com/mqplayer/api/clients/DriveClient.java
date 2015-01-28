@@ -1,6 +1,5 @@
-package com.mqplayer.web.app.clients;
+package com.mqplayer.api.clients;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
@@ -9,7 +8,7 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.About;
-import org.springframework.stereotype.Service;
+import com.mqplayer.api.exceptions.*;
 
 import java.io.IOException;
 
@@ -29,7 +28,7 @@ public class DriveClient extends Client{
 
         Drive drive = new Drive.Builder(TRANSPORT, JSON_FACTORY, credential).build();
 
-        String email = null;
+        String email;
 
         try {
             About about = drive.about().get().execute();
@@ -37,9 +36,10 @@ public class DriveClient extends Client{
         }
         catch(GoogleJsonResponseException exception){
             if (exception.getStatusCode() == 401) {
-                // unauthorized
                 // log ?
+                throw new AuthenticationException();
             }
+
             throw exception;
         }
 

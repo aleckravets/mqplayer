@@ -1,8 +1,9 @@
-package com.mqplayer.web.app.db;
+package com.mqplayer.api.db;
 
-import com.mqplayer.web.app.domain.Account;
-import com.mqplayer.web.app.domain.Playlist;
-import com.mqplayer.web.app.domain.User;
+import com.mqplayer.api.db.mappers.AccountRowMapper;
+import com.mqplayer.api.domain.Account;
+import com.mqplayer.api.domain.Playlist;
+import com.mqplayer.api.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.*;
@@ -46,7 +47,7 @@ public class Db {
     public Account getAccountByToken(String service, String token) {
         return this.queryForObject(
                 "select * from account where service = ? and token = ?",
-                Account.class,
+                new AccountRowMapper(),
                 service, token
         );
     }
@@ -54,19 +55,20 @@ public class Db {
     public Account getAccountByEmail(String service, String email) {
         return this.queryForObject(
                 "select * from account where service = ? and email = ?",
-                Account.class,
+                new AccountRowMapper(),
                 service, email
         );
     }
 
-    public boolean updateToken(String email, String token) {
+    public boolean updateToken(Account account, String token) {
         return 0 < jdbcTemplate.update(
-                "update account set token = ? where email = ?",
-                new Object[] {email, token});
+                "update account set token = ? where service = ? and email = ?",
+                token, account.getService(), account.getEmail()
+        );
     }
 
     public User addUser(User user) {
-        Long userId = this.<Long>insert("insert user select null", "id", new Object[]{});
+        Long userId = this.<Long>insert("insert user select null", "id");
         user.setId(userId);
         return user;
     }
@@ -74,22 +76,28 @@ public class Db {
     public void mergeUsers(User targetUser, User sourceUser) {
         // re-assign sourceUser's accounts
         jdbcTemplate.update(
-                "update account set uesrId = ? where userId = ?",
+                "update account set userId = ? where userId = ?",
                 targetUser.getId(),
                 sourceUser.getId());
 
         // delete sourceUser
         jdbcTemplate.update(
-                "delete user where id = ?",
+                "delete from user where id = ?",
                 sourceUser.getId()
         );
     }
 
-    public void addAccount(Account account) {
-        jdbcTemplate.update(
-                "insert account (service, email, token, userId) values (?, ?, ?, ?)",
-                new Object[] {account.getService(), account.getEmail(), account.getToken(), account.getUserId()}
-        );
+    public Account addAccount(Account account) {
+        Long id =
+                this.<Long>insert(
+                    "insert account (service, email, token, userId) values (?, ?, ?, ?)",
+                    "id",
+                    account.getService(), account.getEmail(), account.getToken(), account.getUser().getId()
+                );
+
+        account.setId(id);
+
+        return account;
     }
 
     private <T> List<T> query(String sql, Object[] args, Class<T> clazz) {
@@ -97,15 +105,15 @@ public class Db {
     }
 
     private <T> T queryForObject(String sql, Class<T> clazz, Object... args) {
-        return queryForObject(sql, args, new BeanPropertyRowMapper<T>(clazz));
+        return queryForObject(sql, new BeanPropertyRowMapper<T>(clazz), args);
     }
 
-    private <T> T queryForObject(String sql, Object[] args, RowMapper<T> rowMapper) {
+    private <T> T queryForObject(String sql, RowMapper<T> rowMapper, Object... args ) {
         List<T> results = jdbcTemplate.query(sql, args, new RowMapperResultSetExtractor<T>(rowMapper, 1));
         return DataAccessUtils.singleResult(results);
     }
 
-    private <T extends Number> T insert(final String sql, final String pk, final Object[] args) {
+    private <T extends Number> T insert(final String sql, final String pk, final Object... args) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         final ArgumentPreparedStatementSetter argsSetter = new ArgumentPreparedStatementSetter(args);
 
