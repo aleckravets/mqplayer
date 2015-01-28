@@ -20,8 +20,6 @@ import java.util.Map;
  */
 @Service
 public class SecurityManager {
-    private final String UNAUTHORIZED_JSON = "{\"error\":\"Unauthorized\"}";
-    private final String CONTENT_TYPE = "application/json";
     private final String CONTEXT_ATTRIBUTE_NAME = "securityContext";
 
     @Autowired
@@ -32,7 +30,7 @@ public class SecurityManager {
      * @param tokens
      * @return
      */
-    public boolean tryAuthorize(SecurityContext securityContext, Map<String, String> tokens) {
+    public void tryAuthorize(SecurityContext securityContext, Map<String, String> tokens) {
         securityContext.setTokens(tokens);
 
         for (Map.Entry<String, String> entry : tokens.entrySet()) {
@@ -40,11 +38,11 @@ public class SecurityManager {
 
             if (user != null) {
                 securityContext.setUser(user);
-                break;
+                return;
             }
         }
 
-        return securityContext.getUser() != null;
+        throw new AuthenticationException();
     }
 
     /**
@@ -52,17 +50,10 @@ public class SecurityManager {
      * This is normally done upon front-end login
      * @param service
      */
-    public void registerToken(SecurityContext securityContext, String service) throws IOException {
+    public void registerToken(SecurityContext securityContext, String service, String token) throws IOException {
         Client client = Client.resolve(service);
 
-        Map<String, String> tokens = securityContext.getTokens();
         User currentUser = securityContext.getUser();
-
-        if (tokens == null || !tokens.containsKey(service)) {
-            throw new AppException(String.format("No token provided for service '%s'", service));
-        }
-
-        String token = tokens.get(service);
 
         // first try to find the account locally
         Account account = db.getAccountByToken(service, token);
@@ -103,18 +94,5 @@ public class SecurityManager {
 
     public SecurityContext getSecurityContext(HttpServletRequest request) {
         return (SecurityContext)request.getAttribute(CONTEXT_ATTRIBUTE_NAME);
-    }
-
-    public void unauthorized(HttpServletResponse response) throws IOException {
-        writeResponse(response, HttpServletResponse.SC_UNAUTHORIZED, UNAUTHORIZED_JSON);
-    }
-
-    private void writeResponse(HttpServletResponse response, int status, String text) throws IOException {
-        response.setContentType(CONTENT_TYPE);
-        response.setStatus(status);
-        PrintWriter out = response.getWriter();
-        out.print(text);
-        out.flush();
-        out.close();
     }
 }

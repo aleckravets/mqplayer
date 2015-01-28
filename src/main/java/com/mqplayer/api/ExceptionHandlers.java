@@ -21,6 +21,16 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
         return getResponse(ex, headers, status);
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity authenticationExceptionHandler(Exception exception) {
+        return getResponse(exception, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity authorizationExceptionHandler(Exception exception) {
+        return getResponse(exception, HttpStatus.FORBIDDEN);
+    }
+
     @ExceptionHandler(AppException.class)
     public ResponseEntity appExceptionHandler(AppException exception) {
         return getResponse(exception, HttpStatus.BAD_REQUEST);

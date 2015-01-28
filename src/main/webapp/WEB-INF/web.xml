@@ -37,15 +37,4 @@
         <servlet-name>mvc-dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-
-    <!-- simple security filter -->
-    <filter>
-        <filter-name>securityFilter</filter-name>
-        <filter-class>com.mqplayer.api.security.SecurityFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>securityFilter</filter-name>
-        <servlet-name>mvc-dispatcher</servlet-name>
-    </filter-mapping>
-
 </web-app>

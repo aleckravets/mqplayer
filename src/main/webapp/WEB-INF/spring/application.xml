@@ -19,6 +19,8 @@
         <property name="password" value="${jdbc.password}"/>
     </bean>
 
+    <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
+
     <context:component-scan base-package="com.mqplayer.api"/>
 
     <mvc:annotation-driven>
@@ -29,6 +31,16 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-    <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean class="com.mqplayer.api.security.AuthenticationInterceptor" />
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <mvc:exclude-mapping path="/token**" />
+            <bean class="com.mqplayer.api.security.AuthorizationInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
 
 </beans>
