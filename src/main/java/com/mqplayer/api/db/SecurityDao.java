@@ -1,16 +1,16 @@
 package com.mqplayer.api.db;
 
 import com.mqplayer.api.db.mappers.AccountRowMapper;
-import com.mqplayer.api.domain.Account;
-import com.mqplayer.api.domain.User;
+import com.mqplayer.api.entities.Account;
+import com.mqplayer.api.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 /**
  * @author akravets
  */
-@Service
+@Repository
 public class SecurityDao {
     @Autowired
     private Db db;
@@ -77,5 +77,13 @@ public class SecurityDao {
         account.setId(id);
 
         return account;
+    }
+
+    public boolean isPlaylistOwner(long userId, long playlistId) {
+        return false;
+//        return 0 < db.queryForObject(
+//                "update account set token = ? where service = ? and email = ?",
+//                token, account.getService(), account.getEmail()
+//        );
     }
 }

@@ -1,4 +1,4 @@
-package com.mqplayer.api.domain;
+package com.mqplayer.api.entities;
 
 /**
  * @author akravets
@@ -6,7 +6,7 @@ package com.mqplayer.api.domain;
 public class Playlist {
     private long id;
     private String name;
-    private long accountId;
+    private User user;
 
     public long getId() {
         return id;
@@ -24,11 +24,11 @@ public class Playlist {
         this.name = name;
     }
 
-    public long getAccountId() {
-        return accountId;
+    public User getUser() {
+        return user;
     }
 
-    public void setAccountId(long accountId) {
-        this.accountId = accountId;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

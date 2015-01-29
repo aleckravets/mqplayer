@@ -1,7 +1,7 @@
 package com.mqplayer.api.db.mappers;
 
-import com.mqplayer.api.domain.Account;
-import com.mqplayer.api.domain.User;
+import com.mqplayer.api.entities.Account;
+import com.mqplayer.api.entities.User;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 import java.sql.ResultSet;

@@ -1,6 +1,6 @@
 package com.mqplayer.api.security;
 
-import com.mqplayer.api.domain.User;
+import com.mqplayer.api.entities.User;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;

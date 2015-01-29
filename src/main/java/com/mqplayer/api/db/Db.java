@@ -1,17 +1,10 @@
 package com.mqplayer.api.db;
 
-import com.mqplayer.api.db.mappers.AccountRowMapper;
-import com.mqplayer.api.domain.Account;
-import com.mqplayer.api.domain.Playlist;
-import com.mqplayer.api.domain.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -41,7 +34,7 @@ public class Db extends JdbcTemplate {
         update(
                 new PreparedStatementCreator() {
                     public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-                        PreparedStatement ps = connection.prepareStatement(sql, new String[] {pk});
+                        PreparedStatement ps = connection.prepareStatement(sql, new String[]{pk});
                         argsSetter.setValues(ps);
                         return ps;
                     }
