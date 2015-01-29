@@ -2,18 +2,16 @@ package com.mqplayer.api.security;
 
 import com.mqplayer.api.clients.Client;
 import com.mqplayer.api.db.Db;
+import com.mqplayer.api.db.SecurityDao;
 import com.mqplayer.api.domain.Account;
 import com.mqplayer.api.domain.User;
-import com.mqplayer.api.exceptions.AppException;
 import com.mqplayer.api.exceptions.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Map;
 
 /**
@@ -24,7 +22,7 @@ public class SecurityManager {
     private final String CONTEXT_ATTRIBUTE_NAME = "securityContext";
 
     @Autowired
-    private Db db;
+    private SecurityDao securityDao;
 
     /**
      * Authorize the request by tokens
@@ -35,7 +33,7 @@ public class SecurityManager {
         securityContext.setTokens(tokens);
 
         for (Map.Entry<String, String> entry : tokens.entrySet()) {
-            User user = db.getUserByToken(entry.getKey(), entry.getValue());
+            User user = securityDao.getUserByToken(entry.getKey(), entry.getValue());
 
             if (user != null) {
                 securityContext.setUser(user);
@@ -58,31 +56,31 @@ public class SecurityManager {
         User currentUser = securityContext.getUser();
 
         // first try to find the account locally
-        Account account = db.getAccountByToken(service, token);
+        Account account = securityDao.getAccountByToken(service, token);
 
         if (account == null) {
             // account not found locally by token - get the email by token from remote service
             String email = client.getEmailByToken(token);
-            account = db.getAccountByEmail(service, email);
+            account = securityDao.getAccountByEmail(service, email);
             if (account == null) {
                 // no account corresponding to this email exists - create it
                 if (currentUser == null) {
                     // create new user if not logged in already
                     currentUser = new User();
-                    db.addUser(currentUser);
+                    securityDao.addUser(currentUser);
                     securityContext.setUser(currentUser);
                 }
                 account = new Account(service, email, token, currentUser);
-                db.addAccount(account);
+                securityDao.addAccount(account);
             } else {
                 // update local account with current token
-                db.updateToken(account, token);
+                securityDao.updateToken(account, token);
             }
         }
 
         if (currentUser != null) {
             if (!currentUser.equals(account.getUser())) {
-                db.mergeUsers(currentUser, account.getUser());
+                securityDao.mergeUsers(currentUser, account.getUser());
                 account.setUser(currentUser);
             }
         } else {
