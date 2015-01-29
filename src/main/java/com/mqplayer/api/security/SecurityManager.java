@@ -6,6 +6,7 @@ import com.mqplayer.api.db.SecurityDao;
 import com.mqplayer.api.domain.Account;
 import com.mqplayer.api.domain.User;
 import com.mqplayer.api.exceptions.AuthenticationException;
+import com.mqplayer.api.exceptions.AuthorizationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,17 +20,18 @@ import java.util.Map;
  */
 @Service
 public class SecurityManager {
-    private final String CONTEXT_ATTRIBUTE_NAME = "securityContext";
-
     @Autowired
     private SecurityDao securityDao;
 
+    @Autowired
+    private SecurityContext securityContext;
+
     /**
-     * Authorize the request by tokens
+     * Authenticate the request by tokens
      * @param tokens
      * @return
      */
-    public void tryAuthorize(SecurityContext securityContext, Map<String, String> tokens) {
+    public void authenticate(Map<String, String> tokens) {
         securityContext.setTokens(tokens);
 
         for (Map.Entry<String, String> entry : tokens.entrySet()) {
@@ -50,7 +52,7 @@ public class SecurityManager {
      * @param service
      */
     @Transactional
-    public void registerToken(SecurityContext securityContext, String service, String token) throws IOException {
+    public void registerToken(String service, String token) throws IOException {
         Client client = Client.resolve(service);
 
         User currentUser = securityContext.getUser();
@@ -88,11 +90,12 @@ public class SecurityManager {
         }
     }
 
-    public void setSecurityContext(HttpServletRequest request, SecurityContext context) {
-        request.setAttribute(CONTEXT_ATTRIBUTE_NAME, context);
+    public boolean isAuthenticated() {
+        return securityContext.getUser() != null;
     }
 
-    public SecurityContext getSecurityContext(HttpServletRequest request) {
-        return (SecurityContext)request.getAttribute(CONTEXT_ATTRIBUTE_NAME);
+    public boolean isAuthorized() {
+        throw new AuthorizationException();
     }
+
 }

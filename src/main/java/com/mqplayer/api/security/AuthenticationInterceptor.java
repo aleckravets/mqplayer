@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mqplayer.api.exceptions.AppException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,14 +28,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        SecurityContext securityContext = new SecurityContext();
-
-        securityManager.setSecurityContext(request, securityContext);
-
         Map<String, String> tokens = parseTokens(request.getHeader(AUTHORIZATION_HEADER));
 
         if (tokens != null)
-            securityManager.tryAuthorize(securityContext, tokens);
+            securityManager.authenticate(tokens);
 
         return true;
     }

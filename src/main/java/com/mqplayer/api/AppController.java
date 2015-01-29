@@ -22,24 +22,26 @@ public class AppController {
     private SecurityManager securityManager;
 
     @Autowired
-    private HttpServletRequest httpServletRequest;
+    private SecurityContext securityContext;
 
     @Autowired
     private PlaylistDao playlistDao;
 
-    private SecurityContext getSecurityContext() {
-        return securityManager.getSecurityContext(httpServletRequest);
-    }
-
     @RequestMapping(value = "/playlists", method = RequestMethod.GET)
     public List<Playlist> getPlaylists() {
-        User user = getSecurityContext().getUser();
+        User user = securityContext.getUser();
         return playlistDao.getAll(user.getId());
+    }
+
+    @RequestMapping(value = "/playlists/{id}", method = RequestMethod.GET)
+    public Playlist getPlaylist(@PathVariable long id) {
+        securityManager.isAuthorized();
+        return playlistDao.getOne(id);
     }
 
     @RequestMapping("/token")
     @ResponseStatus(HttpStatus.OK)
     public void registerToken(@RequestParam String service, @RequestParam String token) throws IOException {
-        securityManager.registerToken(getSecurityContext(), service, token);
+        securityManager.registerToken(service, token);
     }
 }

@@ -17,9 +17,7 @@ public class AuthorizationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        SecurityContext securityContext = securityManager.getSecurityContext(request);
-
-        if (securityContext.getUser() == null) {
+        if (!securityManager.isAuthenticated()) {
             throw new AuthorizationException();
         }
 
