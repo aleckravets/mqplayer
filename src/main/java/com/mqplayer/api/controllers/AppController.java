@@ -1,4 +1,4 @@
-package com.mqplayer.api;
+package com.mqplayer.api.controllers;
 
 import com.mqplayer.api.db.PlaylistDao;
 import com.mqplayer.api.entities.Playlist;
@@ -18,6 +18,7 @@ import java.util.List;
  * @author akravets
  */
 @RestController
+@RequestMapping("/playlists")
 public class AppController {
     @Autowired
     private SecurityManager securityManager;
@@ -28,29 +29,23 @@ public class AppController {
     @Autowired
     private PlaylistService playlistService;
 
-    @RequestMapping(value = "/playlists", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public List<Playlist> getPlaylists() {
         User user = securityContext.getUser();
         return playlistService.getAll(user.getId());
     }
 
-    @RequestMapping(value = "/playlists/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Playlist getPlaylist(@PathVariable long id) {
         Playlist playlist = playlistService.getOne(id);
         securityManager.authorize(playlist);
         return playlist;
     }
 
-    @RequestMapping(value = "/playlists/{id}/records", method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}/records", method = RequestMethod.GET)
     public List<Record> getPlaylistRecords(@PathVariable long id) {
         Playlist playlist = playlistService.getOne(id);
         securityManager.authorize(playlist);
         return playlistService.getRecords(id);
-    }
-
-    @RequestMapping("/token")
-    @ResponseStatus(HttpStatus.OK)
-    public void registerToken(@RequestParam String service, @RequestParam String token) throws IOException {
-        securityManager.registerToken(service, token);
     }
 }
