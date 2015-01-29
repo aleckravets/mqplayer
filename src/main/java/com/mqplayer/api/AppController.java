@@ -2,6 +2,7 @@ package com.mqplayer.api;
 
 import com.mqplayer.api.db.PlaylistDao;
 import com.mqplayer.api.entities.Playlist;
+import com.mqplayer.api.entities.Record;
 import com.mqplayer.api.entities.User;
 import com.mqplayer.api.security.SecurityContext;
 import com.mqplayer.api.security.SecurityManager;
@@ -35,7 +36,16 @@ public class AppController {
 
     @RequestMapping(value = "/playlists/{id}", method = RequestMethod.GET)
     public Playlist getPlaylist(@PathVariable long id) {
-        return playlistService.getOne(id, securityContext.getUser().getId());
+        Playlist playlist = playlistService.getOne(id);
+        securityManager.authorize(playlist);
+        return playlist;
+    }
+
+    @RequestMapping(value = "/playlists/{id}/records", method = RequestMethod.GET)
+    public List<Record> getPlaylistRecords(@PathVariable long id) {
+        Playlist playlist = playlistService.getOne(id);
+        securityManager.authorize(playlist);
+        return playlistService.getRecords(id);
     }
 
     @RequestMapping("/token")

@@ -1,6 +1,7 @@
 package com.mqplayer.api.db;
 
 import com.mqplayer.api.entities.Playlist;
+import com.mqplayer.api.entities.Record;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,11 @@ public class PlaylistDao {
         return db.query("select * from playlist where userId = ?", Playlist.class, userId);
     }
 
-    public Playlist getOne(long id, long userId) {
-        return db.queryForObject("select * from playlist where id = ? && userId = ?", Playlist.class, id, userId);
+    public Playlist getOne(long id) {
+        return db.queryForObject("select * from playlist where id = ?", Playlist.class, id);
+    }
+
+    public List<Record> getRecords(long playlistId) {
+        return db.query("select * from record where playlistId = ?", Record.class, playlistId);
     }
 }

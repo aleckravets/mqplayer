@@ -13,7 +13,7 @@
     </properties>
 
     <dependencies>
-        <!-- servlet-api -->
+        <!-- servlet api -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>

@@ -97,9 +97,8 @@ public class SecurityManager {
         return securityContext.getUser() != null;
     }
 
-//    public void authorize(long playlistId) {
-//        Playlist
-//        if (!securityDao.isPlaylistOwner(securityContext.getUser().getId(), playlistId))
-//            throw new AuthorizationException();
-//    }
+    public void authorize(Playlist playlist) {
+        if (playlist.getUserId() != securityContext.getUser().getId())
+            throw new AuthorizationException();
+    }
 }

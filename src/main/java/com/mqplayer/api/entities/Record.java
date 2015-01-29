@@ -3,10 +3,10 @@ package com.mqplayer.api.entities;
 /**
  * @author akravets
  */
-public class Playlist {
+public class Record {
     private long id;
     private String name;
-    private long userId;
+    private String url;
 
     public long getId() {
         return id;
@@ -24,11 +24,11 @@ public class Playlist {
         this.name = name;
     }
 
-    public long getUserId() {
-        return userId;
+    public String getUrl() {
+        return url;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

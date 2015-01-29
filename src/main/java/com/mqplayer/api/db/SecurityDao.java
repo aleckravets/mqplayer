@@ -78,12 +78,4 @@ public class SecurityDao {
 
         return account;
     }
-
-    public boolean isPlaylistOwner(long userId, long playlistId) {
-        return false;
-//        return 0 < db.queryForObject(
-//                "update account set token = ? where service = ? and email = ?",
-//                token, account.getService(), account.getEmail()
-//        );
-    }
 }

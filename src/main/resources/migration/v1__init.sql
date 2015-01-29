@@ -28,7 +28,7 @@ CREATE TABLE `record` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
-  `playlistId` bigint,
+  `playlistId` bigint NOT NULL,
   CONSTRAINT `FK_record_playlist_id` FOREIGN KEY (`playlistId`) REFERENCES `playlist` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -40,3 +40,10 @@ insert user select 1;
 
 insert account (service, email, token, userid)
   select 'drive', 'alec.kravets@gmail.com', '123', 1;
+
+insert playlist(id, name, userId)
+select 1, 'Led Zeppelin', 1;
+
+insert record(name, url, playlistId)
+select 'Good times, bad times', 'http://drive.com/good-times', 1 union
+select 'Babe, I\'m gonna quite you..', 'http://drive/babe', 1;
