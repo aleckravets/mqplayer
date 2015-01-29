@@ -8,6 +8,7 @@ import com.mqplayer.api.exceptions.AppException;
 import com.mqplayer.api.exceptions.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,6 +51,7 @@ public class SecurityManager {
      * This is normally done upon front-end login
      * @param service
      */
+    @Transactional
     public void registerToken(SecurityContext securityContext, String service, String token) throws IOException {
         Client client = Client.resolve(service);
 

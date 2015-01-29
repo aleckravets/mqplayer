@@ -23,14 +23,7 @@ import java.util.List;
 @Repository
 public class Db {
     @Autowired
-    private DataSource dataSource;
-
     private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }
 
     public List<Playlist> getPlaylists(long userId) {
         return query("select * from playlist where userId = ?", new Object[]{userId}, Playlist.class);

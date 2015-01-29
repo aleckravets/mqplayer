@@ -36,6 +36,11 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
         return getResponse(exception, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity defaultExceptionHandler(Exception exception) {
+        return new ResponseEntity(new ErrorInfo("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     private ResponseEntity getResponse(Exception exception, HttpStatus httpStatus) {
         return getResponse(exception, null, httpStatus);
     }
@@ -48,9 +53,13 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
         private int status;
         private String error;
 
-        public ErrorInfo(Exception exception, HttpStatus httpStatus) {
-            this.error = exception.getLocalizedMessage();
+        public ErrorInfo(String error, HttpStatus httpStatus) {
             this.status = httpStatus.value();
+            this.error = error;
+        }
+
+        public ErrorInfo(Exception exception, HttpStatus httpStatus) {
+            this(exception.getLocalizedMessage(), httpStatus);
         }
 
         public int getStatus() {
