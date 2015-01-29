@@ -31,6 +31,11 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
         return getResponse(exception, HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity notFoundExceptionHandler(NotFoundException exception) {
+        return getResponse(exception, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(AppException.class)
     public ResponseEntity appExceptionHandler(AppException exception) {
         return getResponse(exception, HttpStatus.BAD_REQUEST);

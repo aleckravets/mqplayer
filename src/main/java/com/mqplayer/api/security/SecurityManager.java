@@ -7,6 +7,7 @@ import com.mqplayer.api.entities.Playlist;
 import com.mqplayer.api.entities.User;
 import com.mqplayer.api.exceptions.AuthenticationException;
 import com.mqplayer.api.exceptions.AuthorizationException;
+import com.mqplayer.api.services.PlaylistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,9 @@ import java.util.Map;
 public class SecurityManager {
     @Autowired
     private SecurityDao securityDao;
+
+    @Autowired
+    private PlaylistService playlistService;
 
     @Autowired
     private SecurityContext securityContext;
@@ -93,9 +97,9 @@ public class SecurityManager {
         return securityContext.getUser() != null;
     }
 
-    public void authorize(long playlistId) {
-        if (!securityDao.isPlaylistOwner(securityContext.getUser().getId(), playlistId))
-            throw new AuthorizationException();
-    }
-
+//    public void authorize(long playlistId) {
+//        Playlist
+//        if (!securityDao.isPlaylistOwner(securityContext.getUser().getId(), playlistId))
+//            throw new AuthorizationException();
+//    }
 }

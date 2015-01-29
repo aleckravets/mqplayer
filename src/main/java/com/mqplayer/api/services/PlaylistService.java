@@ -20,8 +20,8 @@ public class PlaylistService {
         return playlistDao.getAll(userId);
     }
 
-    public Playlist getOne(long id) {
-        Playlist playlist = playlistDao.getOne(id);
+    public Playlist getOne(long id, long userId) {
+        Playlist playlist = playlistDao.getOne(id, userId);
 
         if (playlist == null) {
             throw new NotFoundException();

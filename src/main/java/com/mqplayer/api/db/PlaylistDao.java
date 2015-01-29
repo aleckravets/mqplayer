@@ -19,7 +19,7 @@ public class PlaylistDao {
         return db.query("select * from playlist where userId = ?", Playlist.class, userId);
     }
 
-    public Playlist getOne(long id) {
-        return db.queryForObject("select * from playlist where id = ?", Playlist.class, id);
+    public Playlist getOne(long id, long userId) {
+        return db.queryForObject("select * from playlist where id = ? && userId = ?", Playlist.class, id, userId);
     }
 }

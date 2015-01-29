@@ -35,9 +35,7 @@ public class AppController {
 
     @RequestMapping(value = "/playlists/{id}", method = RequestMethod.GET)
     public Playlist getPlaylist(@PathVariable long id) {
-        // todo: replace with AOP
-        securityManager.authorize(id);
-        return playlistService.getOne(id);
+        return playlistService.getOne(id, securityContext.getUser().getId());
     }
 
     @RequestMapping("/token")
