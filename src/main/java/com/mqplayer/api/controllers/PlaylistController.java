@@ -4,6 +4,7 @@ import com.mqplayer.api.db.PlaylistDao;
 import com.mqplayer.api.entities.Playlist;
 import com.mqplayer.api.entities.Record;
 import com.mqplayer.api.entities.User;
+import com.mqplayer.api.models.PlaylistEditModel;
 import com.mqplayer.api.security.SecurityContext;
 import com.mqplayer.api.security.SecurityManager;
 import com.mqplayer.api.services.PlaylistService;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/playlists")
-public class AppController {
+public class PlaylistController {
     @Autowired
     private SecurityManager securityManager;
 
@@ -40,6 +41,11 @@ public class AppController {
         Playlist playlist = playlistService.getOne(id);
         securityManager.authorize(playlist);
         return playlist;
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void addPlaylist(@RequestBody PlaylistEditModel playlistEditModel) {
     }
 
     @RequestMapping(value = "/{id}/records", method = RequestMethod.GET)
