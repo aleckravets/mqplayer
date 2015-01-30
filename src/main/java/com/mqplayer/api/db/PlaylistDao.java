@@ -3,6 +3,7 @@ package com.mqplayer.api.db;
 import com.mqplayer.api.domain.entities.Playlist;
 import com.mqplayer.api.domain.entities.Record;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public class PlaylistDao {
     }
 
     public Playlist getOne(long id) {
-        return db.queryForObject("select * from playlist where id = ?", Playlist.class, id);
+        return db.queryForEntity("select * from playlist where id = ?", Playlist.class, id);
     }
 
     public List<Record> getRecords(long playlistId) {
@@ -51,5 +52,33 @@ public class PlaylistDao {
         record.setId(id);
 
         return record;
+    }
+
+    public void deleteOne(long id) {
+        db.getJdbcOperations().update(
+                "delete from record where playlistId = ?",
+                id
+        );
+
+        db.getJdbcOperations().update(
+                "delete from playlist where id = ?",
+                id
+        );
+    }
+
+    public void deleteMany(List<Long> ids) {
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("ids", ids);
+
+        db.update(
+                "delete from record where playlistId in (:ids)",
+                parameters
+
+        );
+
+        db.update(
+                "delete from playlist where id in (:ids)",
+                parameters
+        );
     }
 }

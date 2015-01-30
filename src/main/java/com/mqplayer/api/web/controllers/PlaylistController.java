@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -35,27 +36,45 @@ public class PlaylistController {
     private PlaylistService playlistService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<PlaylistModel> getPlaylists() {
+    public List<PlaylistModel> getAll() {
         User user = securityContext.getUser();
         List<Playlist> playlists = playlistService.getAll(user.getId());
         return objectMapper.map(playlists, PlaylistModel.class);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public PlaylistModel getPlaylist(@PathVariable long id) {
+    public PlaylistModel getOne(@PathVariable long id) {
         Playlist playlist = playlistService.getOne(id);
         securityManager.authorize(playlist);
         return objectMapper.map(playlist, PlaylistModel.class);
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteOne(@PathVariable long id) {
+        Playlist playlist = playlistService.getOne(id);
+        securityManager.authorize(playlist);
+        playlistService.deleteOne(id);
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteMany(@RequestBody List<Long> ids) {
+        for (Long id : ids) {
+            Playlist playlist = playlistService.getOne(id);
+            securityManager.authorize(playlist);
+        }
+        playlistService.deleteMany(ids);
+    }
+
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void addPlaylist(@RequestBody AddPlaylistDto dto) {
+    public void add(@RequestBody AddPlaylistDto dto) {
         playlistService.addPlaylist(securityContext.getUser(), dto);
     }
 
     @RequestMapping(value = "/{id}/records", method = RequestMethod.GET)
-    public List<RecordModel> getPlaylistRecords(@PathVariable long id) {
+    public List<RecordModel> getRecords(@PathVariable long id) {
         Playlist playlist = playlistService.getOne(id);
         securityManager.authorize(playlist);
         List<Record> records = playlistService.getRecords(id);

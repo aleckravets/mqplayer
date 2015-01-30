@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -47,5 +48,15 @@ public class PlaylistService {
             Record record = new Record(recordDto.getName(), recordDto.getUrl(), playlist.getId());
             playlistDao.addRecord(playlist, record);
         }
+    }
+
+    @Transactional
+    public void deleteOne(long id) {
+        playlistDao.deleteOne(id);
+    }
+
+    @Transactional
+    public void deleteMany(List<Long> ids) {
+        playlistDao.deleteMany(ids);
     }
 }

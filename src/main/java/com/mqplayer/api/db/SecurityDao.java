@@ -15,7 +15,7 @@ public class SecurityDao {
     private Db db;
 
     public User getUserByToken(String service, String token) {
-        return db.queryForObject(
+        return db.queryForEntity(
                 "select u.* from user u join account a on u.id = a.userId where a.service = ? and a.token = ?",
                 User.class,
                 service, token
@@ -23,7 +23,7 @@ public class SecurityDao {
     }
 
     public Account getAccountByToken(String service, String token) {
-        return db.queryForObject(
+        return db.queryForEntity(
                 "select * from account where service = ? and token = ?",
                 new AccountRowMapper(),
                 service, token
@@ -31,7 +31,7 @@ public class SecurityDao {
     }
 
     public Account getAccountByEmail(String service, String email) {
-        return db.queryForObject(
+        return db.queryForEntity(
                 "select * from account where service = ? and email = ?",
                 new AccountRowMapper(),
                 service, email
@@ -39,7 +39,7 @@ public class SecurityDao {
     }
 
     public boolean updateToken(Account account, String token) {
-        return 0 < db.update(
+        return 0 < db.getJdbcOperations().update(
                 "update account set token = ? where service = ? and email = ?",
                 token, account.getService(), account.getEmail()
         );
@@ -53,13 +53,13 @@ public class SecurityDao {
 
     public void mergeUsers(User targetUser, User sourceUser) {
         // re-assign sourceUser's accounts
-        db.update(
+        db.getJdbcOperations().update(
                 "update account set userId = ? where userId = ?",
                 targetUser.getId(),
                 sourceUser.getId());
 
         // delete sourceUser
-        db.update(
+        db.getJdbcOperations().update(
                 "delete from user where id = ?",
                 sourceUser.getId()
         );

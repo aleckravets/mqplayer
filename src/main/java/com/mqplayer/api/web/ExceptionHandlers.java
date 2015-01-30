@@ -43,6 +43,7 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity defaultExceptionHandler(Exception exception) {
+        exception.printStackTrace();
         return new ResponseEntity(new ErrorInfo("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
