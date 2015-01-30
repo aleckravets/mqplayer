@@ -1,13 +1,13 @@
 package com.mqplayer.api.security;
 
-import com.mqplayer.api.clients.Client;
+import com.mqplayer.api.domain.clients.Client;
 import com.mqplayer.api.db.SecurityDao;
-import com.mqplayer.api.entities.Account;
-import com.mqplayer.api.entities.Playlist;
-import com.mqplayer.api.entities.User;
+import com.mqplayer.api.domain.entities.Account;
+import com.mqplayer.api.domain.entities.Playlist;
+import com.mqplayer.api.domain.entities.User;
 import com.mqplayer.api.exceptions.AuthenticationException;
 import com.mqplayer.api.exceptions.AuthorizationException;
-import com.mqplayer.api.services.PlaylistService;
+import com.mqplayer.api.domain.services.PlaylistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

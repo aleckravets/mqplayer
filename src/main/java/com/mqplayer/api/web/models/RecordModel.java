@@ -1,9 +1,11 @@
-package com.mqplayer.api.models;
+package com.mqplayer.api.web.models;
+
+import com.mqplayer.api.domain.entities.Record;
 
 /**
  * @author akravets
  */
-public class RecordEditModel {
+public class RecordModel {
     private String name;
     private String url;
 
@@ -21,5 +23,12 @@ public class RecordEditModel {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public static RecordModel map(Record record) {
+        RecordModel model = new RecordModel();
+        model.setName(record.getName());
+        model.setUrl(record.getUrl());
+        return model;
     }
 }

@@ -1,4 +1,4 @@
-package com.mqplayer.api.clients;
+package com.mqplayer.api.domain.clients;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;

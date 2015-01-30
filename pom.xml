@@ -52,6 +52,13 @@
             <version>2.4.3</version>
         </dependency>
 
+        <!-- object mapper -->
+        <dependency>
+            <groupId>net.sf.dozer</groupId>
+            <artifactId>dozer</artifactId>
+            <version>5.5.1</version>
+        </dependency>
+
         <!-- jdbc -->
         <dependency>
             <groupId>mysql</groupId>

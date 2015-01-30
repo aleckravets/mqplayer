@@ -1,4 +1,4 @@
-package com.mqplayer.api.entities;
+package com.mqplayer.api.domain.entities;
 
 /**
  * @author akravets

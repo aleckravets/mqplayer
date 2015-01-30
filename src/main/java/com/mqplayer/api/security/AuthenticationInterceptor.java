@@ -21,7 +21,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     private final String PARSE_ERROR = "Wrong authorization header format";
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private ObjectMapper jsonMapper;
 
     @Autowired
     private SecurityManager securityManager;
@@ -44,7 +44,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         }
 
         try {
-            tokens = objectMapper.readValue(authorizationString, Map.class);
+            tokens = jsonMapper.readValue(authorizationString, Map.class);
         }
         catch (JsonMappingException exception) {
             throw new AppException(PARSE_ERROR);

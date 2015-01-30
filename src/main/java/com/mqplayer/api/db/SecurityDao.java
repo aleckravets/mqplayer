@@ -1,11 +1,10 @@
 package com.mqplayer.api.db;
 
 import com.mqplayer.api.db.mappers.AccountRowMapper;
-import com.mqplayer.api.entities.Account;
-import com.mqplayer.api.entities.User;
+import com.mqplayer.api.domain.entities.Account;
+import com.mqplayer.api.domain.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 /**
  * @author akravets

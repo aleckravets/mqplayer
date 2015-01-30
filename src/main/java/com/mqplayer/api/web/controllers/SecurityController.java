@@ -1,6 +1,5 @@
-package com.mqplayer.api.controllers;
+package com.mqplayer.api.web.controllers;
 
-import com.mqplayer.api.security.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;

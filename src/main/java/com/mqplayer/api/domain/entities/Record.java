@@ -1,4 +1,4 @@
-package com.mqplayer.api.entities;
+package com.mqplayer.api.domain.entities;
 
 /**
  * @author akravets
@@ -7,6 +7,16 @@ public class Record {
     private long id;
     private String name;
     private String url;
+    private long playlistId;
+
+    public Record() {
+    }
+
+    public Record(String name, String url, long playlistId) {
+        this.name = name;
+        this.url = url;
+        this.playlistId = playlistId;
+    }
 
     public long getId() {
         return id;

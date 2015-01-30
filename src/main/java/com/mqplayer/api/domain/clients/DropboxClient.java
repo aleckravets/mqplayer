@@ -1,4 +1,4 @@
-package com.mqplayer.api.clients;
+package com.mqplayer.api.domain.clients;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

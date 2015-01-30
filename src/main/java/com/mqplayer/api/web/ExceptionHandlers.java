@@ -1,4 +1,4 @@
-package com.mqplayer.api;
+package com.mqplayer.api.web;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
