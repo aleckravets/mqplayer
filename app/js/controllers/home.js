@@ -1,8 +1,10 @@
 'use strict';
 
 angular.module('app')
-    .controller('HomeController', function(session) {
+    .controller('HomeController', function($scope, session, columnResizer) {
         if (session.loggedIn() === undefined) {
             session.autoLogin();
         }
+
+        $scope.startResizing = columnResizer.mousedown;
     });

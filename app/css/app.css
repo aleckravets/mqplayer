@@ -10,18 +10,6 @@
     cursor: default;
 }
 
-#content-wrapper {
-    position: absolute;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    padding-top: 50px;
-}
-
-#content {
-    /*border: 1px solid red;*/
-    height: 100%;
-}
 
 #controls-1 {
     margin: 12px 0 12px 40px;
@@ -32,10 +20,6 @@
     margin-right: 10px;
     font-size: 21px;
     line-height: 21px;
-}
-
-body {
-    padding-top: 70px;
 }
 
 a {
@@ -85,32 +69,6 @@ a.navbar-brand, .navbar-nav > li > a, player a {
 .tree .shared .glyphicon {
     opacity: 0.7;
     /*color: #777;*/
-}
-
-#left {
-    float: left;
-    width: 400px;
-    min-width: 5px;
-    height: 100%;
-    padding: 5px;
-    overflow: auto;
-    background: white;
-    position: relative;
-}
-
-#resize-bar {
-    float: left;
-    width: 5px;
-    background: #285e8e;
-    height: 100%;
-    cursor: ew-resize;
-}
-
-#right {
-    /*border: 1px solid red;*/
-    height: 100%;
-    margin-left: 405px;
-    position: relative;
 }
 
 /*********************************** TREE ***********************************/
