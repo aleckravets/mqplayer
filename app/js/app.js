@@ -11,3 +11,4 @@ angular.module('app')
             $http.get('partials/accounts.html', { cache: $templateCache });
             $http.get('tmpl/playlistManager.html', { cache: $templateCache });
         });
+

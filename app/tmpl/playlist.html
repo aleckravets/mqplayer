@@ -1,3 +1,10 @@
+<div id="playlists">
+    <ul>
+        <li>Playlist 1</li>
+        <li>Playlist 2</li>
+        <li>Playlist 3</li>
+    </ul>
+</div>
 <div id="playlist" ng-mousedown="mousedown($event)" droppable>
     <div ng-if="playlist.loading" class="loading-label"><div><i class="glyphicon glyphicon-time"></i><span>Loading...</span></div></div>
     <div ng-if="!playlist.loading && playlist.records.length == 0" class="loading-label"><div><i class="glyphicon glyphicon-list"></i><span>Playlist is empty</span></div></div>
