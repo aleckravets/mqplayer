@@ -3,5 +3,5 @@
 
     <div ng-if="session.loggedIn() === false" id="login" ng-include="'partials/login.html'"></div>
 
-    <div ng-if="session.loggedIn()" ng-include="'partials/player.html'"></div>
+    <div ng-if="session.loggedIn()" ng-include="'partials/player.html'" onload="restoreBarWidths()"></div>
 </div>

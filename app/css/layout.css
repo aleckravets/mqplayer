@@ -45,7 +45,7 @@ body {
     width: 300px;
     height: 100%;
     margin-left: -100%;
-    min-width: 50px;
+    min-width: 0px;
 }
 
 #right-col {
@@ -53,7 +53,7 @@ body {
     width: 200px;
     margin-left: -200px;
     height: 100%;
-    min-width: 100px;
+    min-width: 0px;
 }
 
 .resize-bar {
@@ -70,63 +70,3 @@ body {
 #resize-bar-right {
     float: right;
 }
-
-
-
-
-
-
-
-/*#content {*/
-    /*border: 1px solid red;*/
-    /*height: 100%;*/
-/*}*/
-
-/*#left-col {*/
-    /*float: left;*/
-    /*width: 400px;*/
-    /*min-width: 5px;*/
-    /*height: 100%;*/
-    /*padding: 5px;*/
-    /*overflow: auto;*/
-    /*background: white;*/
-    /*position: relative;*/
-/*}*/
-/*#middle-col {*/
-    /*float: left;*/
-    /*width: 400px;*/
-    /*min-width: 5px;*/
-    /*height: 100%;*/
-    /*padding: 5px;*/
-    /*overflow: auto;*/
-    /*background: white;*/
-    /*position: relative;*/
-/*}*/
-
-/*#right-col-wrapper {*/
-    /*float: right;*/
-    /*width: 400px;*/
-    /*min-width: 5px;*/
-    /*height: 100%;*/
-    /*padding: 5px;*/
-    /*overflow: auto;*/
-    /*background: yellow;*/
-    /*position: relative;*/
-
-/*}*/
-
-/*.resize-bar {*/
-    /*float: left;*/
-    /*width: 5px;*/
-    /*background: #285e8e;*/
-    /*height: 100%;*/
-    /*cursor: ew-resize;*/
-/*}*/
-
-/*#middle {*/
-    /*border: 1px solid red;*/
-    /*height: 100%;*/
-    /*margin-left: 405px;*/
-    /*margin-right: 405px;*/
-    /*position: relative;*/
-/*}*/

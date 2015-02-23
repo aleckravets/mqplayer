@@ -1,8 +1,9 @@
 'use strict';
 
 angular.module('services')
-    .factory('columnResizer', function($document, session) {
+    .factory('columnResizer', function($document) {
         var startColWidth, startX, colMinWidth, col, isLeft, contentCol, startContentColWidth, contentColMinWidth;
+        var leftWidth, rightWidth;
 
         var mousedown = function(e) {
             e.preventDefault();
@@ -35,9 +36,14 @@ angular.module('services')
                 return;
             }
 
-            resize(x);
-
-            session.state.sidebarWidth = x;
+            if (isLeft) {
+                leftWidth = startColWidth + x;
+                resizeLeft(contentCol, col, leftWidth);
+            }
+            else {
+                rightWidth = startColWidth - x;
+                resizeRight(contentCol, col, rightWidth);
+            }
         };
 
         var mouseup = function () {
@@ -45,16 +51,25 @@ angular.module('services')
             $document.off('mouseup', mouseup);
         };
 
-        var resize = function(x) {
-            if (isLeft) {
-                col.css('width', startColWidth + x + 'px');
-                contentCol.css('margin-left', startColWidth + x + 'px');
-            }
-            else {
-                col.css('width', startColWidth - x + 'px');
-                col.css('margin-left', "-" + (startColWidth - x) + 'px');
-                contentCol.css('margin-right', (startColWidth - x) + 'px');
-            }
+        var resizeLeft = function (contentCol, col, width) {
+            col.css('width', width + 'px');
+            contentCol.css('margin-left', width + 'px');
+        };
+
+        var resizeRight = function (contentCol, col, width) {
+            col.css('width', width + 'px');
+            col.css('margin-left', "-" + width + 'px');
+            contentCol.css('margin-right', width + 'px');
+        };
+
+
+        var restore = function() {
+            var contentCol = $("#content-col");
+            var leftCol = $("#left-col");
+            var rightCol = $("#right-col");
+
+            resizeLeft(contentCol, leftCol, leftWidth);
+            resizeRight(contentCol, rightCol, rightWidth);
         };
 
         return {

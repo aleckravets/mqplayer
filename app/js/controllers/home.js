@@ -6,5 +6,8 @@ angular.module('app')
             session.autoLogin();
         }
 
-        $scope.startResizing = columnResizer.mousedown;
+        $scope.resizeBarMousedown = columnResizer.mousedown;
+        $scope.restoreBarWidths = function() {
+            columnResizer.restore();
+        };
     });

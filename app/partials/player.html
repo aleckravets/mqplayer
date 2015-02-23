@@ -1,8 +1,8 @@
 <div id="content-wrapper">
     <div id="content-col-wrapper">
         <div id="content-col" class="col">
-            <div id="resize-bar-left" class="resize-bar" ng-mousedown="startResizing($event)"></div>
-            <div id="resize-bar-right" class="resize-bar" ng-mousedown="startResizing($event)"></div>
+            <div id="resize-bar-left" class="resize-bar" ng-mousedown="resizeBarMousedown($event)"></div>
+            <div id="resize-bar-right" class="resize-bar" ng-mousedown="resizeBarMousedown($event)"></div>
             <div class="col-inner">
                 <playlist include-replace></playlist>
             </div>
