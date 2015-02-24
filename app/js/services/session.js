@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('services')
-    .factory('session', function($q, Player, Playlist, Tree, page, helper, clients, TreeNode, Item, appData) {
+    .factory('session', function($q, Player, Playlist, Tree, page, helper, clients, TreeNode, Item, appData, PlaylistManager, api) {
         var that = {
             // todo: make private
             active: undefined, // indicates whether the session has started and all it's components are initialized
@@ -12,6 +12,7 @@ angular.module('services')
         var autoLoginPromise;
 
         function start() {
+            that.playlistManager = new PlaylistManager();
             that.playlist = new Playlist();
             that.tree = new Tree();
 
@@ -103,6 +104,9 @@ angular.module('services')
                 .then(function(client) {
                     return client.login(immediate)
                         .then(function() {
+                            return api.login(client.name, client.token);
+                        })
+                        .then(function() {
                             if (!that.active) {
                                 start();
                             }
@@ -132,7 +136,10 @@ angular.module('services')
                         promises.push(
                             clients.load(serviceName)
                                 .then(function (client) {
-                                    return client.login(true);
+                                    return client.login(true)
+                                        .then(function() {
+                                            return api.login(client.name, client.token);
+                                        });
                                 })
                         );
                     });

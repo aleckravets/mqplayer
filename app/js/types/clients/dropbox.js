@@ -45,6 +45,7 @@ angular.module('types')
                 if (!loginCallback) {
                     loginCallback = function (error, client) {
                         if (client.isAuthenticated()) {
+                            self.token = dropbox._oauth._token;
                             loginDeferred.resolve();
                         }
                         else {
