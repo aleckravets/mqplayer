@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -19,8 +20,8 @@ public class SecurityContext {
     /**
      * Current request tokens
      */
-    private Map<String, String> tokens;
-
+//    private Map<String, String> tokens;
+    private List<Token> tokens;
     /**
      * Authorized user of the current request
      */
@@ -34,11 +35,11 @@ public class SecurityContext {
         this.user = user;
     }
 
-    public Map<String, String> getTokens() {
+    public List<Token> getTokens() {
         return tokens;
     }
 
-    public void setTokens(Map<String, String> tokens) {
+    public void setTokens(List<Token> tokens) {
         this.tokens = tokens;
     }
 }

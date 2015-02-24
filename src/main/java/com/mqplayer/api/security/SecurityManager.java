@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,11 +35,11 @@ public class SecurityManager {
      * @param tokens
      * @return
      */
-    public void authenticate(Map<String, String> tokens) {
+    public void authenticate(List<Token> tokens) {
         securityContext.setTokens(tokens);
 
-        for (Map.Entry<String, String> entry : tokens.entrySet()) {
-            User user = securityDao.getUserByToken(entry.getKey(), entry.getValue());
+        for (Token token: tokens) {
+            User user = securityDao.getUserByToken(token.getService(), token.getToken());
 
             if (user != null) {
                 securityContext.setUser(user);

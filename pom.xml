@@ -59,6 +59,13 @@
             <version>5.5.1</version>
         </dependency>
 
+        <!-- tools -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.1</version>
+        </dependency>
+
         <!-- jdbc -->
         <dependency>
             <groupId>mysql</groupId>

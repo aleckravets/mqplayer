@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mqplayer.api.exceptions.AppException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -11,6 +12,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,23 +31,23 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Map<String, String> tokens = parseTokens(request.getHeader(AUTHORIZATION_HEADER));
+        String authHeader = request.getHeader(AUTHORIZATION_HEADER);
 
-        if (tokens != null)
-            securityManager.authenticate(tokens);
+        if (StringUtils.isNotBlank(authHeader)) {
+            securityManager.authenticate(parseTokens(authHeader));
+        }
 
         return true;
     }
 
-    private Map<String, String> parseTokens(String authorizationString) throws IOException {
-        Map<String, String> tokens = null;
-
-        if (authorizationString == null) {
-            return tokens;
-        }
-
+    private List<Token> parseTokens(String authorizationString) throws IOException {
         try {
-            tokens = jsonMapper.readValue(authorizationString, Map.class);
+            Map<String, String> tokensMap = jsonMapper.readValue(authorizationString, Map.class);
+            List<Token> tokens = new ArrayList<>();
+            for (Map.Entry<String, String> entry : tokensMap.entrySet()) {
+                tokens.add(new Token(entry.getKey(), entry.getValue()));
+            }
+            return tokens;
         }
         catch (JsonMappingException exception) {
             throw new AppException(PARSE_ERROR);
@@ -52,8 +55,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         catch (JsonParseException exception) {
             throw new AppException(PARSE_ERROR);
         }
-
-        return tokens;
     }
 
     @Override
