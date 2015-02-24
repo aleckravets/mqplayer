@@ -6,8 +6,26 @@ import com.mqplayer.api.domain.entities.Record;
  * @author akravets
  */
 public class RecordModel {
+    private String service;
+    private String id;
     private String name;
     private String url;
+
+    public String getService() {
+        return service;
+    }
+
+    public void setService(String service) {
+        this.service = service;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -23,12 +41,5 @@ public class RecordModel {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public static RecordModel map(Record record) {
-        RecordModel model = new RecordModel();
-        model.setName(record.getName());
-        model.setUrl(record.getUrl());
-        return model;
     }
 }

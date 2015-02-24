@@ -45,7 +45,7 @@ public class PlaylistService {
         playlistDao.addPlaylist(playlist);
 
         for (AddPlaylistDto.RecordDto recordDto: playlistDto.getRecords()) {
-            Record record = new Record(recordDto.getName(), recordDto.getUrl(), playlist.getId());
+            Record record = new Record(recordDto.getService(), recordDto.getId(), recordDto.getName(), recordDto.getUrl(), playlist.getId());
             playlistDao.addRecord(playlist, record);
         }
     }

@@ -26,8 +26,26 @@ public class AddPlaylistDto {
     }
 
     public static class RecordDto {
+        private String service;
+        private String id;
         private String name;
         private String url;
+
+        public String getService() {
+            return service;
+        }
+
+        public void setService(String service) {
+            this.service = service;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
 
         public String getName() {
             return name;

@@ -41,17 +41,11 @@ public class PlaylistDao {
         return playlist;
     }
 
-    public Record addRecord(Playlist playlist, Record record) {
-        Long id =
-                db.<Long>insert(
-                        "insert record (name, url, playlistId) values (?, ?, ?)",
-                        "id",
-                        record.getName(), record.getUrl(), playlist.getId()
-                );
-
-        record.setId(id);
-
-        return record;
+    public void addRecord(Playlist playlist, Record record) {
+        db.getJdbcOperations().update(
+            "insert record (service, id, name, url, playlistId) values (?, ?, ?, ?, ?)",
+            record.getService(), record.getId(), record.getName(), record.getUrl(), playlist.getId()
+        );
     }
 
     public void deleteOne(long id) {

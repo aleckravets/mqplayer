@@ -25,11 +25,13 @@ CREATE TABLE `playlist` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `record` (
-  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `service` varchar(10) NOT NULL,
+  `id` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
   `playlistId` bigint NOT NULL,
-  CONSTRAINT `FK_record_playlist_id` FOREIGN KEY (`playlistId`) REFERENCES `playlist` (`id`)
+  CONSTRAINT `FK_record_playlist_id` FOREIGN KEY (`playlistId`) REFERENCES `playlist` (`id`),
+  CONSTRAINT `FK_record_service_id` FOREIGN KEY (`service`) REFERENCES `service` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 insert service
@@ -44,6 +46,6 @@ insert account (service, email, token, userid)
 insert playlist(id, name, userId)
 select 1, 'Led Zeppelin', 1;
 
-insert record(name, url, playlistId)
-select 'Good times, bad times', 'http://drive.com/good-times', 1 union
-select 'Babe, I\'m gonna quite you..', 'http://drive/babe', 1;
+insert record(service, id, name, url, playlistId)
+select 'drive', '1', 'Good times, bad times', 'http://drive.com/good-times', 1 union
+select 'drive', '2', 'Babe, I\'m gonna quite you..', 'http://drive/babe', 1;
