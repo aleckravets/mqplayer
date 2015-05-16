@@ -6,8 +6,8 @@ import com.mqplayer.api.domain.entities.Record;
  * @author akravets
  */
 public class RecordModel {
-    private String service;
     private String id;
+    private String service;
     private String name;
     private String url;
 
