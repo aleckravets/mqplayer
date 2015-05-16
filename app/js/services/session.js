@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('services')
-    .factory('session', function($q, Player, Playlist, Tree, page, helper, clients, TreeNode, Item, appData, PlaylistManager, api) {
+    .factory('session', function($q, Player, Playlist, Tree, page, helper, clients, TreeNode, Item, appData, api) {
         var that = {
             // todo: make private
             active: undefined, // indicates whether the session has started and all it's components are initialized
@@ -12,7 +12,6 @@ angular.module('services')
         var autoLoginPromise;
 
         function start() {
-            that.playlistManager = new PlaylistManager();
             that.playlist = new Playlist();
             that.tree = new Tree();
 

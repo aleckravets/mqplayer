@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('directives')
-    .directive('playlistManager', function(session, Record, Item, clients) {
+    .directive('playlistManager', function(session, Record, Item, clients, playlistService) {
         return {
             restrict: 'E',
             scope: {},
@@ -9,13 +9,12 @@ angular.module('directives')
             link: function(scope, element, attrs) { },
             templateUrl: 'js/directives/playlist-manager/playlist-manager.html',
             controller: function ($scope, $element) {
-                var playlistManager = session.playlistManager,
-                    playlist = session.playlist;
+                var playlist = session.playlist;
 
                 $scope.loading = true;
 
                 $scope.loadPlaylist = function(playlistId) {
-                    playlistManager.getPlaylistRecords(playlistId)
+                    playlistService.getPlaylistRecords(playlistId)
                         .then(function(data) {
                             playlist.clear();
 
@@ -30,7 +29,7 @@ angular.module('directives')
 
                 };
 
-                playlistManager.getPlaylists()
+                playlistService.getPlaylists()
                     .then(function(playlists) {
                         $scope.playlists = playlists;
                         $scope.loading = false;

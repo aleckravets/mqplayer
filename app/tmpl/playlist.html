@@ -1,4 +1,20 @@
 <div id="playlist" ng-mousedown="mousedown($event)" droppable>
+    <div class="toolbar">
+        <div class="toolbar-inner">
+            <a ng-click="openSaveDialog()" ng-mousedown="$event.stopPropagation()"><i class="glyphicon glyphicon-floppy-disk"></i></a>
+            <a><i class="glyphicon glyphicon-trash"></i></a>
+            <div id="save-playlist-dialog" class="controls form-inline" ng-if="saveDialog" ng-mousedown="$event.stopPropagation()">
+                <input type="text"
+                       class="form-control input-sm"
+                       ng-keydown="keydown($event)"
+                       placeholder="save playlist as..."
+                       maxlength="50"
+                       ng-model="saveName"
+                       />
+                <a class="btn btn-primary btn-sm" ng-click="save(saveName)" ng-disabled="saveDisabled()">Save</a>
+            </div>
+        </div>
+    </div>
     <div ng-if="playlist.loading" class="loading-label"><div><i class="glyphicon glyphicon-time"></i><span>Loading...</span></div></div>
     <div ng-if="!playlist.loading && playlist.records.length == 0" class="loading-label"><div><i class="glyphicon glyphicon-list"></i><span>Playlist is empty</span></div></div>
     <ul ng-class="{dragover: dragover}">
@@ -17,6 +33,6 @@
             <!--<a title="remove selected from playlist (Del)" ng-click="deleteSelected()"><i class="glyphicon glyphicon-trash"></i></a>-->
             <!--<a title="saved playlists" ng-click="openManager()" ng-mousedown="openManagerMousedown($event)"><i class="glyphicon glyphicon-star"></i></a>-->
         <!--</div>-->
-        <!--<playlist-manager ng-if="managerVisible"></playlist-manager>-->
+        <!--<playlist-manager-old ng-if="managerVisible"></playlist-manager-old>-->
     <!--</div>-->
 </div>

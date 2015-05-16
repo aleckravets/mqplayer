@@ -687,3 +687,29 @@ ul.tree li {
     margin-top: 2px;
     background: url('../img/dropbox-15x14.png') no-repeat 50% 50%;
 }
+
+.toolbar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 50px;
+}
+
+.toolbar-inner {
+    /*border: 1px solid #ccc;*/
+    position: fixed;
+    /*background: yellow;*/
+    padding: 2px 5px;
+    width: 50px;
+}
+
+#save-playlist-dialog {
+    white-space: nowrap;
+    margin-top: 10px;
+    margin-left: -270px;
+    background: #fff;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    padding: 10px;
+    border: 1px solid #ccc;
+}

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('directives')
-    .directive('playlist', function($document, $timeout, session, Record, helper, $rootScope) {
+    .directive('playlist', function($document, $timeout, session, Record, helper, $rootScope, playlistService) {
         return {
             restrict: 'E',
             scope: {},
@@ -44,22 +44,22 @@ angular.module('directives')
                     playlist.clear();
                 };
 
-                 $scope.openManager = function(e) {
-                    $scope.managerVisible = true;
-                };
-
-                $scope.closeManager = function() {
-                    $scope.managerVisible = false;
-                };
-
-                $scope.openManagerMousedown = function(e) {
-                    if ($scope.managerVisible) {
-                        e.stopPropagation(); // no blinking
-                    }
-                };
+//                 $scope.openManager = function(e) {
+//                    $scope.managerVisible = true;
+//                };
+//
+//                $scope.closeManager = function() {
+//                    $scope.managerVisible = false;
+//                };
+//
+//                $scope.openManagerMousedown = function(e) {
+//                    if ($scope.managerVisible) {
+//                        e.stopPropagation(); // no blinking
+//                    }
+//                };
 
                 $rootScope.$on('mousedown', function() {
-                    $scope.closeManager();
+                    $scope.closeSaveDialog();
                 });
 
                 var selectNone = function() {
@@ -86,6 +86,20 @@ angular.module('directives')
                 $scope.dblclick = function(e, record) {
                     $rootScope.$broadcast('player.timeupdate', 0);
                     $timeout(function() {player.playRecord(record); }); // this is odd - gotta investigate
+                };
+
+                /* save playlist */
+                $scope.openSaveDialog = function() {
+                    $scope.saveDialog = true;
+                };
+
+                $scope.closeSaveDialog = function() {
+                    $scope.saveDialog = false;
+                };
+
+                $scope.save = function(name) {
+                    $scope.closeSaveDialog();
+//                    playlistService.addPlaylist(name, )
                 };
 
                 var handleSelection;
@@ -192,6 +206,9 @@ angular.module('directives')
                             break;
                         case 40: // down arrow
                             moveDown(e);
+                            break;
+                        case 27:
+                            $scope.closeSaveDialog();
                             break;
                         default:
                             return;
