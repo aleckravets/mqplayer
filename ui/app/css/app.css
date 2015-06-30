@@ -1,0 +1,715 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+.checkbox {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.form-control[disabled] {
+    cursor: default;
+}
+
+
+#controls-1 {
+    margin: 12px 0 12px 40px;
+    white-space: nowrap;
+}
+
+#controls-1 a {
+    margin-right: 10px;
+    font-size: 21px;
+    line-height: 21px;
+}
+
+a {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.navbar {
+    background: #285e8e;
+    border: none;
+}
+
+.navbar-nav > li > a {
+    background: transparent !important;
+}
+
+a.navbar-brand, .navbar-nav li a, player a {
+    text-decoration: none;
+}
+
+a.navbar-brand, .navbar-nav > li > a, player a {
+    text-decoration: none;
+    color: #fff !important;
+}
+
+.navbar-brand span * {
+    vertical-align: middle;
+}
+.navbar-brand i {
+    margin-right: 5px;
+}
+
+.navbar .glyphicon-music {
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+.navbar-right i {
+    font-size: 12px;
+}
+
+.tree .glyphicon,
+#playlist li .glyphicon {
+    color: #285e8e;
+}
+
+.tree .shared .glyphicon {
+    opacity: 0.7;
+    /*color: #777;*/
+}
+
+/*********************************** TREE ***********************************/
+ul.tree,
+ul.tree ul{
+    white-space: nowrap;
+    padding-left: 20px;
+    list-style-type: none;
+}
+
+ul.tree li {
+    cursor: default;
+}
+
+.tree-root {
+    margin-bottom: 4px;
+}
+
+.tree-label {
+    padding: 1px 4px;
+    border: 1px solid transparent;
+}
+
+.tree-label.selected {
+    background: #c4e3f3;
+    border: 1px solid #285e8e;
+}
+
+#tree-buttons {
+    text-align: right;
+    padding: 5px 0;
+}
+
+.tree a {
+    cursor: pointer;
+}
+
+.tree .glyphicon {
+    font-size: 12px;
+}
+.glyphicon-root {
+    width: 16px;
+    height: 16px;
+}
+
+.tree-root-drive .glyphicon-root {
+    background: url('../img/drive-14x12.png') no-repeat 50% 50%;
+    margin-bottom: -2px;
+}
+
+.tree-root-dropbox .glyphicon-root {
+    background: url('../img/dropbox-15x14.png') no-repeat 50% 50%;
+    margin-bottom: -2px;
+}
+
+.tree .glyphicon-plus {
+    font-size: 9px;
+    margin-left: -15px;
+    padding-right: 5px;
+    margin-top: -3px;
+    vertical-align: middle;
+    line-height: 18px;
+}
+
+.tree .glyphicon-folder-closed {
+    line-height: 18px;
+}
+
+.tree .glyphicon-file {
+    color: #555
+}
+
+.collapsed ul {
+    display: none;
+}
+
+.loading {
+    font-size: 85%;
+}
+
+/************************************** PLAYER ******************************/
+#volume-col {
+    float: left;
+    height: 100%;
+    border-right: 1px solid #ccc;
+    padding: 11px;
+}
+
+.controls {
+
+}
+
+#controls-1 a {
+    display: block;
+    float: left;
+    height: 100%;
+    width: 34px;
+}
+
+#controls-2 {
+    margin: 13px 10px 0 0;
+}
+
+#controls-3 {
+    margin: 14px 0; /* reduce the original margin of nav-text so the bottom border fits */
+}
+
+#controls-4 {
+    margin: 14px 0 0 50px; /* reduce the original margin of nav-text so the bottom border fits */
+}
+#controls-4 .glyphicon-trash {
+    font-size: 13px;
+}
+
+#controls-2 a {
+    font-size: 18px;
+}
+
+#controls-2 a,
+#controls-3 a,
+#controls-4 a {
+    width: 16px;
+    display: block;
+    float: left;
+    /*padding: 1px 0;*/
+    margin-left: 20px;
+}
+
+#controls-3 a.pressed{
+    border-bottom: 2px solid #fff;
+}
+
+
+#controls-1 a.pause {
+    display: none;
+}
+
+.playing #controls-1 a.play,
+.buffering #controls-1 a.play {
+    display: none;
+}
+
+.playing #controls-1 a.pause,
+.buffering #controls-1 a.pause{
+    display: block;
+}
+
+.paused #controls-1 a.play,
+.stopped #controls-1 a.play {
+    display: block;
+}
+
+#volume {
+    float: left;
+    margin-top: 19px;
+    width: 100px;
+    border: none;
+    border-radius: 1px;
+    height: 10px;
+}
+
+#volume .ui-slider-handle {
+    background: url('../img/handle.png') no-repeat 50% 50%;
+    border: none;
+    outline: none;
+    width: 20px;
+    height: 20px;
+    margin-top: -1px;
+    margin-right: -4px;
+}
+
+#volume .ui-slider-range {
+    background:  #285e8e;
+    opacity: 0.7;
+    margin: 1px;
+    height: 8px !important;
+    /*position: absolute;*/
+    border: 0;
+    border-radius: 0;
+    top: 0;
+}
+
+#track {
+    float: left;
+    width: 300px;
+    margin-top: 19px;
+    margin-right: 20px;
+    background: #fff;
+    opacity: 1 !important;
+    border-color: #999;
+    border: none;
+    border-radius: 1px;
+    height: 10px;
+}
+
+#track .ui-slider-handle {
+    display: none;
+    border: none;
+    outline: none;
+    width: 25px;
+    height: 25px;
+    margin-top: -5px;
+}
+
+#track .ui-slider-range {
+    background:  #285e8e;
+    opacity: 0.7;
+    border-radius: 0;
+    border: 1px solid #fff;
+    top: 0;
+}
+
+/******************************** PLAYLIST *************************/
+
+#playlist {
+    position: relative;
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+    padding: 10px 5px 10px 0;
+    background: white;
+}
+
+#playlist-inner {
+    border: 1px solid red;
+    position: relative;
+}
+
+#playlist ul {
+    list-style-type: none;
+    padding-left: 0;
+    cursor: default;
+    pointer-events: none;
+}
+
+#playlist ul.dragover li:last-child {
+    border-bottom: 2px dotted #000;
+}
+
+#playlist li {
+    margin: 0 0 0 20px;
+    border-top: 2px solid transparent;
+    pointer-events: all;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+
+    /*padding: 10px;*/
+}
+
+#playlist li span {
+    /*border: 1px solid red;*/
+}
+
+#playlist > ul li i {
+    display: none;
+    margin-left: -14px;
+}
+
+.buffering #playlist li.current .glyphicon-time {
+    display: inline-block;
+}
+
+.playing #playlist li.current i.glyphicon-play {
+    display: inline-block;
+}
+
+.paused #playlist li.current i.glyphicon-pause {
+    display: inline-block;
+}
+
+#playlist li:nth-child(2n+1) {
+    background-color: #F9F9F9;
+}
+
+#playlist li.selected {
+    background: #c4e3f3;
+}
+
+#playlist li.current {
+    font-weight: bold;
+}
+
+#playlist li span {
+    pointer-events: none; /* do not fire dragenter/dragleave events on li's contents */
+}
+
+#playlist li.dragover{
+    border-top: 2px dotted #000;
+}
+
+#playlist-menu-wrapper {
+    position: absolute;
+    right: 0;
+    top: 10%;
+    /*float: right;*/
+    /*margin-top: 10px;*/
+    /*margin-right: -5px;*/
+    width: 40px;
+}
+
+#playlist-menu {
+    position: fixed;
+    width: 40px;
+    background:  #285e8e;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+#playlist-menu a {
+    color: #fff;
+    display: block;
+    text-decoration: none;
+    line-height: 0px;
+    padding: 8px 0 8px 12px;
+    border-bottom: 1px solid #fff;
+    font-size: 16px;
+}
+
+#playlist-menu a:last-child {
+    border-bottom: none;
+}
+
+/* PLAYLIST MANAGER */
+
+#playlist-manager {
+    padding: 10px;
+}
+
+#playlist-manager .controls {
+    white-space: nowrap;
+}
+
+#playlist-manager .controls input {
+    width: 270px;
+}
+
+#playlist-manager ul {
+    padding: 0;
+}
+
+#playlist-manager .header {
+    background-color: #eee;
+    border-bottom: 1px solid #ccc;
+    padding: 2px;
+}
+
+#playlist-manager li {
+    margin: 0;
+    padding: 2px;
+    overflow: hidden;
+}
+
+#playlist-manager .chk {
+    width: 25px;
+}
+
+#playlist-manager .row {
+    margin: 0;
+}
+
+#playlist-manager li .row .remove {
+    color: darkred;
+}
+
+#playlist-manager li .row .records {
+    text-align: center;
+}
+
+#playlist-manager .col {
+    padding: 0;
+}
+
+#playlist-manager li > div {
+    float: left;
+    width: 100%;
+}
+
+#playlist-manager li .name {
+    /*display: block;*/
+    text-decoration: none;
+    margin-right: 15px;
+}
+
+#playlist-manager li:hover {
+    background: #e5efef;
+}
+
+#playlist-manager li a.remove {
+    display: block;
+    float: right;
+    width: 15px;
+    margin-left: -15px;
+    font-size: 10px;
+    margin-top: 5px;
+}
+
+#playlist-manager .playlists {
+}
+#playlist-manager .playlists ul {
+    margin: 5px 0;
+    min-height: 50px;
+    max-height: 250px;
+    overflow: auto;
+}
+
+#playlist-manager .buttons {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#playlist-manager .empty {
+    text-align: center;
+    margin-left: -10px;
+    margin-top: -40px;
+    position: absolute;
+    width: 100%;
+    color: #aaa;
+}
+/****** PLAYLIST END **********/
+
+.loading-label {
+    position: absolute;
+    left: 50%;
+    top: 45%;
+    font-size: 20px;
+    color: #ccc;
+    z-index: 1;
+    text-align: center;
+}
+
+.loading-label div {
+    /*border: 1px solid green;*/
+    position: relative;
+    left: -50%;
+}
+
+.loading-label div i,
+.loading-label div span {
+    /*vertical-align: middle;*/
+    margin-right: 5px;
+}
+
+.loading-label div i {
+    font-size: 25px;
+    vertical-align: top;
+}
+
+#splash div i {
+    /*font-size: 50px;*/
+}
+
+
+#text {
+    padding: 0 20px;
+}
+
+#browsers .br td {
+    background: #eee;
+    font-weight: bold;
+}
+
+#browsers td {
+    border: 1px solid #000;
+    padding: 5px;
+    text-align: center;
+}
+
+#browsers td.yes {
+    /*background: #b2dba1;*/
+}
+
+#shortcuts th {
+    padding: 5px 20px;
+    text-align: center;
+}
+#features li {
+    margin-top: 5px;
+}
+
+
+/* end of user menu */
+
+#login {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    padding-top: 50px;
+    background-color: #4478ad;
+    text-align: center;
+}
+#login h1 {
+    font-size: 3.5em;
+    text-shadow: 0px 3px 3px #333;
+    letter-spacing: 2px;
+    margin-top: 50px;
+    text-align: center;
+    color: #fff;
+    display: inline-block;
+    border-bottom: 1px solid #fff;
+    padding-bottom: 20px;
+}
+
+#login-box {
+    margin: 10px auto;
+    width: 500px;
+    text-align: center;
+}
+
+#login-box p {
+    color: #fff;
+    font-family: Arial,sans-serif;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+#login-box a {
+    display: inline-block;
+    height: 80px;
+    color: #fff;
+    vertical-align: bottom;
+    font-size: 1.5em;
+    padding: 0 15px;
+}
+
+#login-box a i {
+    background-color: #eee;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    margin: 0 auto 10px auto;
+    width: 80px;
+    height: 80px;
+    display: block;
+    border-radius: 50%;
+}
+
+#login-box a:hover i {
+    background-color: #fff;
+}
+
+#login-box a.drive i {
+    background-image: url("../img/drive-57x49.png")
+}
+
+#login-box a.dropbox i {
+    background-image: url("../img/dropbox-50x47.png")
+}
+
+/* accounts */
+
+.navbar-nav > li > .dropdown-menu {
+    margin-top: 3px;
+}
+
+.navbar-nav .glyphicon-cloud,
+.navbar-nav .glyphicon-help {
+    top: 3px;
+}
+
+.accounts ul {
+    padding: 0;
+}
+
+.accounts li {
+    width: 300px;
+    cursor: default;
+    padding: 10px 10px 10px 30px;
+    margin: 0;
+    border-bottom: 1px solid #eee;
+    overflow: hidden;
+}
+
+.accounts li:last-child {
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-bottom: none;
+}
+
+.accounts li:hover {
+    background: #F5F5F5;
+}
+
+.accounts h4 {
+    margin: 0;
+}
+
+.accounts .button {
+    float: right;
+}
+
+.accounts p {
+    margin: 4px 0 0 0;
+}
+.accounts .username {
+    font-size: 0.9em;
+}
+
+.accounts .stats {
+    font-size: 0.8em;
+}
+
+.accounts .dropdown-menu i {
+    display: block;
+    float: left;
+    width: 14px;
+    height: 14px;
+    margin-left: -21px;
+}
+
+.accounts .drive i {
+    margin-top: 2px;
+    background: url('../img/drive-14x12.png') no-repeat 50% 50%;
+}
+
+.accounts .dropbox i {
+    margin-top: 2px;
+    background: url('../img/dropbox-15x14.png') no-repeat 50% 50%;
+}
+
+.toolbar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 50px;
+}
+
+.toolbar-inner {
+    /*border: 1px solid #ccc;*/
+    position: fixed;
+    /*background: yellow;*/
+    padding: 2px 5px;
+    width: 50px;
+}
+
+#save-playlist-dialog {
+    white-space: nowrap;
+    margin-top: 10px;
+    margin-left: -270px;
+    background: #fff;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    padding: 10px;
+    border: 1px solid #ccc;
+}

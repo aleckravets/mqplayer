@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<script>
+
+</script>
+<style>
+    html, body {
+        height: 100%;
+    }
+    #main {
+        margin: 0 100px;
+        height: 100%;
+        border: 1px solid #000;
+    }
+
+    #content-wrapper{
+        float: left;
+        width: 100%;
+    }
+
+    #content-col{
+        margin: 0 200px 0 25%;
+        background: #ccc;
+        height: 100%;
+    }
+
+    #left-col{
+        float: left;
+        width: 25%; /*Width of left column in percentage*/
+        height: 100%;
+        margin-left: -100%;
+        background: #C8FC98;
+    }
+
+    #right-col{
+        float: left;
+        width: 200px; /*Width of right column in pixels*/
+        margin-left: -200px;
+        height: 100%;
+        background: #FDE95E;
+    }
+
+    .col-inner{
+        margin: 10px; /*Margins for inner DIV inside each column (to provide padding)*/
+        margin-top: 0;
+    }
+
+    #resize-bar-left {
+        float: right;
+        width: 5px;
+        background: #285e8e;
+        height: 100%;
+        cursor: ew-resize;
+    }
+
+    #resize-bar-right {
+        float: left;
+        width: 5px;
+        background: #285e8e;
+        height: 100%;
+        cursor: ew-resize;
+    }
+
+
+</style>
+
+<div id="main">
+
+    <div id="content-wrapper">
+        <div id="content-col">
+            <div class="col-inner">
+                <b>Content Column: <em>Fluid</em></b>
+            </div>
+        </div>
+    </div>
+
+    <div id="left-col">
+        <div id="resize-bar-left"></div>
+        <div class="col-inner">
+            <b>Left Column: <em>25%</em></b>
+        </div>
+    </div>
+
+    <div id="right-col">
+        <div id="resize-bar-right"></div>
+        <div class="col-inner">
+            <b>Right Column: <em>200px</em></b>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

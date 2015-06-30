@@ -1,0 +1,17 @@
+<ul class="dropdown-menu" ng-controller="AccountsController">
+    <li ng-if="loading">Loading...</li>
+    <li ng-repeat="service in services" class="{{service.name}}">
+        <i></i>
+        <div>
+            <div class="button">
+                <button ng-if="!service.loggedIn" ng-click="login(service.name)">Login</button>
+                <button ng-if="service.loggedIn" ng-click="logout(service.name)">Logout</button>
+            </div>
+            <h4>{{service.title}}</h4>
+            <div ng-if="service.loggedIn">
+                <p class="username">{{service.user}} </p>
+                <p class="stats">{{service.stats}}</p>
+            </div>
+        </div>
+    </li>
+</ul>

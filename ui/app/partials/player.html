@@ -1,0 +1,23 @@
+<div id="content-wrapper">
+    <div id="content-col-wrapper">
+        <div id="content-col" class="col">
+            <div id="resize-bar-left" class="resize-bar" ng-mousedown="resizeBarMousedown($event)"></div>
+            <div id="resize-bar-right" class="resize-bar" ng-mousedown="resizeBarMousedown($event)"></div>
+            <div class="col-inner">
+                <playlist include-replace></playlist>
+            </div>
+        </div>
+    </div>
+
+    <div id="left-col" class="col">
+        <div class="col-inner">
+            <tree></tree>
+        </div>
+    </div>
+
+    <div id="right-col" class="col">
+        <div class="col-inner">
+            <playlist-manager></playlist-manager>
+        </div>
+    </div>
+</div>

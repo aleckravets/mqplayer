@@ -1,0 +1,7 @@
+<div id="playlist-manager">
+    <ul>
+        <li ng-repeat="playlist in playlists" ng-dblclick="loadPlaylist(playlist.id)">
+            {{playlist.name}} {{playlist.id}}
+        </li>
+    </ul>
+</div>

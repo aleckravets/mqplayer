@@ -1,0 +1,21 @@
+{
+    "manifest_version": 2,
+    "name": "Music Queue",
+    "description": "Music Player for Google Drive",
+    "version": "1.2",
+    "container" : "GOOGLE_DRIVE",
+    "api_console_project_id" : "97071318931",
+    "app": {
+        "urls": [
+            "http://mqplayer.com/"
+        ],
+        "launch": {
+            "web_url": "http://mqplayer.com"
+        }
+    },
+    "icons": {
+        "128": "mq-128x128.png"
+    },
+    "permissions": [
+    ]
+}

@@ -1,0 +1,16 @@
+<script type="text/ng-template" id="node.html">
+    <div ng-class="{collapsed: node.collapsed, 'shared': node.item.shared}">
+        <a ng-if="node.item.type !== 'file'" ng-click="toggleDir(node)"><i class="glyphicon glyphicon-plus" ng-class="{'glyphicon-minus': !node.collapsed}"></i><i class="glyphicon glyphicon-folder-close" ng-class="{'glyphicon-folder-open': !node.collapsed}" ng-if="node.item.type === 'dir'"></i><i class="glyphicon glyphicon-root" ng-if="node.item.type === 'root'"></i></a>
+        <i ng-if="node.item.type === 'file'" class="glyphicon glyphicon-file"></i>
+        <span draggable class="tree-label" ng-class="{selected: node.selected}" ng-mousedown="mousedown($event, node)" ng-dblclick="dblclick($event, node)">{{node.item.name}}</span>
+        <div ng-if="node.item.type !== 'file' && !node.collapsed && node.loading" class="loading">Loading...</div>
+        <ul ng-if="node.item.type !== 'file'">
+            <li ng-repeat="node in node.children" ng-include="'node.html'"></li>
+            <li ng-if="node.item.type === 'root' && node.empty"><i>no files</i></li>
+        </ul>
+    </div>
+</script>
+
+<ul class="tree">
+    <li ng-repeat="node in tree.roots" ng-include="'node.html'" class="tree-item tree-root tree-root-{{node.item.client.name}}"></li>
+</ul>
