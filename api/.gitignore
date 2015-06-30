@@ -1,0 +1,8 @@
+.idea/
+docs/*
+data/*
+*.iml
+target/
+*.log
+src/main/webapp/node_modules
+src/main/webapp/marionettejs/main.build.js
