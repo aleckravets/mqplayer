@@ -1,0 +1,6 @@
+.idea/
+docs/*
+data/*
+*.iml
+target/
+*.log
