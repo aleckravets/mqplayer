@@ -106,7 +106,8 @@ angular.module('types')
                 gapi.auth.authorize({'client_id': clientid, 'scope': scopes.join(' '), 'immediate': immediate || false}, function(resp) {
                     if (resp && !resp.error) {
                         authorized = true;
-                        self.token = token = gapi.auth.getToken();
+                        token = gapi.auth.getToken();
+                        self.token = token.access_token;
                         deferred.resolve();
                     }
                     else {

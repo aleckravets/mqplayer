@@ -2,11 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.mqplayer</groupId>
+        <artifactId>mqplayer</artifactId>
+        <version>1.0</version>
+    </parent>
+
     <modelVersion>4.0.0</modelVersion>
-    <groupId>mqplayer</groupId>
     <artifactId>mqplayer-api</artifactId>
     <packaging>war</packaging>
-    <version>1.0-SNAPSHOT</version>
 
     <properties>
         <spring.version>4.1.1.RELEASE</spring.version>
@@ -101,7 +105,7 @@
                         </goals>
                         <configuration>
                             <files>
-                                <file>${basedir}/src/main/resources/jdbc.properties</file>
+                                <file>D:/projects/mqplayer/api/src/main/resources/jdbc.properties</file>
                             </files>
                         </configuration>
                     </execution>
@@ -121,10 +125,10 @@
                         <location>classpath:migration</location>
                     </locations>
                     <sqlMigrationPrefix>v</sqlMigrationPrefix>
-                    <driver>${jdbc.driver}</driver>
-                    <url>${jdbc.url}</url>
-                    <user>${jdbc.user}</user>
-                    <password>${jdbc.password}</password>
+                    <driver>com.mysql.jdbc.Driver</driver>
+                    <url>jdbc:mysql://localhost/mqplayer</url>
+                    <user>root</user>
+                    <password></password>
                 </configuration>
             </plugin>
         </plugins>

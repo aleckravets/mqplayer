@@ -58,6 +58,12 @@ public class SecurityDao {
                 targetUser.getId(),
                 sourceUser.getId());
 
+        // transfer playlists
+        db.getJdbcOperations().update(
+                "update playlist set userId = ? where userId = ?",
+                targetUser.getId(),
+                sourceUser.getId());
+
         // delete sourceUser
         db.getJdbcOperations().update(
                 "delete from user where id = ?",
