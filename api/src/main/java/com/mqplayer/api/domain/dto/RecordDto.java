@@ -1,11 +1,11 @@
-package com.mqplayer.api.web.models;
+package com.mqplayer.api.domain.dto;
 
 import com.mqplayer.api.domain.entities.Record;
 
 /**
  * @author akravets
  */
-public class RecordModel {
+public class RecordDto {
     private String id;
     private String service;
     private String name;

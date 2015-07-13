@@ -1,7 +1,8 @@
 package com.mqplayer.api.domain.services;
 
 import com.mqplayer.api.db.PlaylistDao;
-import com.mqplayer.api.domain.dto.AddPlaylistDto;
+import com.mqplayer.api.domain.dto.CreatePlaylistDto;
+import com.mqplayer.api.domain.dto.PlaylistDto;
 import com.mqplayer.api.domain.entities.Playlist;
 import com.mqplayer.api.domain.entities.Record;
 import com.mqplayer.api.domain.entities.User;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -40,14 +40,15 @@ public class PlaylistService {
     }
 
     @Transactional
-    public void addPlaylist(User user, AddPlaylistDto playlistDto) {
+    public Playlist create(User user, CreatePlaylistDto playlistDto) {
         Playlist playlist = new Playlist(playlistDto.getName(), user.getId());
         playlistDao.addPlaylist(playlist);
 
-        for (AddPlaylistDto.RecordDto recordDto: playlistDto.getRecords()) {
+        for (CreatePlaylistDto.RecordDto recordDto: playlistDto.getRecords()) {
             Record record = new Record(recordDto.getService(), recordDto.getId(), recordDto.getName(), recordDto.getUrl(), playlist.getId());
             playlistDao.addRecord(playlist, record);
         }
+        return playlist;
     }
 
     @Transactional
@@ -58,5 +59,9 @@ public class PlaylistService {
     @Transactional
     public void deleteMany(List<Long> ids) {
         playlistDao.deleteMany(ids);
+    }
+
+    public void update(Long id, PlaylistDto dto) {
+        playlistDao.update(id, dto.getName());
     }
 }

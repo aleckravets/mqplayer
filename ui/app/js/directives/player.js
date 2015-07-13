@@ -5,7 +5,7 @@ angular.module('directives')
     .directive('player', function(session) {
         return {
             restrict: 'E',
-            scope: {},
+            //scope: {},
             templateUrl: 'tmpl/player.html',
             controller: function($scope, $timeout, $document) {
                 $scope.session = session;
@@ -36,6 +36,9 @@ angular.module('directives')
                     session.player.playRecord(rec)
                         .then(function() {
                             $timeout(angular.noop);
+                        })
+                        .catch(function(error) {
+                            $scope.error(error);
                         });
                 }
 

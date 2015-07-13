@@ -1,0 +1,27 @@
+<div id="playlist-manager" ng-controller="PlaylistManagerController">
+    <div class="toolbar">
+        <h1>Saved playlists</h1>
+        <!--<button type="button" ng-click="play()" title="Play"><i class="glyphicon glyphicon-play"></i></button>-->
+        <!--<button type="button" ng-click="selectAll()" title="Select all"><i class="icon-check" style="line-height: 24px;"></i></button>-->
+        <button type="button" ng-click="remove()" ng-if="selected().length > 0" title="Delete"><i class="icon-trash"></i></button>
+    </div>
+    <div class="playlists">
+        <ul>
+            <li ng-repeat="playlist in playlistManager.playlists | orderBy: 'name'">
+                <div class="playlist" ng-click="select(playlist)">
+                    <div class="buttons" ng-click="$event.stopPropagation()">
+                        <button type="button" ng-click="play(playlist)" title="Play"><i class="glyphicon glyphicon-play"></i></button>
+                        <button type="button" ng-click="enqueue(playlist)" title="Enqueue"><i class="icon-reorder"></i></button>
+                        <button type="button" ng-click="savePlaylistDialog(playlist)" title="Edit"><i class="icon-edit"></i></button>
+                        <button type="button" ng-click="remove(playlist)" title="Delete"><i class="icon-trash"></i></button>
+                    </div>
+                    <div class="check">
+                        <i ng-class="{'icon-check': playlist.selected, 'icon-check-empty': !playlist.selected}"></i>
+                    </div>
+                    {{playlist.name}}
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="spinner spinner-large" ng-if="loading"></div>
+</div>

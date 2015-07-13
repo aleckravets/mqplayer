@@ -12,6 +12,8 @@
     <!-- endbuild -->
 
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!--<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">-->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
 
     <!-- build:css css/app.css -->
     <link rel="stylesheet" href="css/layout.css"/>
@@ -40,6 +42,16 @@
     </div>
 </div>
 
+<div id="msg" ng-if="messageText" class="center" ng-class="{error: messageType == 'error'}" ng-mousedown="$event.stopPropagation()">
+    <div>
+        <div class="icon" ng-switch="messageType">
+            <span ng-switch-when="error" class="icon-warning-sign"></span>
+            <span ng-switch-default class="icon-info-sign"></span>
+        </div>
+        <div class="text">{{messageText}}</div>
+    </div>
+</div>
+
 <div ng-view></div>
 
 <!-- build:js js/lib.js -->
@@ -49,17 +61,22 @@
 <script src="bower_components/angular-route/angular-route.js"></script>
 <script src="bower_components/slider/src/slider.js"></script>
 <script src="bower_components/script.js/dist/script.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <!--<script src="bower_components/bootstrap/js/dropdown.js"></script>-->
 <!-- endbuild -->
 
 <!-- build:js js/app.js -->
 <script src="js/tools.js"></script>
+<script src="js/polyfills.js"></script>
 <script src="js/app.js"></script>
 <script src="js/q.js"></script>
 <script src="js/columnResizer.js"></script>
 <script src="js/controllers/app.js"></script>
 <script src="js/controllers/accounts.js"></script>
-<!--<script src="js/controllers/playlistManager.js"></script>-->
+<script src="js/controllers/playlist-manager-controller.js"></script>
+<script src="js/controllers/playlist-controller.js"></script>
+<script src="js/controllers/save-playlist-controller.js"></script>
 <script src="js/controllers/home.js"></script>
 <script src="js/controllers/openFromDrive.js"></script>
 <script src="js/routing.js"></script>
@@ -71,6 +88,7 @@
 <script src="js/types/item.js"></script>
 <script src="js/types/clients/drive.js"></script>
 <script src="js/types/clients/dropbox.js"></script>
+<script src="js/types/playlist-manager.js"></script>
 <script src="js/services/helper.js"></script>
 <script src="js/services/page.js"></script>
 <script src="js/services/session.js"></script>
@@ -79,16 +97,15 @@
 <script src="js/services/api.js"></script>
 <script src="js/directives/tree.js"></script>
 <script src="js/directives/player.js"></script>
-<script src="js/directives/playlist.js"></script>
-<script src="js/directives/playlist-manager/playlist-manager-directive.js"></script>
-<script src="js/directives/playlistManager.js"></script>
+<!--<script src="js/directives/playlist.js"></script>-->
+<!--<script src="js/directives/playlist-manager/playlist-manager-directive.js"></script>-->
+<!--<script src="js/directives/playlist-manager.js"></script>-->
 <script src="js/directives/resizebar.js"></script>
 <script src="js/directives/draggable.js"></script>
 <script src="js/directives/droppable.js"></script>
 <script src="js/directives/includeReplace.js"></script>
 
-<script src="js/playlist-manager/playlist-service.js"></script>
-<script src="js/playlist-manager/user-playlist.js"></script>
+<script src="js/services/playlist-service.js"></script>
 <!-- endbuild -->
 
 <!--[if IE 9]>

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('app')
-    .controller('AppController', function($scope, $location, $timeout, session, page, helper, clients, $document, $route, $rootScope) {
+    .controller('AppController', function($scope, $location, $timeout, session, page, helper, clients, $document, $route, $rootScope, $modal) {
         // preload clients
         clients.available().forEach(function(client) {
             clients.load(client.name);
@@ -17,6 +17,19 @@ angular.module('app')
 
         $scope.logout = function(service) {
             session.logout(service);
+        };
+
+        $scope.showMessage = function(text, type) {
+            $scope.messageText = text;
+            $scope.messageType = type;
+        };
+
+        $scope.hideMessage = function() {
+            $scope.messageText = '';
+        };
+
+        $scope.error = function(text) {
+            $scope.showMessage(text, 'error');
         };
 
         // MENU WIDGETS
@@ -42,8 +55,9 @@ angular.module('app')
         };
 
         $rootScope.$on('keydown', function(e, keyCode) {
-            if (keyCode == 27) {
+            if (keyCode == 27) { // escape
                 $scope.closeMenuWidget();
+                $scope.hideMessage();
             }
         });
 
@@ -57,15 +71,15 @@ angular.module('app')
             }
         };
 
-        // PLAYLISTS
-        $scope.togglePlaylistManager = function(show) {
-            if (show !== undefined) {
-                $scope.playlistManagerOpen = show;
-            }
-            else {
-                $scope.playlistManagerOpen = !$scope.playlistManagerOpen;
-            }
-        };
+        //// PLAYLISTS
+        //$scope.togglePlaylistManager = function(show) {
+        //    if (show !== undefined) {
+        //        $scope.playlistManagerOpen = show;
+        //    }
+        //    else {
+        //        $scope.playlistManagerOpen = !$scope.playlistManagerOpen;
+        //    }
+        //};
 
         // hm...
         $(document).on('mousedown', function(e) {
@@ -84,10 +98,28 @@ angular.module('app')
         // END OF ACCOUNTS
 
         $scope.mousedown = function() {
+            $scope.hideMessage();
             $scope.$emit('mousedown');
         };
 
         $scope.keydown = function(e) {
             $scope.$emit('keydown', e.keyCode);
         };
+
+        $scope.savePlaylistDialog = function(playlist) {
+            var saveModal = $modal.open({
+                animation: false,
+                templateUrl: 'tmpl/save-playlist-modal.html',
+                scope: $scope, // child scope is created
+                controller: 'SavePlaylistController',
+                resolve: {
+                    playlist: function() { return playlist }
+                }
+            });
+
+            saveModal.rendered.then(function() {
+                $('#save-playlist-name').focus();
+            });
+        };
+
     });

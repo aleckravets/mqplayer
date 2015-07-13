@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('services')
-    .factory('session', function($q, Player, Playlist, Tree, page, helper, clients, TreeNode, Item, appData, api) {
-        var that = {
+    .factory('session', function($q, Player, Playlist, Tree, page, helper, clients, TreeNode, Item, appData, api, PlaylistManager) {
+        var $this = {
             // todo: make private
             active: undefined, // indicates whether the session has started and all it's components are initialized
             state: {},
@@ -12,12 +12,14 @@ angular.module('services')
         var autoLoginPromise;
 
         function start() {
-            that.playlist = new Playlist();
-            that.tree = new Tree();
+            $this.playlist = new Playlist();
+            $this.tree = new Tree();
 
-            that.player = new Player();
+            $this.player = new Player();
 
-            that.active = true;
+            $this.active = true;
+
+            $this.playlistManager = new PlaylistManager;
         }
 
         function getRoot(client) {
@@ -30,12 +32,14 @@ angular.module('services')
         }
 
         function end() {
-            that.active = false;
+            $this.active = false;
 
-            that.player.stop();
-            that.player = undefined;
-            that.tree = undefined;
-            that.playlist = undefined;
+            $this.player.stop();
+            $this.player = undefined;
+            $this.tree = undefined;
+            $this.playlist = undefined;
+            $this.playlistManager = undefined;
+
             page.setTitle();
 
             // do not try to auto relogin on implicit logout
@@ -67,10 +71,10 @@ angular.module('services')
 //                };
 
                     if (state.ids && state.ids.length > 0) {
-                        that.playlist.set(helper.getRecordsByItemIds(clients.drive, state.ids))
+                        $this.playlist.set(helper.getRecordsByItemIds(clients.drive, state.ids))
                             .then(function (records) {
                                 if (records.length > 0) {
-                                    that.player.playRecord(records[0]);
+                                    $this.player.playRecord(records[0]);
                                 }
                             })
                             .catch(function (reason) {
@@ -86,7 +90,7 @@ angular.module('services')
                 checkState();
             }
             else {
-                that.login('drive', true)
+                $this.login('drive', true)
                     .then(function() {
                         checkState();
                     });
@@ -98,7 +102,7 @@ angular.module('services')
          * @param {boolean} auto If set to "true" will try to sign in quietly by using cookies.
          * @returns {Promise<session>} A promise of started session.
          */
-        that.login = function (serviceName, immediate) {
+        $this.login = function (serviceName, immediate) {
             return clients.load(serviceName)
                 .then(function(client) {
                     return client.login(immediate)
@@ -106,10 +110,10 @@ angular.module('services')
                             return api.login(client.name, client.token);
                         })
                         .then(function() {
-                            if (!that.active) {
+                            if (!$this.active) {
                                 start();
                             }
-                            that.tree.roots.push(getRoot(client));
+                            $this.tree.roots.push(getRoot(client));
 
                             appData.services.add(serviceName);
                             appData.save();
@@ -124,7 +128,7 @@ angular.module('services')
          * Try to login using all services found in storage
          * @returns {*}
          */
-        that.autoLogin = function () {
+        $this.autoLogin = function () {
             if (!autoLoginPromise) {
                 var services = appData.services;
 
@@ -149,16 +153,16 @@ angular.module('services')
 
                             // todo: iterate over results rather than clients.get(true)
                             clients.get(true).forEach(function (client) {
-                                that.tree.roots.push(getRoot(client));
+                                $this.tree.roots.push(getRoot(client));
                             });
                         })
                         .catch(function (reason) {
-                            that.active = false;
+                            $this.active = false;
                             return $q.reject(reason);
                         });
                 }
                 else {
-                    that.active = false;
+                    $this.active = false;
                     autoLoginPromise = $q.reject();
                 }
             }
@@ -170,7 +174,7 @@ angular.module('services')
          * Logs out and stops the session.
          * @returns {Promise} A promise resolved when done.
          */
-        that.logout = function (serviceName) {
+        $this.logout = function (serviceName) {
             var promise;
 
             if (serviceName) {
@@ -181,9 +185,9 @@ angular.module('services')
                             appData.save();
                             // active clients left?
                             if (clients.get(true).length > 0) {
-                                for (var i = 0; i < that.tree.roots.length; i++) {
-                                    if (that.tree.roots[i].item.client === clients[serviceName]) {
-                                        that.tree.roots.splice(i, 1);
+                                for (var i = 0; i < $this.tree.roots.length; i++) {
+                                    if ($this.tree.roots[i].item.client === clients[serviceName]) {
+                                        $this.tree.roots.splice(i, 1);
                                         break;
                                     }
                                 }
@@ -212,9 +216,9 @@ angular.module('services')
             return promise;
         };
 
-        that.loggedIn = function() {
-            return that.active;
+        $this.loggedIn = function() {
+            return $this.active;
         };
 
-        return that;
+        return $this;
     });

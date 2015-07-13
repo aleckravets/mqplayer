@@ -1,20 +1,19 @@
 package com.mqplayer.api.web.controllers;
 
+import com.mqplayer.api.domain.dto.PlaylistDto;
 import com.mqplayer.api.utils.ObjectMapper;
-import com.mqplayer.api.domain.dto.AddPlaylistDto;
+import com.mqplayer.api.domain.dto.CreatePlaylistDto;
 import com.mqplayer.api.domain.entities.Playlist;
 import com.mqplayer.api.domain.entities.Record;
 import com.mqplayer.api.domain.entities.User;
 import com.mqplayer.api.security.SecurityContext;
 import com.mqplayer.api.security.SecurityManager;
 import com.mqplayer.api.domain.services.PlaylistService;
-import com.mqplayer.api.web.models.PlaylistModel;
-import com.mqplayer.api.web.models.RecordModel;
+import com.mqplayer.api.domain.dto.RecordDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -36,17 +35,17 @@ public class PlaylistController {
     private PlaylistService playlistService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<PlaylistModel> getAll() {
+    public List<PlaylistDto> getAll() {
         User user = securityContext.getUser();
         List<Playlist> playlists = playlistService.getAll(user.getId());
-        return objectMapper.map(playlists, PlaylistModel.class);
+        return objectMapper.map(playlists, PlaylistDto.class);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public PlaylistModel getOne(@PathVariable long id) {
+    public PlaylistDto getOne(@PathVariable long id) {
         Playlist playlist = playlistService.getOne(id);
         securityManager.authorize(playlist);
-        return objectMapper.map(playlist, PlaylistModel.class);
+        return objectMapper.map(playlist, PlaylistDto.class);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -57,7 +56,15 @@ public class PlaylistController {
         playlistService.deleteOne(id);
     }
 
-    @RequestMapping(value = "", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void update(@PathVariable long id, @RequestBody PlaylistDto dto) {
+        Playlist playlist = playlistService.getOne(id);
+        securityManager.authorize(playlist);
+        playlistService.update(id, dto);
+    }
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void deleteMany(@RequestBody List<Long> ids) {
         for (Long id : ids) {
@@ -69,15 +76,16 @@ public class PlaylistController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void add(@RequestBody AddPlaylistDto dto) {
-        playlistService.addPlaylist(securityContext.getUser(), dto);
+    public PlaylistDto create(@RequestBody CreatePlaylistDto dto) {
+        Playlist playlist = playlistService.create(securityContext.getUser(), dto);
+        return objectMapper.map(playlist, PlaylistDto.class);
     }
 
     @RequestMapping(value = "/{id}/records", method = RequestMethod.GET)
-    public List<RecordModel> getRecords(@PathVariable long id) {
+    public List<RecordDto> getRecords(@PathVariable long id) {
         Playlist playlist = playlistService.getOne(id);
         securityManager.authorize(playlist);
         List<Record> records = playlistService.getRecords(id);
-        return objectMapper.map(records, RecordModel.class);
+        return objectMapper.map(records, RecordDto.class);
     }
 }

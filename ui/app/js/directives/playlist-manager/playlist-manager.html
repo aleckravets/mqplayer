@@ -1,3 +1,10 @@
+
+<div class="toolbar">
+    <button type="button" ng-click="openSaveDialog()" title="Save playlist"><i class="icon-save"></i></button>
+    <button type="button" ng-click="selectAll()" title="Select all (Ctrl + A)"><i class="icon-check"></i></button>
+    <button type="button" ng-click="clear()" title="Clear"><i class="icon-remove"></i></button>
+    <button type="button" ng-click="removeSelected()" title="Remove (Del)"><i class="icon-trash"></i></button>
+</div>
 <div id="playlist-manager">
     <ul>
         <li ng-repeat="playlist in playlists" ng-dblclick="loadPlaylist(playlist.id)">

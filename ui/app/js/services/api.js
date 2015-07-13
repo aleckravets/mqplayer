@@ -5,39 +5,52 @@ angular.module('services')
         var baseUrl = '/api', tokens = {};
 
         return {
-            _setAuthHeader: function() {
+            setAuthHeader: function() {
                 $http.defaults.headers.common.Authorization = angular.toJson(tokens);
             },
-            _addToken: function(service, token) {
+            addToken: function(service, token) {
                 tokens[service] = token;
-                this._setAuthHeader();
+                this.setAuthHeader();
             },
-            _removeToken: function(service) {
+            removeToken: function(service) {
                 tokens[service] = undefined;
-                this._setAuthHeader();
+                this.setAuthHeader();
             },
-            _get: function(url) {
+
+            request: function(method, url, data) {
                 var deferred = $q.defer();
-                $http.get(baseUrl + url)
+                var result;
+
+                if (method == 'post') {
+                    result = $http.post(baseUrl + url, data);
+                }
+                else {
+                    result = $http[method](baseUrl + url);
+                }
+
+                result
                     .success(function(data, status, headers, config) {
                         deferred.resolve(data);
                     })
                     .error(function(data, status, headers, config) {
-                        deferred.reject();
+                        deferred.reject(data);
                     });
+
                 return deferred.promise;
             },
-            _post: function(url, data) {
-                var deferred = $q.defer();
-                $http.post(baseUrl + url, data)
-                    .success(function(data, status, headers, config) {
-                        deferred.resolve(data);
-                    })
-                    .error(function(data, status, headers, config) {
-                        deferred.reject();
-                    });
-                return deferred.promise;
+
+            get: function(url) {
+                return this.request('get', url);
             },
+
+            post: function(url, data) {
+                return this.request('post', url, data);
+            },
+
+            delete: function(url) {
+                return this.request('delete', url);
+            },
+
             /**
              * Register new token at backend and store it to use for further authentication
              * @param {String} service
@@ -46,17 +59,10 @@ angular.module('services')
              */
             login: function(service, token) {
                 var self = this;
-                return this._post('/token', {service: service, token: token})
+                return this.post('/token', {service: service, token: token})
                     .then(function() {
-                        self._addToken(service, token);
+                        self.addToken(service, token);
                     });
-            },
-            get: function(url) {
-                return this._get(url);
-            },
-            post: function(url, data) {
-                return this._post(url, data);
             }
-
         };
     });

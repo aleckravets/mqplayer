@@ -1,11 +1,11 @@
-package com.mqplayer.api.web.models;
+package com.mqplayer.api.domain.dto;
 
 import com.mqplayer.api.domain.entities.Playlist;
 
 /**
  * @author akravets
  */
-public class PlaylistModel {
+public class PlaylistDto {
     private long id;
     private String name;
 
@@ -25,8 +25,8 @@ public class PlaylistModel {
         this.name = name;
     }
 
-    public static PlaylistModel map(Playlist playlist) {
-        PlaylistModel model = new PlaylistModel();
+    public static PlaylistDto map(Playlist playlist) {
+        PlaylistDto model = new PlaylistDto();
         model.setId(playlist.getId());
         model.setName(playlist.getName());
         return model;

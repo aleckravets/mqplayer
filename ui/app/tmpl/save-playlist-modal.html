@@ -1,0 +1,22 @@
+<div id="save-playlist-modal">
+    <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" ng-click="cancel()"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title">{{title}}</h3>
+    </div>
+    <div class="modal-body">
+        <input type="text" id="save-playlist-name"
+               class="form-control"
+               ng-keydown="saveKeydown($event)"
+               placeholder="playlist name..."
+               maxlength="50"
+               ng-model="name"
+                />
+    </div>
+    <div class="modal-footer">
+        <div class="buttons">
+            <span class="spinner" ng-if="loading"></span>
+            <button class="btn btn-primary" ng-click="ok()" ng-disabled="!name">OK</button>
+            <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+        </div>
+    </div>
+</div>

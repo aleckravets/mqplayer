@@ -4,20 +4,18 @@
             <div id="resize-bar-left" class="resize-bar" ng-mousedown="resizeBarMousedown($event)"></div>
             <div id="resize-bar-right" class="resize-bar" ng-mousedown="resizeBarMousedown($event)"></div>
             <div class="col-inner">
-                <playlist include-replace></playlist>
+                <ng-include src="'tmpl/playlist.html'"/>
             </div>
         </div>
     </div>
-
     <div id="left-col" class="col">
         <div class="col-inner">
             <tree></tree>
         </div>
     </div>
-
     <div id="right-col" class="col">
         <div class="col-inner">
-            <playlist-manager></playlist-manager>
+            <ng-include src="'tmpl/playlist-manager.html'"/>
         </div>
     </div>
 </div>

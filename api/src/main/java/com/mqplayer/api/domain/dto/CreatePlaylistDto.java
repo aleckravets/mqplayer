@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * @author akravets
  */
-public class AddPlaylistDto {
+public class CreatePlaylistDto {
     private String name;
     private List<RecordDto> records;
 

@@ -10,13 +10,26 @@ Array.prototype.spliceArray = function(start, deleteCount, insertItems) {
     Array.prototype.splice.apply(this, [start, deleteCount].concat(insertItems));
 };
 
-Array.prototype.remove = function(item) {
-    var index = this.indexOf(item);
+/**
+ * Removes one or multiple items from array
+ * @param a
+ */
+Array.prototype.remove = function(a) {
+    if (Array.isArray(a)) {
+        var th = this;
+        a.forEach(function(item) {
+            th.remove(item);
+        });
+    }
+    else {
+        var index = this.indexOf(a);
 
-    if (index !== -1) {
-        this.splice(index, 1);
+        if (index !== -1) {
+            this.splice(index, 1);
+        }
     }
 };
+
 
 Array.prototype.add = function(item) {
     if (this.indexOf(item) === -1) {

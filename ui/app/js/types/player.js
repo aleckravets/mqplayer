@@ -46,31 +46,38 @@ angular.module('types')
                 var deferred = $q.defer(),
                     self = this;
 
-                this.state = 'buffering';
+                this.stop();
 
-                $rootScope.$broadcast('player.timeupdate', 0);
+                if (record.item.client.isLoggedIn()) {
+                    this.state = 'buffering';
 
-                this.audio.pause();
-                this.audio.src = ''; // todo: set to undefined for IE
+                    $rootScope.$broadcast('player.timeupdate', 0);
 
-                this.currentRecord = record;
+                    this.audio.pause();
+                    this.audio.src = ''; // todo: set to undefined for IE
 
-                record.item.getUrl()
-                    .then(function(url) {
-                        self.loadedmetadata = function() {
-                            self.audio.play();
-                            self.state = 'playing';
-                            deferred.resolve();
-                        };
+                    this.currentRecord = record;
 
-                        self.audio.src = url;
+                    record.item.getUrl()
+                        .then(function (url) {
+                            self.loadedmetadata = function () {
+                                self.audio.play();
+                                self.state = 'playing';
+                                deferred.resolve();
+                            };
 
-                        page.setTitle(record.item.name);
-                    })
-                    .catch(function(error) {
-                        console.log('Failed to get file url: ' + error);
-                        self.stop();
-                    });
+                            self.audio.src = url;
+
+                            page.setTitle(record.item.name);
+                        })
+                        .catch(function (error) {
+                            console.log('Failed to get file url: ' + error);
+                            self.stop();
+                        });
+                }
+                else {
+                    deferred.reject('Log in to ' + record.item.client.title + ' to play this record (' + record.item.name + ').');
+                }
 
                 return deferred.promise;
             },

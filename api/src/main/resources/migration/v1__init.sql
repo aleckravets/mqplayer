@@ -28,7 +28,7 @@ CREATE TABLE `record` (
   `service` varchar(10) NOT NULL,
   `id` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `url` varchar(255) NOT NULL,
+  `url` varchar(255),
   `playlistId` bigint NOT NULL,
   CONSTRAINT `FK_record_playlist_id` FOREIGN KEY (`playlistId`) REFERENCES `playlist` (`id`),
   CONSTRAINT `FK_record_service_id` FOREIGN KEY (`service`) REFERENCES `service` (`id`)

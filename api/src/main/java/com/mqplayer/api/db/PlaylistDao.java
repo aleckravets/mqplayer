@@ -43,8 +43,8 @@ public class PlaylistDao {
 
     public void addRecord(Playlist playlist, Record record) {
         db.getJdbcOperations().update(
-            "insert record (service, id, name, url, playlistId) values (?, ?, ?, ?, ?)",
-            record.getService(), record.getId(), record.getName(), record.getUrl(), playlist.getId()
+                "insert record (service, id, name, url, playlistId) values (?, ?, ?, ?, ?)",
+                record.getService(), record.getId(), record.getName(), record.getUrl(), playlist.getId()
         );
     }
 
@@ -74,5 +74,13 @@ public class PlaylistDao {
                 "delete from playlist where id in (:ids)",
                 parameters
         );
+    }
+
+    public void update(long id, String name) {
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("id", id);
+        parameters.addValue("name", name);
+
+        db.update("update playlist set name = :name where id = :id", parameters);
     }
 }
