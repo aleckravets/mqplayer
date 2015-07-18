@@ -1,23 +1,10 @@
 package com.mqplayer.api.domain.dto;
 
-import com.mqplayer.api.domain.entities.Record;
-
-/**
- * @author akravets
- */
 public class RecordDto {
     private String id;
-    private String service;
     private String name;
     private String url;
-
-    public String getService() {
-        return service;
-    }
-
-    public void setService(String service) {
-        this.service = service;
-    }
+    private AccountDto account;
 
     public String getId() {
         return id;
@@ -41,5 +28,13 @@ public class RecordDto {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public AccountDto getAccount() {
+        return account;
+    }
+
+    public void setAccount(AccountDto account) {
+        this.account = account;
     }
 }

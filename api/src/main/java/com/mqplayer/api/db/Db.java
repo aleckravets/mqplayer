@@ -28,6 +28,10 @@ public class Db extends NamedParameterJdbcTemplate {
         return getJdbcOperations().query(sql, args, new BeanPropertyRowMapper<T>(clazz));
     }
 
+    public <T> List<T> query(String sql, RowMapper<T> rowMapper, Object... args) {
+        return getJdbcOperations().query(sql, args, rowMapper);
+    }
+
     public <T> T queryForEntity(String sql, Class<T> clazz, Object... args) {
         return queryForEntity(sql, new BeanPropertyRowMapper<T>(clazz), args);
     }

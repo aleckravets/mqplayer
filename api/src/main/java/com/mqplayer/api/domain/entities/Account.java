@@ -1,30 +1,32 @@
 package com.mqplayer.api.domain.entities;
 
-/**
- * @author akravets
- */
+import com.mqplayer.api.db.annotations.Ignore;
+
 public class Account {
-    private long id;
+    private Long id;
     private String service;
     private String email;
     private String token;
+    private Long userId;
+
+    @Ignore
     private User user;
 
     public Account() {
     }
 
-    public Account(String service, String email, String token, User user) {
+    public Account(String service, String email, String token, Long userId) {
         this.service = service;
         this.email = email;
         this.token = token;
-        this.user = user;
+        this.userId = userId;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -50,6 +52,14 @@ public class Account {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public User getUser() {

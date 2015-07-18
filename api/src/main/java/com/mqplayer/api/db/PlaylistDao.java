@@ -1,23 +1,25 @@
 package com.mqplayer.api.db;
 
+import com.mqplayer.api.db.mappers.RecordMapper;
+import com.mqplayer.api.domain.entities.Account;
 import com.mqplayer.api.domain.entities.Playlist;
 import com.mqplayer.api.domain.entities.Record;
+import com.mqplayer.api.domain.entities.User;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
-/**
- * @author akravets
- */
 @Repository
-public class PlaylistDao {
+public class PlaylistDao extends BaseDao {
     @Autowired
     private Db db;
 
     public List<Playlist> getAll(long userId) {
-        return db.query("select * from playlist where userId = ?", Playlist.class, userId);
+        return db.query("select * from playlist where user_id = ?", Playlist.class, userId);
     }
 
     public Playlist getOne(long id) {
@@ -25,13 +27,22 @@ public class PlaylistDao {
     }
 
     public List<Record> getRecords(long playlistId) {
-        return db.query("select * from record where playlistId = ?", Record.class, playlistId);
+        Set<String> columns = getColumns(Record.class, "r", "record");
+        columns.addAll(getColumns(Account.class, "a", "account"));
+        columns.addAll(getColumns(User.class, "u", "user"));
+
+        return db.query("select " + StringUtils.join(columns, ", ") +
+                        " from record r " +
+                        " join account a on r.account_id = a.id" +
+                        " join user u on u.id = a.user_id" +
+                        " where r.playlist_id = ?",
+                new RecordMapper(), playlistId);
     }
 
-    public Playlist addPlaylist(Playlist playlist) {
+    public Playlist create(Playlist playlist) {
         Long id =
                 db.<Long>insert(
-                        "insert playlist (name, userId) values (?, ?)",
+                        "insert playlist (name, user_id) values (?, ?)",
                         "id",
                         playlist.getName(), playlist.getUserId()
                 );
@@ -41,16 +52,16 @@ public class PlaylistDao {
         return playlist;
     }
 
-    public void addRecord(Playlist playlist, Record record) {
+    public void createRecord(Record record) {
         db.getJdbcOperations().update(
-                "insert record (service, id, name, url, playlistId) values (?, ?, ?, ?, ?)",
-                record.getService(), record.getId(), record.getName(), record.getUrl(), playlist.getId()
+                "insert record (account_id, id, name, url, playlist_id) values (?, ?, ?, ?, ?)",
+                record.getAccountId(), record.getId(), record.getName(), record.getUrl(), record.getPlaylistId()
         );
     }
 
     public void deleteOne(long id) {
         db.getJdbcOperations().update(
-                "delete from record where playlistId = ?",
+                "delete from record where playlist_id = ?",
                 id
         );
 
@@ -65,7 +76,7 @@ public class PlaylistDao {
         parameters.addValue("ids", ids);
 
         db.update(
-                "delete from record where playlistId in (:ids)",
+                "delete from record where playlist_id in (:ids)",
                 parameters
 
         );

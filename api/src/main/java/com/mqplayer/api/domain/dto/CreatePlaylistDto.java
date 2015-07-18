@@ -26,18 +26,10 @@ public class CreatePlaylistDto {
     }
 
     public static class RecordDto {
-        private String service;
         private String id;
         private String name;
         private String url;
-
-        public String getService() {
-            return service;
-        }
-
-        public void setService(String service) {
-            this.service = service;
-        }
+        private Long accountId;
 
         public String getId() {
             return id;
@@ -61,6 +53,14 @@ public class CreatePlaylistDto {
 
         public void setUrl(String url) {
             this.url = url;
+        }
+
+        public Long getAccountId() {
+            return accountId;
+        }
+
+        public void setAccountId(Long accountId) {
+            this.accountId = accountId;
         }
     }
 }

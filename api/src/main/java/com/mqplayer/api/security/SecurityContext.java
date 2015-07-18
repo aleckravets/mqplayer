@@ -20,8 +20,8 @@ public class SecurityContext {
     /**
      * Current request tokens
      */
-//    private Map<String, String> tokens;
     private List<Token> tokens;
+
     /**
      * Authorized user of the current request
      */

@@ -32,10 +32,9 @@ angular.module('app')
         function create(name) {
             var entities = session.playlist.records.map(function (record) {
                 return {
-                    service: record.item.client.name,
+                    accountId: record.accountId,
                     id: record.item.id,
                     name: record.item.name,
-                    //type: record.item.type,
                     url: record.item.getUrl(true)
                 };
             });
@@ -58,6 +57,7 @@ angular.module('app')
             if ($event.keyCode == 13) { // enter
                 $scope.ok();
             }
+
             $event.stopPropagation();
         };
     });

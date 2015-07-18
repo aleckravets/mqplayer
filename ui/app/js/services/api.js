@@ -60,8 +60,9 @@ angular.module('services')
             login: function(service, token) {
                 var self = this;
                 return this.post('/token', {service: service, token: token})
-                    .then(function() {
+                    .then(function(accountId) {
                         self.addToken(service, token);
+                        return accountId;
                     });
             }
         };

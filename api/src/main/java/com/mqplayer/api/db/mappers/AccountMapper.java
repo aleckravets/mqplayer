@@ -2,26 +2,21 @@ package com.mqplayer.api.db.mappers;
 
 import com.mqplayer.api.domain.entities.Account;
 import com.mqplayer.api.domain.entities.User;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * @author akravets
- */
-public class AccountRowMapper extends BeanPropertyRowMapper<Account> {
+public class AccountMapper extends BaseMapper<Account> {
 
-    public AccountRowMapper() {
-        super(Account.class);
+    public AccountMapper() {
+        super(Account.class, "account");
     }
 
     @Override
     public Account mapRow(ResultSet rs, int rowNum) throws SQLException {
         Account account = super.mapRow(rs, rowNum);
-        User user = new User();
-        user.setId(rs.getLong("userId"));
-        account.setUser(user);
+        UserMapper userMapper = new UserMapper();
+        account.setUser(userMapper.mapRow(rs, rowNum));
         return account;
     }
 }

@@ -5,15 +5,6 @@ angular.module('services')
         var that = { };
 
         /**
-         * Converts a single Item to a Record.
-         * @param {Item} item
-         * @returns {Record}
-         */
-        function recordFromItem(item) {
-            return new Record(item);
-        }
-
-        /**
          * Checks whether provided file's type is supported by looking at its extension.
          * @param {string} name A file's name.
          * @returns {boolean}
@@ -33,7 +24,7 @@ angular.module('services')
                 var records = [];
                 items.forEach(function(item) {
                     if (item.type == 'file' && that.isSupportedType(item.name)) {
-                        records.push(recordFromItem(item));
+                        records.push(new Record(item, item.client.accountId));
                     }
                 });
 
@@ -76,31 +67,6 @@ angular.module('services')
 
                     return result;
                 });
-            });
-        };
-
-        that.savePlaylist = function(name, playlist) {
-            appData.playlists[name] = playlist.records.map(function(record) {
-                return {
-                    service: record.item.client.name,
-                    id: record.item.id,
-                    name: record.item.name,
-                    type: record.item.type,
-                    url: record.item.getUrl(true)
-                };
-            });
-
-            appData.save();
-        };
-
-        that.restorePlaylist = function(name, playlist) {
-            playlist.clear();
-
-            var data = appData.playlists[name];
-
-            playlist.records = data.map(function(_item) {
-                var item = new Item(clients[_item.service], _item.id, _item.name, _item.type, _item.url);
-                return new Record(item);
             });
         };
 

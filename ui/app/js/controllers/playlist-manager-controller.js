@@ -6,7 +6,6 @@ angular.module('app')
         var player = session.player;
         var playlistManager = $scope.playlistManager = session.playlistManager;
 
-
         $scope.select = function(savedPlaylist) {
             savedPlaylist.selected = !savedPlaylist.selected;
         };
@@ -26,8 +25,8 @@ angular.module('app')
                     playlist.clear();
 
                     playlist.records = data.map(function(_item) {
-                        var item = new Item(clients[_item.service], _item.id, _item.name, 'file', _item.url);
-                        return new Record(item);
+                        var item = new Item(clients[_item.account.service], _item.id, _item.name, 'file', _item.url);
+                        return new Record(item, _item.account.id);
                     });
 
                     var recordToPlay;
@@ -78,8 +77,8 @@ angular.module('app')
             PlaylistService.getRecords(savedPlaylist.id)
                 .then(function(data) {
                     var records = data.map(function (_item) {
-                        var item = new Item(clients[_item.service], _item.id, _item.name, 'file', _item.url);
-                        return new Record(item);
+                        var item = new Item(clients[_item.account.service], _item.id, _item.name, 'file', _item.url);
+                        return new Record(item, _item.account.id);
                     });
                     playlist.enqueue($q.when(records));
                 })

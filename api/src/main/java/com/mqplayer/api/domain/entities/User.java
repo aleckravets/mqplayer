@@ -1,8 +1,5 @@
 package com.mqplayer.api.domain.entities;
 
-/**
- * @author akravets
- */
 public class User {
     private long id;
 

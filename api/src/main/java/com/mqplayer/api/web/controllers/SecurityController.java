@@ -23,7 +23,7 @@ public class SecurityController {
 
     @RequestMapping(value = "/token", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void registerToken(@RequestBody Token token) throws IOException {
-        securityManager.registerToken(token.getService(), token.getToken());
+    public long registerToken(@RequestBody Token token) throws IOException {
+        return securityManager.registerToken(token.getService(), token.getToken());
     }
 }

@@ -107,7 +107,10 @@ angular.module('services')
                 .then(function(client) {
                     return client.login(immediate)
                         .then(function() {
-                            return api.login(client.name, client.token);
+                            return api.login(client.name, client.token)
+                                .then(function(accountId) {
+                                    client.accountId = accountId;
+                                });
                         })
                         .then(function() {
                             if (!$this.active) {
@@ -141,7 +144,10 @@ angular.module('services')
                                 .then(function (client) {
                                     return client.login(true)
                                         .then(function() {
-                                            return api.login(client.name, client.token);
+                                            return api.login(client.name, client.token)
+                                                .then(function(accountId) {
+                                                    client.accountId = accountId;
+                                                });
                                         });
                                 })
                         );

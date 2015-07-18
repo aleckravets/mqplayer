@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="20150717-1" author="akravets">
+        <sql>
+            CREATE TABLE user (
+                id bigint PRIMARY KEY AUTO_INCREMENT
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="20150717-2" author="akravets">
+        <sql>
+            CREATE TABLE service (
+                id varchar(10) PRIMARY KEY
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="20150717-3" author="akravets">
+        <preConditions>
+            <tableExists tableName="service"/>
+            <tableExists tableName="user"/>
+        </preConditions>
+        <sql>
+            CREATE TABLE account (
+                id bigint PRIMARY KEY AUTO_INCREMENT,
+                service varchar(10) NOT NULL,
+                email varchar(255) NOT NULL,
+                token varchar(255),
+                user_id bigint NOT NULL,
+                UNIQUE KEY accountId_email (service, email),
+                CONSTRAINT FK_account_service_id FOREIGN KEY (service) REFERENCES service (id),
+                CONSTRAINT FK_account_user_id FOREIGN KEY (user_id) REFERENCES user (id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="20150717-4" author="akravets">
+        <preConditions>
+            <tableExists tableName="user"/>
+        </preConditions>
+        <sql>
+            CREATE TABLE playlist (
+                id bigint PRIMARY KEY AUTO_INCREMENT,
+                name varchar(255) NOT NULL,
+                user_id bigint NOT NULL,
+                CONSTRAINT FK_playlist_user_id FOREIGN KEY (user_id) REFERENCES user (id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="20150717-5" author="akravets">
+        <preConditions>
+            <tableExists tableName="playlist"/>
+            <tableExists tableName="account"/>
+        </preConditions>
+        <sql>
+            CREATE TABLE record (
+                id varchar(500) NOT NULL,
+                account_id bigint(20) NOT NULL,
+                name varchar(500) NOT NULL,
+                url varchar(500),
+                playlist_id bigint NOT NULL,
+                CONSTRAINT FK_record_playlist_id FOREIGN KEY (playlist_id) REFERENCES playlist (id),
+                CONSTRAINT FK_record_account_id FOREIGN KEY (account_id) REFERENCES account (id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+        </sql>
+    </changeSet>
+
+    <changeSet id="20150717-6" author="akravets">
+        <preConditions>
+            <tableExists tableName="service"/>
+        </preConditions>
+        <sql>
+            insert service
+            select 'drive' union
+            select 'dropbox';
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

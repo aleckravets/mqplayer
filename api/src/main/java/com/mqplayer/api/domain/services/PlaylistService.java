@@ -42,11 +42,11 @@ public class PlaylistService {
     @Transactional
     public Playlist create(User user, CreatePlaylistDto playlistDto) {
         Playlist playlist = new Playlist(playlistDto.getName(), user.getId());
-        playlistDao.addPlaylist(playlist);
+        playlistDao.create(playlist);
 
         for (CreatePlaylistDto.RecordDto recordDto: playlistDto.getRecords()) {
-            Record record = new Record(recordDto.getService(), recordDto.getId(), recordDto.getName(), recordDto.getUrl(), playlist.getId());
-            playlistDao.addRecord(playlist, record);
+            Record record = new Record(recordDto.getAccountId(), recordDto.getId(), recordDto.getName(), recordDto.getUrl(), playlist.getId());
+            playlistDao.createRecord(record);
         }
         return playlist;
     }

@@ -56,7 +56,7 @@ public class SecurityManager {
      * @param service
      */
     @Transactional
-    public void registerToken(String service, String token) throws IOException {
+    public long registerToken(String service, String token) throws IOException {
         Client client = Client.resolve(service);
 
         User currentUser = securityContext.getUser();
@@ -76,7 +76,7 @@ public class SecurityManager {
                     securityDao.addUser(currentUser);
                     securityContext.setUser(currentUser);
                 }
-                account = new Account(service, email, token, currentUser);
+                account = new Account(service, email, token, currentUser.getId());
                 securityDao.addAccount(account);
             } else {
                 // update local account with current token
@@ -92,6 +92,8 @@ public class SecurityManager {
         } else {
             securityContext.setUser(account.getUser());
         }
+
+        return account.getId();
     }
 
     public boolean isAuthenticated() {
