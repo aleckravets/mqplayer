@@ -24,7 +24,7 @@ angular.module('services')
                 var records = [];
                 items.forEach(function(item) {
                     if (item.type == 'file' && that.isSupportedType(item.name)) {
-                        records.push(new Record(item, item.client.accountId));
+                        records.push(new Record(item, item.client.account));
                     }
                 });
 

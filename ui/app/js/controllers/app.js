@@ -13,10 +13,12 @@ angular.module('app')
 
         $scope.login = function(service) {
             session.login(service);
+            $scope.closeMenuWidget();
         };
 
         $scope.logout = function(service) {
             session.logout(service);
+            $scope.closeMenuWidget();
         };
 
         $scope.showMessage = function(text, type) {

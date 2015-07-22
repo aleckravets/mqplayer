@@ -32,7 +32,7 @@ angular.module('app')
         function create(name) {
             var entities = session.playlist.records.map(function (record) {
                 return {
-                    accountId: record.accountId,
+                    accountId: record.account.id,
                     id: record.item.id,
                     name: record.item.name,
                     url: record.item.getUrl(true)

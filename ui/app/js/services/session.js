@@ -108,8 +108,8 @@ angular.module('services')
                     return client.login(immediate)
                         .then(function() {
                             return api.login(client.name, client.token)
-                                .then(function(accountId) {
-                                    client.accountId = accountId;
+                                .then(function(account) {
+                                    client.account = account;
                                 });
                         })
                         .then(function() {
@@ -145,8 +145,8 @@ angular.module('services')
                                     return client.login(true)
                                         .then(function() {
                                             return api.login(client.name, client.token)
-                                                .then(function(accountId) {
-                                                    client.accountId = accountId;
+                                                .then(function(account) {
+                                                    client.account = account;
                                                 });
                                         });
                                 })

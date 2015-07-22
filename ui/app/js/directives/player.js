@@ -10,7 +10,10 @@ angular.module('directives')
             controller: function($scope, $timeout, $document) {
                 $scope.session = session;
 
-                $scope.state = {};
+                $scope.state = {
+                    volume: 0.5,
+                    tratata: 99
+                };
 
                 $scope.$on('player.trackended', function(event) {
                     $timeout(function(){ });
@@ -20,6 +23,10 @@ angular.module('directives')
                     if (session.player && Math.abs(value - session.player.audio.currentTime) > 1) {
                         session.player.setTime(value);
                     }
+                });
+
+                $scope.$watch('state.volume', function(value) {
+                    session.player.audio.volume = value;
                 });
 
                 $scope.$on('player.timeupdate', function(e, time) {

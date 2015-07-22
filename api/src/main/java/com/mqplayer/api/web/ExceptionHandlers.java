@@ -1,5 +1,7 @@
 package com.mqplayer.api.web;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +14,8 @@ import com.mqplayer.api.exceptions.*;
  */
 @ControllerAdvice
 public class ExceptionHandlers extends ResponseEntityExceptionHandler {
+    private static Logger logger = LoggerFactory.getLogger(ExceptionHandlers.class);
 
-    /**
-     * Handle standard Spring MVC exceptions, see base method for details
-     */
-    @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
         return getResponse(ex, headers, status);
     }
@@ -42,9 +41,8 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity defaultExceptionHandler(Exception exception) {
-        exception.printStackTrace();
-        return new ResponseEntity(new ErrorInfo("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
+    public void defaultExceptionHandler(Exception exception) {
+        logger.error(exception.getMessage(), exception);
     }
 
     private ResponseEntity getResponse(Exception exception, HttpStatus httpStatus) {

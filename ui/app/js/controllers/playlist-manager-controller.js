@@ -26,7 +26,7 @@ angular.module('app')
 
                     playlist.records = data.map(function(_item) {
                         var item = new Item(clients[_item.account.service], _item.id, _item.name, 'file', _item.url);
-                        return new Record(item, _item.account.id);
+                        return new Record(item, _item.account);
                     });
 
                     var recordToPlay;
@@ -77,8 +77,9 @@ angular.module('app')
             PlaylistService.getRecords(savedPlaylist.id)
                 .then(function(data) {
                     var records = data.map(function (_item) {
-                        var item = new Item(clients[_item.account.service], _item.id, _item.name, 'file', _item.url);
-                        return new Record(item, _item.account.id);
+                        var client = clients[_item.account.service];
+                        var item = new Item(client.isLoggedIn() && client.user.email == _item.account.email ? client : null, _item.id, _item.name, 'file', _item.url);
+                        return new Record(item, _item.account);
                     });
                     playlist.enqueue($q.when(records));
                 })

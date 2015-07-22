@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('types')
-    .factory('Player', function($rootScope, $q, page) {
+    .factory('Player', function($rootScope, $q, page, clients) {
         function Ctor() {
             this.audio = new Audio();
             this.volumeStep = 0.05;
@@ -48,7 +48,7 @@ angular.module('types')
 
                 this.stop();
 
-                if (record.item.client.isLoggedIn()) {
+                if (record.item.client && record.item.client.isLoggedIn()) {
                     this.state = 'buffering';
 
                     $rootScope.$broadcast('player.timeupdate', 0);
@@ -76,7 +76,8 @@ angular.module('types')
                         });
                 }
                 else {
-                    deferred.reject('Log in to ' + record.item.client.title + ' to play this record (' + record.item.name + ').');
+                    deferred.reject('You have to be logged in to ' + clients[record.account.service].title +
+                    ' as ' + record.account.email + ' to play this record (' + record.item.name + ').');
                 }
 
                 return deferred.promise;
