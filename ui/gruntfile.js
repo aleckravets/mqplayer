@@ -38,6 +38,20 @@ module.exports = function(grunt) {
         },
         usemin: {
             html: 'dist/index.html'
+        },
+        filerev: {
+            options: {
+                algorithm: 'md5',
+                length: 4
+            },
+            source: {
+                files: [{
+                    src: [
+                        'dist/js/*.js',
+                        'dist/css/*.css'
+                    ]
+                }]
+            }
         }
     });
 
@@ -46,6 +60,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-filerev');
+    grunt.loadNpmTasks('grunt-angular-templates');
     grunt.loadNpmTasks('grunt-usemin');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-ngmin');
@@ -54,11 +70,13 @@ module.exports = function(grunt) {
         'clean:dist',
         'copy:build',
         'useminPrepare',
+        'ngtemplates',
         'concat',
         'ngmin',
         'copy:debug',
         'uglify',
         'cssmin',
+        'filerev',
         'usemin',
 //        'clean:tmp'
     ]);
