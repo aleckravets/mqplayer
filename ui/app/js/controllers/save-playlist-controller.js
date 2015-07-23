@@ -34,14 +34,16 @@ angular.module('app')
         }
 
         function create(name) {
-            var entities = session.playlist.records.map(function (record, index) {
-                return {
-                    accountId: record.account.id,
-                    id: record.item.id,
-                    name: record.item.name,
-                    url: record.item.getUrl(true),
-                    order: index
-                };
+            var entities = session.playlist.records
+                .slice(0, 999)
+                .map(function (record, index) {
+                    return {
+                        accountId: record.account.id,
+                        id: record.item.id,
+                        name: record.item.name,
+                        url: record.item.getUrl(true),
+                        order: index
+                    };
             });
 
             return PlaylistService.create(name, entities)

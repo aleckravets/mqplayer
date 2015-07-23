@@ -8,6 +8,7 @@ import com.mqplayer.api.domain.entities.Record;
 import com.mqplayer.api.domain.entities.User;
 import com.mqplayer.api.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,9 @@ import java.util.List;
  */
 @Service
 public class PlaylistService {
+    @Value("${playlist.maxRecords}")
+    private int maxRecords;
+
     @Autowired
     private PlaylistDao playlistDao;
 
@@ -44,7 +48,7 @@ public class PlaylistService {
         Playlist playlist = new Playlist(playlistDto.getName(), user.getId());
         playlistDao.create(playlist);
 
-        for (CreatePlaylistDto.RecordDto recordDto: playlistDto.getRecords()) {
+        for (CreatePlaylistDto.RecordDto recordDto: playlistDto.getRecords().subList(0, maxRecords - 1)) {
             Record record = new Record(recordDto.getAccountId(), recordDto.getId(),
                     recordDto.getName(), recordDto.getUrl(), playlist.getId(), recordDto.getOrder());
             playlistDao.createRecord(record);
