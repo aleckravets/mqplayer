@@ -8,10 +8,14 @@ angular.module('app')
             $scope.name = playlist.name;
         }
 
-        $scope.ok = function() {
+        $scope.ok = function(name) {
+            if (!name) {
+                return;
+            }
+
             $scope.loading = true;
 
-            var promise = playlist ? update(playlist, $scope.name) : create($scope.name);
+            var promise = playlist ? update(playlist, name) : create(name);
 
             return promise
                 .then(function() {
@@ -56,7 +60,7 @@ angular.module('app')
             }
 
             if ($event.keyCode == 13) { // enter
-                $scope.ok();
+                $scope.ok($scope.name);
             }
 
             $event.stopPropagation();
