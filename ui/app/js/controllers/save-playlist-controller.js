@@ -30,12 +30,13 @@ angular.module('app')
         }
 
         function create(name) {
-            var entities = session.playlist.records.map(function (record) {
+            var entities = session.playlist.records.map(function (record, index) {
                 return {
                     accountId: record.account.id,
                     id: record.item.id,
                     name: record.item.name,
-                    url: record.item.getUrl(true)
+                    url: record.item.getUrl(true),
+                    order: index
                 };
             });
 

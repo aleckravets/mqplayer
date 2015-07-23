@@ -16,8 +16,13 @@ import com.mqplayer.api.exceptions.*;
 public class ExceptionHandlers extends ResponseEntityExceptionHandler {
     private static Logger logger = LoggerFactory.getLogger(ExceptionHandlers.class);
 
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return getResponse(ex, headers, status);
+    /**
+     * Handle standard Spring MVC exceptions, see base method for details
+     */
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(Exception exception, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        logger.error(exception.getLocalizedMessage(), exception);
+        return getResponse(exception, headers, status);
     }
 
     @ExceptionHandler(AuthenticationException.class)
@@ -42,7 +47,7 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public void defaultExceptionHandler(Exception exception) {
-        logger.error(exception.getMessage(), exception);
+        logger.error(exception.getLocalizedMessage(), exception);
     }
 
     private ResponseEntity getResponse(Exception exception, HttpStatus httpStatus) {

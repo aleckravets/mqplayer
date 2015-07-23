@@ -4,6 +4,7 @@ public class RecordDto {
     private String id;
     private String name;
     private String url;
+    private Integer order;
     private AccountDto account;
 
     public String getId() {
@@ -28,6 +29,14 @@ public class RecordDto {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 
     public AccountDto getAccount() {

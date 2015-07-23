@@ -11,6 +11,7 @@ public class Record {
     private String url;
     private Long accountId;
     private long playlistId;
+    private int order;
 
     @Ignore
     private Account account;
@@ -18,12 +19,13 @@ public class Record {
     public Record() {
     }
 
-    public Record(Long accountId, String id, String name, String url, long playlistId) {
+    public Record(Long accountId, String id, String name, String url, long playlistId, int order) {
         this.id = id;
         this.name = name;
         this.url = url;
         this.accountId = accountId;
         this.playlistId = playlistId;
+        this.order = order;
     }
 
     public String getId() {
@@ -64,6 +66,14 @@ public class Record {
 
     public void setPlaylistId(long playlistId) {
         this.playlistId = playlistId;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
     }
 
     public Account getAccount() {

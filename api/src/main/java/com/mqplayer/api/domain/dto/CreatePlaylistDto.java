@@ -30,6 +30,7 @@ public class CreatePlaylistDto {
         private String name;
         private String url;
         private Long accountId;
+        private Integer order;
 
         public String getId() {
             return id;
@@ -53,6 +54,14 @@ public class CreatePlaylistDto {
 
         public void setUrl(String url) {
             this.url = url;
+        }
+
+        public Integer getOrder() {
+            return order;
+        }
+
+        public void setOrder(Integer order) {
+            this.order = order;
         }
 
         public Long getAccountId() {

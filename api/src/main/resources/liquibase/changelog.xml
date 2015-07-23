@@ -83,4 +83,11 @@
         </sql>
     </changeSet>
 
+    <changeSet id="20150723-1" author="akravets">
+        <comment>record ordering column</comment>
+        <addColumn tableName="record">
+            <column name="order" type="int not null" defaultValue="0"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

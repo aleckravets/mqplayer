@@ -35,7 +35,8 @@ public class PlaylistDao extends BaseDao {
                         " from record r " +
                         " join account a on r.account_id = a.id" +
                         " join user u on u.id = a.user_id" +
-                        " where r.playlist_id = ?",
+                        " where r.playlist_id = ?" +
+                        " order by `order`",
                 new RecordMapper(), playlistId);
     }
 
@@ -44,7 +45,8 @@ public class PlaylistDao extends BaseDao {
                 db.<Long>insert(
                         "insert playlist (name, user_id) values (?, ?)",
                         "id",
-                        playlist.getName(), playlist.getUserId()
+                        playlist.getName(),
+                        playlist.getUserId()
                 );
 
         playlist.setId(id);
@@ -54,8 +56,13 @@ public class PlaylistDao extends BaseDao {
 
     public void createRecord(Record record) {
         db.getJdbcOperations().update(
-                "insert record (account_id, id, name, url, playlist_id) values (?, ?, ?, ?, ?)",
-                record.getAccountId(), record.getId(), record.getName(), record.getUrl(), record.getPlaylistId()
+                "insert record (account_id, id, name, url, playlist_id, `order`) values (?, ?, ?, ?, ?, ?)",
+                record.getAccountId(),
+                record.getId(),
+                record.getName(),
+                record.getUrl(),
+                record.getPlaylistId(),
+                record.getOrder()
         );
     }
 
