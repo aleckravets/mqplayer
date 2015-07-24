@@ -48,7 +48,10 @@ public class PlaylistService {
         Playlist playlist = new Playlist(playlistDto.getName(), user.getId());
         playlistDao.create(playlist);
 
-        for (CreatePlaylistDto.RecordDto recordDto: playlistDto.getRecords().subList(0, maxRecords - 1)) {
+        List<CreatePlaylistDto.RecordDto> recordDtos = playlistDto.getRecords().size() > maxRecords
+                ? playlistDto.getRecords().subList(0, maxRecords - 1) : playlistDto.getRecords();
+
+        for (CreatePlaylistDto.RecordDto recordDto: recordDtos) {
             Record record = new Record(recordDto.getAccountId(), recordDto.getId(),
                     recordDto.getName(), recordDto.getUrl(), playlist.getId(), recordDto.getOrder());
             playlistDao.createRecord(record);
