@@ -10,8 +10,6 @@ cd $project_dir/api
 
 mvn -P prod clean package liquibase:update -DskipTests
 
-service tomcat7 stop
-
 rm -fr $deploy_to
 
 cp -pr $project_dir/api/target/mqplayer-api.war $deploy_to
@@ -23,5 +21,3 @@ bower install
 gulp
 
 cp -pr dist/* $ui_dir/
-
-service tomcat7 start
