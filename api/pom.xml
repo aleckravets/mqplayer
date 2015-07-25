@@ -108,8 +108,64 @@
 
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>test</id>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>${basedir}/src/main/resources-test</directory>
+                    </resource>
+                </resources>
+            </build>
+            <properties>
+                <jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
+                <jdbc.url>jdbc:mysql://localhost/mqplayertest</jdbc.url>
+                <jdbc.user>root</jdbc.user>
+                <jdbc.password></jdbc.password>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>${basedir}/src/main/resources-prod</directory>
+                    </resource>
+                </resources>
+            </build>
+            <properties>
+                <jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
+                <jdbc.url>jdbc:mysql://localhost/mqplayer</jdbc.url>
+                <jdbc.user>root</jdbc.user>
+                <jdbc.password></jdbc.password>
+            </properties>
+        </profile>
+        <profile>
+            <id>local</id>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>${basedir}/src/main/resources-local</directory>
+                    </resource>
+                </resources>
+            </build>
+            <properties>
+                <jdbc.driver>com.mysql.jdbc.Driver</jdbc.driver>
+                <jdbc.url>jdbc:mysql://localhost/mqplayer</jdbc.url>
+                <jdbc.user>root</jdbc.user>
+                <jdbc.password></jdbc.password>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <finalName>mqplayer-api</finalName>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/main/resources</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -117,24 +173,6 @@
                     <source>1.7</source>
                     <target>1.7</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <version>1.0-alpha-2</version>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>read-project-properties</goal>
-                        </goals>
-                        <configuration>
-                            <files>
-                                <file>src/main/resources/jdbc.properties</file>
-                            </files>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
@@ -150,7 +188,7 @@
                     <url>${jdbc.url}</url>
                     <username>${jdbc.user}</username>
                     <password>${jdbc.password}</password>
-                    <changeLogFile>liquibase/changelog.xml</changeLogFile>
+                    <changeLogFile>${basedir}/src/main/resources/liquibase/changelog.xml</changeLogFile>
                 </configuration>
             </plugin>
         </plugins>

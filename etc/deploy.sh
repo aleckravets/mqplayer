@@ -4,16 +4,24 @@ set -e
 
 project_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )"/.. && pwd )"
 deploy_to=/var/lib/tomcat7/webapps/ROOT.war
-pom=$project_dir/pom.xml
+ui_dir=/var/www/mqplayer.com/public_html
 
-mvn -f $project_dir/pom.xml clean package war
+cd $project_dir/api
 
-mvn -f $project_dir/api/pom.xml initialize resources:resources liquibase:update
+mvn -P prod clean package liquibase:update -DskipTests
 
-# service tomcat7 stop
+service tomcat7 stop
 
 rm -fr $deploy_to
 
 cp -pr $project_dir/api/target/mqplayer-api.war $deploy_to
 
-# service tomcat7 start
+cd $project_dir/ui
+
+npm install
+bower install
+gulp
+
+cp -pr dist/* $ui_dir/
+
+service tomcat7 start

@@ -9,7 +9,7 @@
        http://www.springframework.org/schema/mvc
        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <context:property-placeholder location="classpath*:mqplayer.properties, classpath*:jdbc.properties"/>
+    <context:property-placeholder location="classpath*:mqplayer.properties"/>
 
     <bean id="jsonMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
 
