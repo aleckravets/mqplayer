@@ -20,4 +20,6 @@ npm install
 bower install
 gulp
 
+rm -fr $ui_dir/*
+
 cp -pr dist/* $ui_dir/
