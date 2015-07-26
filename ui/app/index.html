@@ -42,7 +42,7 @@
     </div>
 </div>
 
-<div id="msg" ng-if="messageText" class="center" ng-class="{error: messageType == 'error'}" ng-mousedown="$event.stopPropagation()">
+<div id="msg" ng-if="messageText" class="center" ng-class="{error: messageType == 'error'}" ng-mousedown="$event.stopPropagation()" ng-cloak>
     <div>
         <div class="icon" ng-switch="messageType">
             <span ng-switch-when="error" class="icon-warning-sign"></span>
@@ -105,6 +105,7 @@
 <!-- endbuild -->
 
 <!-- build:templates -->
+<!-- templates script will be placed here -->
 <!-- endbuild -->
 
 <!--[if IE 9]>
