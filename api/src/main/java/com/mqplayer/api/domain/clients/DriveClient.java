@@ -19,6 +19,11 @@ import java.io.IOException;
 public class DriveClient extends Client{
     protected static final HttpTransport TRANSPORT = new NetHttpTransport();
     protected static final JsonFactory JSON_FACTORY = new JacksonFactory();
+    private String applicationName;
+
+    public DriveClient(String applicationName) {
+        this.applicationName = applicationName;
+    }
 
     public String getEmailByToken(String token) throws IOException {
         GoogleCredential credential =
@@ -26,7 +31,9 @@ public class DriveClient extends Client{
                 .build()
                 .setAccessToken(token);
 
-        Drive drive = new Drive.Builder(TRANSPORT, JSON_FACTORY, credential).build();
+        Drive drive = new Drive.Builder(TRANSPORT, JSON_FACTORY, credential)
+                .setApplicationName(applicationName)
+                .build();
 
         String email;
 

@@ -10,11 +10,12 @@ import java.io.IOException;
  */
 public abstract class Client {
     public abstract String getEmailByToken(String token) throws IOException;
+    private static final String driveAppName = "mqplayer";
 
     public static Client resolve(String service) {
         switch (service) {
             case "drive":
-                return new DriveClient();
+                return new DriveClient(driveAppName);
             case "dropbox":
                 return new DropboxClient();
             default:
