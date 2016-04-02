@@ -30,11 +30,35 @@ Array.prototype.remove = function(a) {
     }
 };
 
-
 Array.prototype.add = function(item) {
     if (this.indexOf(item) === -1) {
         this.push(item);
     }
+};
+
+Array.prototype.clone = function() {
+    return this.slice(0);
+};
+
+Array.prototype.shuffle = function() {
+    var counter = this.length, temp, index;
+
+    while (counter > 0) {
+        index = Math.floor(Math.random() * counter);
+
+        counter--;
+
+        temp = this[counter];
+        this[counter] = this[index];
+        this[index] = temp;
+    }
+
+    return this;
+};
+
+Array.prototype.rotate = function(n) {
+    this.unshift.apply(this, this.splice(n, this.length));
+    return this;
 };
 
 function isEmpty(obj) {

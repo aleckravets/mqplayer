@@ -16,16 +16,7 @@ angular.module('app')
         var lastClickedRecord;
 
         $scope.deleteSelected = function() {
-            if (playlist.selectedRecords.length == playlist.records.length) {
-                playlist.records.empty();
-            }
-            else {
-                playlist.selectedRecords.forEach(function(record) {
-                    var i = playlist.records.indexOf(record);
-                    playlist.records.splice(i, 1);
-                });
-            }
-            playlist.selectedRecords.empty();
+            playlist.removeSelected();
         };
 
         $scope.selectAll = function() {
@@ -64,6 +55,7 @@ angular.module('app')
         $scope.dblclick = function(e, record) {
             $rootScope.$broadcast('player.timeupdate', 0);
             $timeout(function() {
+                playlist.rotateShuffledRecords(record);
                 player.playRecord(record)
                     .catch(function(error) {
                         $scope.error(error);
@@ -242,16 +234,7 @@ angular.module('app')
                 }
 
                 if ($scope.dragging) { // dragging the records around the playlist
-                    var records = playlist.records,
-                        dragged = playlist.selectedRecords;
-
-                    if (!insertBefore || dragged.indexOf(insertBefore) === -1) { // if target is not among the dragged records
-                        dragged.forEach(function(record) {
-                            records.splice(records.indexOf(record), 1);
-                        });
-
-                        records.spliceArray(insertBefore ? records.indexOf(insertBefore) : records.length, 0, dragged);
-                    }
+                    playlist.move(playlist.selectedRecords, insertBefore);
                 }
                 else { // dragging the node from the tree
                     playlist.enqueue(helper.getItemRecords(tree.draggedNode.item), insertBefore);

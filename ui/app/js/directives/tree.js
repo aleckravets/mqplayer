@@ -33,7 +33,7 @@ angular.module('directives')
 
                     playlist.set(helper.getItemRecords(node.item)).then(function(records) {
                         if (records.length > 0) {
-                            player.playRecord(records[0])
+                            player.playRecord(playlist.getRecords()[0])
                                 .then(function(){
                                     $timeout(angular.noop);
                                 });

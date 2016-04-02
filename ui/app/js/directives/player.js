@@ -115,6 +115,17 @@ angular.module('directives')
                     });
                 });
 
+                $scope.toggleShuffle = function() {
+                    var player = session.player;
+                    var playlist = session.playlist;
+
+                    if (player.currentRecord) {
+                        playlist.rotateShuffledRecords(player.currentRecord);
+                    }
+
+                    playlist.toggleRandom();
+                };
+
                 // todo: remove on destroy
 
                 function shortcut(e) {

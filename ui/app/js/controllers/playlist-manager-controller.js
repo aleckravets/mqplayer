@@ -24,47 +24,51 @@ angular.module('app')
                 .then(function(data) {
                     playlist.clear();
 
-                    playlist.records = data.map(function(_item) {
+                    var records = data.map(function(_item) {
                         var item = new Item(clients[_item.account.service], _item.id, _item.name, 'file', _item.url);
                         return new Record(item, _item.account);
                     });
 
-                    var recordToPlay;
-                    var playlistClients = [];
+                    playlist.set(records)
+                        .then(function() {
+                            var recordToPlay;
+                            var playlistClients = [];
 
-                    playlist.records.forEach(function(record) {
-                        var client = record.item.client;
+                            var orderedRecords = playlist.getRecords();
+                            orderedRecords.forEach(function(record) {
+                                var client = record.item.client;
 
-                        if (playlistClients.indexOf(client) === -1) {
-                            playlistClients.push(client);
-                        }
+                                if (playlistClients.indexOf(client) === -1) {
+                                    playlistClients.push(client);
+                                }
 
-                        if (!recordToPlay && client.isLoggedIn()) {
-                            recordToPlay = record;
-                        }
-                    });
+                                if (!recordToPlay && client.isLoggedIn()) {
+                                    recordToPlay = record;
+                                }
+                            });
 
-                    if (playlist.records.length) {
-                        if (recordToPlay) {
-                            player.playRecord(recordToPlay)
-                                .catch(function (error) {
+                            if (orderedRecords.length) {
+                                if (recordToPlay) {
+                                    player.playRecord(recordToPlay)
+                                        .catch(function (error) {
+                                            $scope.error(error);
+                                        });
+                                }
+                                else if (playlistClients.length) {
+                                    var error;
+
+                                    if (playlistClients.length > 1) {
+                                        error = 'To play records from this playlist you have to be logged in to the following services: '
+                                            + playlistClients.map(function(client) { return client.title; }).join(', ');
+                                    }
+                                    else {
+                                        error = 'You have to be logged in to ' + playlistClients[0].title + ' to play records from this playlist.'
+                                    }
+
                                     $scope.error(error);
-                                });
-                        }
-                        else if (playlistClients.length) {
-                            var error;
-
-                            if (playlistClients.length > 1) {
-                                error = 'To play records from this playlist you have to be logged in to the following services: '
-                                    + playlistClients.map(function(client) { return client.title; }).join(', ');
+                                }
                             }
-                            else {
-                                error = 'You have to be logged in to ' + playlistClients[0].title + ' to play records from this playlist.'
-                            }
-
-                            $scope.error(error);
-                        }
-                    }
+                        });
                 })
                 .finally(function() {
                     $scope.loading = false;
@@ -81,7 +85,7 @@ angular.module('app')
                         var item = new Item(client.isLoggedIn() && client.user.email == _item.account.email ? client : null, _item.id, _item.name, 'file', _item.url);
                         return new Record(item, _item.account);
                     });
-                    playlist.enqueue($q.when(records));
+                    playlist.enqueue(records);
                 })
                 .finally(function() {
                     $scope.loading = false;

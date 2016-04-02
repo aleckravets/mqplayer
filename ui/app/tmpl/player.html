@@ -12,7 +12,7 @@
 <div id="volume" ui-slider="{range: 'min'}" use-decimals min="0" max="1.0" step="{{session.player.volumeStep}}" ng-model="state.volume"></div>
 <div id="controls-3" class="navbar-text navbar-left controls">
     <a title="repeat (r)" ng-click="session.playlist.toggleRepeat()" ng-class="{'pressed': session.playlist.repeat}"><i class="glyphicon glyphicon-repeat"></i></a>
-    <a title="shuffle (s)" ng-click="session.playlist.toggleRandom()" ng-class="{'pressed': session.playlist.random}"><i class="glyphicon glyphicon-random"></i></a>
+    <a title="shuffle (s)" ng-click="toggleShuffle()" ng-class="{'pressed': session.playlist.random}"><i class="glyphicon glyphicon-random"></i></a>
 </div>
 <div id="controls-4" class="navbar-text navbar-left controls">
 </div>

@@ -1,1 +1,11 @@
 https://www.getpostman.com/collections/38b24e84109cf0ba1b95
+
+todos:
+- save volume level
+- add user settings
+    playlist deletion confirmation
+    keep current playlist across sessions
+
+bugs:
+- broken logo on drive login screen
+- pause is resumed when pressed during loading

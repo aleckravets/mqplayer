@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('types')
-    .factory('Playlist', function(Record) {
+    .factory('Playlist', function(Record, $q) {
         function Ctor() {
             this.repeat =  false;
             this.random = false;
             this.records = [];
+            this.shuffledRecords = [];
             this.selectedRecords = [];
             this.loading = false;
         }
@@ -13,22 +14,24 @@ angular.module('types')
         Ctor.prototype = {
             /**
              * Adds one or multiple records to the playlist.
-             * @param {Promise<Record[]>} recordsPromise records to enqueue.
+             * @param {Promise<Record[]>|Record[]} records Records to enqueue.
              * @param {Record} [insertBeforeRecord] A record in the playlist before which the new records should be
              * inserted, if omitted - the records are inserted at the end.
              * @returns {Promise<Record[]} the whole playlist when enqueue is done.
              */
-            enqueue: function(recordsPromise, insertBeforeRecord) {
+            enqueue: function(records, insertBeforeRecord) {
                 this.loading = true;
 
                 var self = this,
                     index = insertBeforeRecord ? this.records.indexOf(insertBeforeRecord) : this.records.length;
 
-                return recordsPromise
-                    .then(function(records) {
-                        records.forEach(function (record) {
+                return $q.when(records)
+                    .then(function(recs) {
+                        recs.forEach(function (record) {
                             self.records.splice(index++, 0, record);
                         });
+
+                        self.shuffle();
 
                         return self.records;
                     })
@@ -39,12 +42,12 @@ angular.module('types')
 
             /**
              * Clears the playlist and enqueues passed record(s).
-             * @param {Promise<Record[]>} recordsPromise records to enqueue.
+             * @param {Promise<Record[]>} records records to enqueue.
              * @returns {Promise<Record[]} the whole playlist when enqueue is done.
              */
-            set: function(recordsPromise) {
+            set: function(records) {
                 this.clear();
-                return this.enqueue(recordsPromise);
+                return this.enqueue(records);
             },
 
             /**
@@ -53,6 +56,22 @@ angular.module('types')
             clear: function() {
                 this.records.empty();
                 this.selectedRecords.empty();
+                this.shuffle();
+            },
+
+            removeSelected: function() {
+                var self = this;
+                if (this.selectedRecords.length == this.records.length) {
+                    this.records.empty();
+                }
+                else {
+                    this.selectedRecords.forEach(function(record) {
+                        var i = self.records.indexOf(record);
+                        self.records.splice(i, 1);
+                    });
+                }
+                this.selectedRecords.empty();
+                this.shuffle();
             },
 
             /**
@@ -60,22 +79,19 @@ angular.module('types')
              * @param {Record} record
              * @param {Boolean} [random=this.random]
              * @param {Boolean} [repeat=this.repeat]
-             * @returns {Record|false} The previous record or false.
+             * @returns {Record | Boolean} The previous record or false.
              */
             prev: function(record, random, repeat) {
-                var i;
-                if (random === undefined ? this.random : random) {
-                    i = Math.floor(Math.random() * this.records.length);
-                    return this.records[i];
-                } else {
-                    i = this.records.indexOf(record);
-                    if (i > 0) {
-                        return this.records[i - 1];
-                    }
-                    else if (i === 0 && (repeat === undefined ? this.repeat : repeat)) {
-                        return this.records[this.records.length - 1];
-                    }
+                var records =  (random === undefined ? this.random : random) ? this.shuffledRecords : this.records;
+                var i = records.indexOf(record);
+
+                if (i > 0) {
+                    return records[i - 1];
                 }
+                else if (i === 0 && (repeat === undefined ? this.repeat : repeat)) {
+                    return records[records.length - 1];
+                }
+
                 return false;
             },
 
@@ -84,24 +100,19 @@ angular.module('types')
              * @param {Record} record
              * @param {Boolean} [random=this.random]
              * @param {Boolean} [repeat=this.repeat]
-             * @returns {Record|false} The next record or false.
+             * @returns {Record|Boolean} The next record or false.
              */
             next: function(record, random, repeat) {
-                var i;
+                var records =  (random === undefined ? this.random : random) ? this.shuffledRecords : this.records;
+                var i = records.indexOf(record);
 
-                if (random === undefined ? this.random : random) {
-                    i = Math.floor(Math.random() * this.records.length);
-                    return this.records[i];
+
+                if (i <= records.length - 2) {
+                    return records[i + 1];
                 }
 
-                i = this.records.indexOf(record);
-
-                if (i <= this.records.length - 2) {
-                    return this.records[i + 1];
-                }
-
-                if (i === this.records.length - 1 && (repeat === undefined ? this.repeat : repeat)) {
-                    return this.records[0];
+                if (i === records.length - 1 && (repeat === undefined ? this.repeat : repeat)) {
+                    return records[0];
                 }
 
                 return false;
@@ -112,6 +123,9 @@ angular.module('types')
              */
             toggleRandom: function() {
                 this.random = !this.random;
+                if (this.currentRecord) {
+                    this.rotateShuffledRecords(this.currentRecord);
+                }
             },
 
             /**
@@ -130,8 +144,40 @@ angular.module('types')
                 });
             },
 
-            removeSelected: function() {
+            //removeSelected: function() {
+            //
+            //},
 
+            move: function(movedRecords, insertBefore) {
+                var $this = this;
+
+                if (!insertBefore || movedRecords.indexOf(insertBefore) === -1) { // if target is not among the movedRecords records
+                    movedRecords.forEach(function(record) {
+                        $this.records.splice($this.records.indexOf(record), 1);
+                    });
+
+                    $this.records.spliceArray(insertBefore ? $this.records.indexOf(insertBefore) : $this.records.length, 0, movedRecords);
+                }
+
+                //this.shuffle();
+            },
+
+            shuffle: function() {
+                this.shuffledRecords = this.records
+                    .clone()
+                    .shuffle();
+            },
+
+            rotateShuffledRecords: function(firstRecord) {
+                this.shuffledRecords.rotate(this.shuffledRecords.indexOf(firstRecord));
+            },
+
+            /**
+             * Returns the records in the right order depending on the "shuffle" state.
+             * @returns {*}
+             */
+            getRecords: function() {
+                return this.random ? this.shuffledRecords : this.records;
             }
         };
 
