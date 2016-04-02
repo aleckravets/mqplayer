@@ -28,7 +28,9 @@ angular.module('types')
             _getItem: function(data){
                 var type = data.mimeType === 'application/vnd.google-apps.folder' ? 'dir' : 'file';
                 var shared = data.sharedWithMeDate ? true : false;
-                var url = type === 'file' ? data.webContentLink : undefined;
+                var url = type === 'file'
+                    ? data.downloadUrl + "&access_token=" + encodeURIComponent(this.token)
+                    : undefined;
                 var parentid = !shared ? data.parents && data.parents[0].id : undefined;
 
                 return new Item(this, data.id, data.title, type, url, parentid, shared);
