@@ -58,6 +58,7 @@ angular.module('services')
              * @returns {Promise}
              */
             login: function(service, token) {
+                return $q.when(1);
                 var self = this;
                 return this.post('/token', {service: service, token: token})
                     .then(function(account) {

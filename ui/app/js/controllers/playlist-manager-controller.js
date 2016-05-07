@@ -131,6 +131,6 @@ angular.module('app')
                 });
         }
 
-        loadPlaylists();
+        //loadPlaylists();
 
     });
