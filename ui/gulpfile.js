@@ -83,6 +83,16 @@ gulp.task('main', ['clean'], function() {
         .pipe(gulp.dest('dist'));
 });
 
+var ghPages = require('gulp-gh-pages');
+
+gulp.task('deploy', function() {
+    return gulp.src('./dist/**/*')
+        .pipe(ghPages({
+            remoteUrl: 'https://github.com/mqplayer/mqplayer.github.io',
+            branch: 'master'
+        }));
+});
+
 gulp.task('default', [
     'clean',
     'main'
