@@ -1,7 +1,7 @@
 <div ng-controller="PlaylistController">
     <div class="toolbar">
         <h1>Playlist</h1>
-        <button type="button" ng-click="savePlaylistDialog()" disabled ng-if="playlist.records.length" title="Save playlist as..."><i class="icon-save"></i></button>
+        <button type="button" ng-click="savePlaylistDialog()" ng-if="playlist.records.length" title="Save playlist as..."><i class="icon-save"></i></button>
         <button type="button" ng-click="deleteSelected()" ng-if="playlist.selectedRecords.length" title="Remove (Del)"><i class="icon-trash"></i></button>
         <button type="button" ng-click="clear()" ng-if="playlist.records.length" title="Clear"><i class="icon-remove"></i></button>
     </div>

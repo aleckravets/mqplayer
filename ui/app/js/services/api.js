@@ -2,7 +2,7 @@
 
 angular.module('services')
     .factory('api', function($http, $q, clients) {
-        var baseUrl = '/api', tokens = {};
+        var baseUrl = 'http://181.214.69.130:8080', tokens = {};
 
         return {
             setAuthHeader: function() {
@@ -58,7 +58,7 @@ angular.module('services')
              * @returns {Promise}
              */
             login: function(service, token) {
-                return $q.when(1);
+                //return $q.when(1);
                 var self = this;
                 return this.post('/token', {service: service, token: token})
                     .then(function(account) {
