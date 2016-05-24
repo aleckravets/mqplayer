@@ -2,7 +2,7 @@
 
 angular.module('services')
     .factory('api', function($http, $q, clients) {
-        var baseUrl = 'http://181.214.69.130:8080', tokens = {};
+        var baseUrl = '/api', tokens = {};
 
         return {
             setAuthHeader: function() {
